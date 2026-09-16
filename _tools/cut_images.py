@@ -12,8 +12,8 @@ uses. Output: assets/img/<name>-1600.webp and <name>-800.webp, never
 upscaled; assets/video/hero.webm, hero.mp4 and hero-poster.webp;
 assets/og.jpg at 1200x630.
 
-Output names are chosen by hand in the picks file; nothing here derives them
-from the originals' file names.
+Output names are chosen by hand in the picks file; an entry that leaves "name"
+out falls back to the original's file name in kebab case.
 """
 import json, os, re, subprocess, sys
 from PIL import Image, ImageOps
@@ -97,7 +97,7 @@ def run(picks_path=PICKS, images=True, video=True, og=True):
     if images:
         for p in picks.get("images", []):
             src = os.path.join(ORIGINALS, p["src"])
-            for path in cut_image(src, IMG, p["name"], p.get("crop")):
+            for path in cut_image(src, IMG, p.get("name") or slug(p["src"]), p.get("crop")):
                 print("wrote", os.path.relpath(path, ROOT), os.path.getsize(path) // 1024, "KB")
     if video and picks.get("video"):
         v = picks["video"]

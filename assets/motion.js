@@ -16,7 +16,13 @@
 //   data-count="2500"      counts up from data-count-from (default 0) with optional
 //                          data-count-prefix and data-count-suffix
 (function () {
-  if (!window.gsap || !window.ScrollTrigger) return;
+  // The loader takes html.motion off again if a script fails or four seconds
+  // pass without motion.js reporting in. The scripts can still arrive after
+  // that, so check the class before touching anything: without it the page is
+  // the static site and must stay that way.
+  if (!document.documentElement.classList.contains("motion")) return;
+  if (window.__motionTimer) clearTimeout(window.__motionTimer);
+  if (!window.gsap || !window.ScrollTrigger) { document.documentElement.classList.remove("motion"); return; }
   gsap.registerPlugin(ScrollTrigger);
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
@@ -41,54 +47,96 @@
   });
 
   // ---- draw helpers
-  function prepDraw(paths) {
-    paths.forEach(function (p) {
-      var len = p.getTotalLength();
-      p.style.strokeDasharray = len;
-      p.style.strokeDashoffset = len;
+  //
+  // Only lines with no dash pattern of their own can be drawn by animating a
+  // dash offset: doing it to the cost figure's target line (6 8) or the
+  // panel's engraved nameplate rule (3 5) would overwrite the pattern and
+  // leave them solid. Those, and every text label, fade in instead. The
+  // initial states go through gsap.set rather than element.style so that a
+  // gsap.matchMedia context can revert them along with its timeline.
+  function drawable(root) {
+    return $$("path, line, polyline, circle, rect, ellipse", root).filter(function (p) {
+      return typeof p.getTotalLength === "function" && !p.hasAttribute("stroke-dasharray");
     });
   }
-  function drawable(root) {
-    return $$("path, line, polyline, circle, rect, ellipse", root).filter(function (p) { return typeof p.getTotalLength === "function"; });
+  function dashed(root) {
+    return $$("[stroke-dasharray]", root);
+  }
+  function prepDraw(root) {
+    var paths = drawable(root);
+    paths.forEach(function (p) {
+      var len = p.getTotalLength();
+      gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+    });
+    var fade = dashed(root).concat($$("text", root));
+    if (fade.length) gsap.set(fade, { opacity: 0 });
+    return { paths: paths, fade: fade };
   }
 
   // ---- pinned sequences
-  $$("[data-pin]").forEach(function (section) {
-    if (!matchMedia("(min-width: 768px)").matches) return; // pins are desktop-only; phones get the static stacked layout
-    var steps = $$("[data-step]", section);
-    if (!steps.length) return;
-    var length = parseFloat(section.getAttribute("data-pin-length")) || 2;
-    var hold = $$("[data-hold]", section);
-    var dim = $$("[data-dim]", section);
-    gsap.set(steps, { opacity: 0, y: 30 });
-    var tl = gsap.timeline({
-      scrollTrigger: { trigger: section, start: "top top", end: "+=" + (length * 100) + "%", pin: true, scrub: 0.6, anticipatePin: 1 }
+  //
+  // Pins are desktop-only, and so is the hidden state that goes with them.
+  // gsap.matchMedia builds the timeline and its gsap.set when the query
+  // matches and reverts both -- inline styles included -- when it stops, so a
+  // phone rotated into landscape and a desktop window narrowed past the
+  // breakpoint both end up with the static stacked layout rather than a
+  // hidden step no timeline will ever reveal. data-pin-armed is the mark
+  // motion.css keys the hidden state off; it goes on before the gsap.set and
+  // comes off in the cleanup below.
+  gsap.matchMedia().add("(min-width: 768px)", function () {
+    var armed = [];
+    $$("[data-pin]").forEach(function (section) {
+      var steps = $$("[data-step]", section);
+      if (!steps.length) return;
+      var length = parseFloat(section.getAttribute("data-pin-length")) || 2;
+      var hold = $$("[data-hold]", section);
+      var dim = $$("[data-dim]", section);
+      section.setAttribute("data-pin-armed", "");
+      armed.push(section);
+      gsap.set(steps, { opacity: 0, y: 30 });
+      var tl = gsap.timeline({
+        scrollTrigger: { trigger: section, start: "top top", end: "+=" + (length * 100) + "%", pin: true, scrub: 0.6, anticipatePin: 1 }
+      });
+      if (hold.length) tl.to(hold, {
+        opacity: 0, y: -40, duration: 1,
+        // Opacity alone leaves the hero's buttons in the tab order behind the
+        // steps that replaced them.
+        onComplete: function () { hold.forEach(function (el) { el.setAttribute("inert", ""); }); },
+        onReverseComplete: function () { hold.forEach(function (el) { el.removeAttribute("inert"); }); }
+      }, 0);
+      if (dim.length) tl.to(dim, { opacity: 0.85, duration: 1 }, 0);
+      steps.forEach(function (step, i) {
+        var at = i === 0 ? 0.6 : ">";
+        tl.to(step, { opacity: 1, y: 0, duration: 1 }, at);
+        var sel = step.getAttribute("data-step-draw");
+        if (sel) {
+          var target = section.querySelector(sel) || document.querySelector(sel);
+          var d = target && prepDraw(target);
+          if (d && d.paths.length) tl.to(d.paths, { strokeDashoffset: 0, duration: 1.2, stagger: 0.15 }, "<");
+          if (d && d.fade.length) tl.to(d.fade, { opacity: 1, duration: 0.6 }, "<0.6");
+        }
+        tl.to({}, { duration: 1 });                          // hold
+        if (i < steps.length - 1) tl.to(step, { opacity: 0, y: -30, duration: 0.8 });
+      });
     });
-    if (hold.length) tl.to(hold, { opacity: 0, y: -40, duration: 1 }, 0);
-    if (dim.length) tl.to(dim, { opacity: 0.85, duration: 1 }, 0);
-    steps.forEach(function (step, i) {
-      var at = i === 0 ? 0.6 : ">";
-      tl.to(step, { opacity: 1, y: 0, duration: 1 }, at);
-      var sel = step.getAttribute("data-step-draw");
-      if (sel) {
-        var paths = drawable(section.querySelector(sel) || document.querySelector(sel));
-        if (paths.length) { prepDraw(paths); tl.to(paths, { strokeDashoffset: 0, duration: 1.2, stagger: 0.15 }, "<"); }
-      }
-      tl.to({}, { duration: 1 });                          // hold
-      if (i < steps.length - 1) tl.to(step, { opacity: 0, y: -30, duration: 0.8 });
-    });
+    return function () {
+      armed.forEach(function (section) {
+        section.removeAttribute("data-pin-armed");
+        $$("[data-hold]", section).forEach(function (el) { el.removeAttribute("inert"); });
+      });
+    };
   });
 
   // ---- standalone drawings
   $$("svg[data-draw]").forEach(function (svg) {
     if (svg.closest("[data-pin]")) return;                 // handled by the pin above
-    var paths = drawable(svg);
-    if (!paths.length) return;
-    prepDraw(paths);
-    gsap.to(paths, {
-      strokeDashoffset: 0, ease: "none", stagger: 0.25,
+    var d = prepDraw(svg);
+    if (!d.paths.length && !d.fade.length) return;
+    var tl = gsap.timeline({
       scrollTrigger: { trigger: svg, start: "top 85%", end: "bottom 45%", scrub: true }
     });
+    if (d.paths.length) tl.to(d.paths, { strokeDashoffset: 0, ease: "none", stagger: 0.25, duration: 1 }, 0);
+    if (d.fade.length) tl.to(d.fade, { opacity: 1, ease: "none", duration: 0.5 }, ">");
   });
 
   // ---- counters
@@ -99,9 +147,11 @@
     var suffix = el.getAttribute("data-count-suffix") || "";
     var state = { v: from };
     function render() { el.textContent = prefix + Math.round(state.v).toLocaleString("en-US") + suffix; }
-    render();
+    // Not rendered until the tween starts: rendering now would rewrite the
+    // built-in $1,000 as $0 the moment the script runs, long before the
+    // number is anywhere near the viewport.
     gsap.to(state, {
-      v: to, duration: 1.8, ease: "power2.out", onUpdate: render,
+      v: to, duration: 1.8, ease: "power2.out", onStart: render, onUpdate: render,
       scrollTrigger: { trigger: el, start: "top 88%", once: true }
     });
   });

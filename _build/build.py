@@ -121,17 +121,25 @@ _INLINE = re.compile(r"\{\{inline:([^}]+)\}\}")
 
 
 def expand(body):
-    """Turn an img placeholder (img:file.webp|alt|extra, in double braces)
-    into a real img tag, and an inline placeholder into the file's contents."""
+    """Turn an img placeholder (img:name|alt|extra, in double braces, where
+    name is the output name without its width suffix or extension) into a real
+    img tag, and an inline placeholder into the file's contents.
+
+    The srcset descriptors are the files' own widths, not 800 and 1600: a crop
+    narrower than 1600px is never upscaled, so several of the large files are
+    1050, 1160 or 1400 wide and a hard-coded 1600w would tell the browser to
+    pick them for a display width they cannot fill.
+    """
     def one(m):
         name, alt, extra = m.group(1), m.group(2), m.group(3)
         big, small = "%s-1600.webp" % name, "%s-800.webp" % name
         w, h = webp_size(os.path.join(IMG, big))
+        sw = webp_size(os.path.join(IMG, small))[0]
         return ('<img src="%(r)sassets/img/%(big)s" '
-                'srcset="%(r)sassets/img/%(small)s 800w, %(r)sassets/img/%(big)s 1600w" '
+                'srcset="%(r)sassets/img/%(small)s %(sw)dw, %(r)sassets/img/%(big)s %(w)dw" '
                 'sizes="(max-width: 800px) 100vw, 800px" alt="%(alt)s" width="%(w)d" height="%(h)d" '
                 'loading="lazy" decoding="async"%(extra)s>'
-                % dict(r=URL_ROOT, big=big, small=small, alt=alt, w=w, h=h,
+                % dict(r=URL_ROOT, big=big, small=small, alt=alt, w=w, h=h, sw=sw,
                        extra=(" " + extra) if extra else ""))
     body = _IMG.sub(one, body)
 
@@ -174,7 +182,7 @@ def pinned(steps, svg_name, length=None):
     """A section that pins while its steps play beside a drawing that draws
     itself one group per step. With motion off the steps stack under each
     other beside the finished drawing."""
-    length = length or len(steps) + 2
+    length = length or len(steps) + 1
     items = "".join(
         '      <div class="pin-step" data-step data-step-draw="%s"><div class="eyebrow">%s</div><h2>%s</h2><p>%s</p></div>\n'
         % (sel, eyebrow, heading, text) for eyebrow, heading, text, sel in steps)
@@ -193,12 +201,18 @@ def motion_loader(root):
     Dynamically inserted scripts are async by default; async=false restores
     document order. If any script fails, or motion.js has not reported in
     within four seconds, the motion class comes off so nothing stays hidden.
+
+    The timer is on window so motion.js can clear it the moment it starts
+    executing: a slow connection that delivers the scripts at four and a half
+    seconds would otherwise strip the class out from under a script that is
+    about to run, and motion.js checks for that too before it animates
+    anything.
     """
     srcs = ",".join('"%s%s?v=%s"' % (root, s.lstrip("/"), digest(s)) for s in MOTION_SCRIPTS)
     return ('<script>(function(h){if(!h.classList.contains("motion"))return;'
             'function off(){h.classList.remove("motion")}'
             '[%s].forEach(function(s){var e=document.createElement("script");e.src=s;e.async=false;e.onerror=off;document.body.appendChild(e)});'
-            'setTimeout(function(){if(!window.__motionReady)off()},4000)})(document.documentElement)</script>\n' % srcs)
+            'window.__motionTimer=setTimeout(function(){if(!window.__motionReady)off()},4000)})(document.documentElement)</script>\n' % srcs)
 
 
 # -------------------------------------------------------------------- shell
@@ -219,24 +233,36 @@ def shell(page, path="index.html"):
 
     hero, hero_class, hero_steps = "", "hero-plain", ""
     if page.get("hero_img"):
-        w, h = webp_size(os.path.join(IMG, page["hero_img"]))
+        # The hero photograph is the page's LCP element and spans the viewport,
+        # so it gets the same two widths and real descriptors the body images
+        # get; a phone that took the 1600-wide file here was most of the
+        # PACK EXPO landing's budget.
+        big = page["hero_img"]
+        small = big.replace("-1600.webp", "-800.webp")
+        w, h = webp_size(os.path.join(IMG, big))
+        sw = webp_size(os.path.join(IMG, small))[0]
         hero_class = "hero-photo"
-        hero = ('  <img class="hero-bg" src="%sassets/img/%s" alt="%s" '
-                'width="%d" height="%d" fetchpriority="high" decoding="async">\n'
-                % (root, page["hero_img"], html_attr(page["hero_alt"]), w, h))
+        hero = ('  <img class="hero-bg" src="%(r)sassets/img/%(big)s" '
+                'srcset="%(r)sassets/img/%(small)s %(sw)dw, %(r)sassets/img/%(big)s %(w)dw" sizes="100vw" '
+                'alt="%(alt)s" width="%(w)d" height="%(h)d" fetchpriority="high" decoding="async">\n'
+                % dict(r=root, big=big, small=small, sw=sw, w=w, h=h,
+                       alt=html_attr(page["hero_alt"])))
 
     preload = ""
     if page.get("hero_video"):
         v = page["hero_video"]
         poster = "%sassets/video/%s-poster.webp" % (root, v["name"])
         w, h = webp_size(os.path.join(ROOT, "assets", "video", "%s-poster.webp" % v["name"]))
-        hero_class = "hero-cinema\" data-pin data-pin-length=\"3"
+        hero_class = "hero-cinema\" data-pin data-pin-length=\"2"
         preload = '<link rel="preload" as="image" href="%s">\n' % poster
+        # MP4 first: the browser takes the first source it can play, and the
+        # H.264 cut is 1704 KB against the VP9 cut's 2422 KB. Everything that
+        # plays the WebM plays the MP4 too.
         hero = ('  <div class="hero-media" data-parallax="0.15">\n'
                 '    <img class="hero-bg" src="%(p)s" alt="%(alt)s" width="%(w)d" height="%(h)d" fetchpriority="high" decoding="async">\n'
                 '    <video class="hero-video" muted loop playsinline preload="none" poster="%(p)s" aria-hidden="true" tabindex="-1">\n'
-                '      <source src="%(r)sassets/video/%(n)s.webm" type="video/webm">\n'
                 '      <source src="%(r)sassets/video/%(n)s.mp4" type="video/mp4">\n'
+                '      <source src="%(r)sassets/video/%(n)s.webm" type="video/webm">\n'
                 '    </video>\n  </div>\n  <div class="hero-dim" data-dim aria-hidden="true"></div>\n'
                 % dict(p=poster, alt=html_attr(v["alt"]), w=w, h=h, r=root, n=v["name"]))
         if page.get("hero_steps"):
@@ -395,7 +421,7 @@ PAGES["index.html"] = dict(
                "Specified, cost-engineered and supported by an engineer who has done it for twenty years, "
                "not pulled from a catalog and shipped with a wish.",
     actions=[("Start an application review", "/start/"), ("Meet us at PACK EXPO", "/pack-expo/")],
-    hero_video=dict(name="hero", alt="A packaging machine running with barcode verification, controlled by a Phoenix-engineered operator panel"),
+    hero_video=dict(name="hero", alt="A die-cutting head running behind its glass guard, with the laser guide line lit"),
     hero_steps=[
         ("Proof one", "Engineered to the target.", "A $1,000 operator panel taken back to the factory and re-engineered to $350 at 2,500 units. Not discounted. Redesigned."),
         ("Proof two", "A panel with your name on it.", "Your logo on the bezel, your mounting, your price at your quantity. The big brands will not discuss it below a seven-figure order."),
@@ -542,9 +568,9 @@ PAGES["for-oems/index.html"] = dict(
             ("Step two", "A controller sized to the machine.",
              "If the software needs a routine written, Russell writes it and you paste it in. If the hardware needs a custom mount or a branded bezel, the factory quotes it. None of this is billed.", "#g-plc"),
             ("Step three", "I/O, drives and the first application.",
-             "The first machine on a new platform is where a supplier is either a partner or a problem. Phoenix commits three to eight engineering hours a week until the first unit is running.", "#g-io"),
+             "The first machine on a new platform is where a supplier is either a partner or a problem. Phoenix commits three to eight engineering hours a week until the first unit is running. After the first three to six months that tapers, because it has to, and by then your team owns the platform.", "#g-io"),
             ("Step four", "Then, production.",
-             "Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Illinois, and keeps the factory relationship warm so the next revision costs less than the last one.", "#g-net"),
+             "Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Illinois, and keeps the factory relationship warm so the next revision costs less than the last one. When a distributor makes sense for inventory, we will say so. When it does not, we will say that too.", "#g-net"),
         ], "topology.svg"),
         cards=cards([
             ("HMI and touchscreens", "Operator interfaces from small panel displays to full-glass fronts, branded to your machine."),

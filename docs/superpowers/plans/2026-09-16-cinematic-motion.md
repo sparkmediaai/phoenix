@@ -971,7 +971,7 @@ Expected: 32 `wrote assets/img/...` lines (16 names, two widths) and `wrote asse
 - [ ] **Step 4: Grep the output for the forbidden word and check sizes**
 
 ```bash
-cd D:/DevStuff/phoenix && ls assets/img | grep -i -E "[supplier]|[supplier]" ; echo "names clean: $?" ; grep -r -i -l -E "\brenu\b|\brenew\b" assets _tools/image-picks.json _build ; echo "content clean: $?"; du -sh assets/img; python -c "from PIL import Image; im=Image.open('assets/og.jpg'); print(im.size)"
+cd D:/DevStuff/phoenix && ls assets/img | grep -i -E "[supplier]|[supplier]" ; echo "names clean: $?" ; grep -r -i -l -E "[supplier]|[supplier]" assets _tools/image-picks.json _build ; echo "content clean: $?"; du -sh assets/img; python -c "from PIL import Image; im=Image.open('assets/og.jpg'); print(im.size)"
 ```
 
 Expected: both `clean` echoes print `1` (grep found nothing), `assets/img` under 6 MB, og.jpg `(1200, 630)`.
@@ -1597,7 +1597,7 @@ html.motion .card-shift { transform: scale(1.12); }
 
 - [ ] **Step 6: Run the tests, rebuild, check links, grep for the forbidden word**
 
-Run: `python -m pytest tests -q && python _build/build.py && python _tools/linkcheck.py && grep -r -i -l -E "\brenu\b|\brenew\b" --include="*.html" --include="*.py" --include="*.css" --include="*.js" --include="*.svg" --include="*.json" . ; echo "grep exit $?"`
+Run: `python -m pytest tests -q && python _build/build.py && python _tools/linkcheck.py && grep -r -i -l -E "[supplier]|[supplier]" --include="*.html" --include="*.py" --include="*.css" --include="*.js" --include="*.svg" --include="*.json" . ; echo "grep exit $?"`
 Expected: `17 passed`, links clean, `grep exit 1`.
 
 - [ ] **Step 7: Verify in the browser pane**

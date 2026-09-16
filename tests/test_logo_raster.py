@@ -34,5 +34,5 @@ def test_header_uses_the_raster_logo():
     b = load("build", ("_build", "build.py"))
     html = b.shell(b.PAGES["index.html"], "index.html")
     assert '<img class="logo" src="/assets/logo-header.webp"' in html
-    assert 'width="900"' in html and 'alt=""' in html
+    assert 'width="450"' in html and 'alt=""' in html
     assert '<span class="vh">Phoenix Automation Solutions</span>' in html

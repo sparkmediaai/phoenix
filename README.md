@@ -69,7 +69,7 @@ which changes `BASE` and `CNAME` together, rebuilds and link-checks.
 | `_build/build.py` | The shell, the site facts and the page table. |
 | `_build/set_domain.py` | Moves the site to a new hostname. |
 | `_build/make_social.py` | Placeholder `assets/og.jpg` and `assets/icon-180.png`. Needs Pillow. |
-| `_tools/logo_raster.py` | Cuts the header logo from `_tools/brand/phoenix-logo.png`, Dave's high-resolution rendering, into `assets/logo.webp` and a pale-wordmark `assets/logo-header.webp`. |
+| `_tools/logo_raster.py` | Cuts the header logo from `_tools/brand/phoenix-logo.png`, Dave's high-resolution rendering, into a pale-wordmark `assets/logo-header.webp` at 450px, three times the width the header draws it at. |
 | `_tools/make_logo.py` | Draws the logo. The flame-and-bird mark is hand-drawn SVG paths; the wordmark is Michroma (OFL, in `_tools/fonts`) converted to outlines. Writes `assets/logo.svg`, `mark.svg`, `favicon.svg` and `icon-180.png`, which now serve the favicon and touch icon only; `--preview` renders a side-by-side against the client's 532px JPEG, the only artwork supplied. Needs `pip install fonttools resvg-py pillow`. |
 | `_tools/linkcheck.py` | Resolves every internal href, src, srcset and CSS url() against the filesystem. Run it after a build and always after moving the site. |
 | `_tools/cut_images.py` | Cuts the client's originals into `assets/img/`, `assets/video/` and `assets/og.jpg` per `_tools/image-picks.json`. `--images`, `--video` and `--og` run one part on its own; with no flag it runs all three. |

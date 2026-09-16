@@ -3,11 +3,16 @@
     python _tools/logo_raster.py
 
 Reads _tools/brand/phoenix-logo.png (transparent, grey PHOENIX, orange
-SOLUTIONS), trims the transparent margins, and writes two 900px-wide WebPs:
-assets/logo.webp as supplied, for light backgrounds, and
-assets/logo-header.webp with the grey wordmark recoloured to the header's
+SOLUTIONS), trims the transparent margins, and writes one 450px-wide WebP:
+assets/logo-header.webp, with the grey wordmark recoloured to the header's
 pale text (#E6DDD1) so it reads on the ink header. The flame and the orange
-word are untouched in both.
+word are untouched.
+
+The header draws the mark 44px tall, about 149px wide, so 450px covers a 3x
+display and the old 900px covered a 6x one that does not exist. Nothing on
+the site asks for the logo on a light background, so the as-supplied
+rendering is not written at all: an unreferenced file in a public repo is a
+file somebody later assumes is used.
 """
 import os
 from PIL import Image
@@ -16,7 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SRC = os.path.join(HERE, "brand", "phoenix-logo.png")
 OUT = os.path.join(ROOT, "assets")
-WIDTH = 900
+WIDTH = 450
 PALE = (230, 221, 209)
 
 
@@ -46,13 +51,11 @@ def scaled(im, width):
 
 def run():
     im = trim(Image.open(SRC).convert("RGBA"))
-    light = scaled(im, WIDTH)
-    light.save(os.path.join(OUT, "logo.webp"), "WEBP", quality=90, method=6)
     dark = scaled(recolor_wordmark(im, PALE), WIDTH)
-    dark.save(os.path.join(OUT, "logo-header.webp"), "WEBP", quality=90, method=6)
-    for n in ("logo.webp", "logo-header.webp"):
-        p = os.path.join(OUT, n)
-        print("wrote assets/%s %dx%d %d KB" % (n, *Image.open(p).size, os.path.getsize(p) // 1024))
+    name = "logo-header.webp"
+    dark.save(os.path.join(OUT, name), "WEBP", quality=90, method=6)
+    p = os.path.join(OUT, name)
+    print("wrote assets/%s %dx%d %d KB" % (name, *Image.open(p).size, os.path.getsize(p) // 1024))
 
 
 if __name__ == "__main__":

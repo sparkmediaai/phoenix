@@ -7,6 +7,8 @@
   var steps = Array.prototype.slice.call(form.querySelectorAll("[data-wizard-step]"));
   if (steps.length < 2) return;
   var submitRow = form.querySelector(".form-actions");
+  if (!submitRow) return;
+  var status = form.querySelector(".form-status");
   var current = 0;
 
   var nav = document.createElement("p");
@@ -48,7 +50,21 @@
     if (first && dir) first.focus({ preventScroll: true });
   }
 
-  next.addEventListener("click", function () { if (stepValid(current)) show(current + 1, 1); });
+  // A step that will not advance has to say why, and put the cursor where the
+  // problem is. Without this, Next simply does nothing and the visitor is left
+  // to spot the red border on their own.
+  function say(msg, cls) {
+    if (!status) return;
+    status.textContent = msg;
+    status.className = "form-status" + (cls ? " " + cls : "");
+  }
+
+  next.addEventListener("click", function () {
+    if (stepValid(current)) { say("", ""); show(current + 1, 1); return; }
+    say("Please complete the highlighted fields.", "err");
+    var bad = steps[current].querySelector('[aria-invalid="true"]');
+    if (bad) bad.focus({ preventScroll: true });
+  });
   back.addEventListener("click", function () { show(current - 1, -1); });
   form.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && e.target.tagName !== "TEXTAREA" && e.target.tagName !== "BUTTON" && current < steps.length - 1) { e.preventDefault(); next.click(); }
