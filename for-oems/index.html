@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/site.css?v=7b32dc09">
 <link rel="stylesheet" href="/assets/forms.css?v=53fdd355">
-<link rel="stylesheet" href="/assets/motion.css?v=1e59b443">
+<link rel="stylesheet" href="/assets/motion.css?v=38b631e3">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
 </head>
 <body>
@@ -62,24 +62,44 @@
 <main id="main">
 <aside class="note"><b>Working note</b> The 'part-time employee for my customer' line is Russell's own (8 Sep, 16:37). The three-to-eight-hours-a-week figure and the taper after three to six months are his too.</aside>
 
-<section class="band">
-  <div class="inner narrow" data-reveal>
-    <h2>Before you buy anything</h2>
-    <p>You send the machine, not a part number. Phoenix looks at the function, the environment, the
-    quantity and the cost target, and comes back with a control architecture and a price at your
-    volume. If the software needs a routine written, Russell writes it and you paste it in. If the
-    hardware needs a custom mount or a branded bezel, the factory quotes it. None of this is billed.</p>
-
-    <h2>The first application</h2>
-    <p>The first machine on a new platform is where a supplier is either a partner or a problem. Phoenix
-    commits engineering hours to it, three to eight a week if that is what it takes, until the first
-    unit is running. After the first three to six months that tapers, because it has to, and by then
-    your team owns the platform.</p>
-
-    <h2>Then, production</h2>
-    <p>Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Illinois,
-    and keeps the factory relationship warm so the next revision costs less than the last one. When a
-    distributor makes sense for inventory, we will say so. When it does not, we will say that too.</p>
+<section class="band pin" data-pin data-pin-length="6">
+  <div class="inner pin-grid">
+    <div class="pin-steps">
+      <div class="pin-step" data-step data-step-draw="#g-hmi"><div class="eyebrow">Step one</div><h2>Send the machine, not a part number.</h2><p>Phoenix looks at the function, the environment, the quantity and the cost target, and comes back with an operator interface sized to the job.</p></div>
+      <div class="pin-step" data-step data-step-draw="#g-plc"><div class="eyebrow">Step two</div><h2>A controller sized to the machine.</h2><p>If the software needs a routine written, Russell writes it and you paste it in. If the hardware needs a custom mount or a branded bezel, the factory quotes it. None of this is billed.</p></div>
+      <div class="pin-step" data-step data-step-draw="#g-io"><div class="eyebrow">Step three</div><h2>I/O, drives and the first application.</h2><p>The first machine on a new platform is where a supplier is either a partner or a problem. Phoenix commits three to eight engineering hours a week until the first unit is running.</p></div>
+      <div class="pin-step" data-step data-step-draw="#g-net"><div class="eyebrow">Step four</div><h2>Then, production.</h2><p>Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Illinois, and keeps the factory relationship warm so the next revision costs less than the last one.</p></div>
+    </div>
+    <figure class="art pin-figure"><svg xmlns="http://www.w3.org/2000/svg" id="topology" viewBox="0 0 520 460" role="img" aria-labelledby="topo-title" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title id="topo-title">Controls topology: HMI, PLC, remote I/O and the network between them</title>
+  <g id="g-hmi">
+    <rect x="160" y="20" width="200" height="120" rx="8"/>
+    <rect x="178" y="36" width="164" height="76" rx="4"/>
+    <path d="M 192 100 L 224 70 L 252 88 L 290 52 L 328 78"/>
+    <text x="260" y="132" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">HMI</text>
+  </g>
+  <g id="g-plc">
+    <rect x="190" y="200" width="140" height="90" rx="6"/>
+    <path d="M 206 224 H 314 M 206 244 H 314 M 206 264 H 274"/>
+    <circle cx="300" cy="264" r="6" stroke="#C4542C"/>
+    <text x="260" y="282" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">PLC</text>
+  </g>
+  <g id="g-io">
+    <rect x="30" y="350" width="120" height="70" rx="6"/>
+    <rect x="200" y="350" width="120" height="70" rx="6"/>
+    <rect x="370" y="350" width="120" height="70" rx="6"/>
+    <path d="M 46 372 H 134 M 46 392 H 134 M 216 372 H 304 M 216 392 H 304 M 386 372 H 474 M 386 392 H 474"/>
+    <text x="90" y="440" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">I/O</text>
+    <text x="260" y="440" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">I/O</text>
+    <text x="430" y="440" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">drives</text>
+  </g>
+  <g id="g-net" stroke="#C4542C">
+    <path d="M 260 140 V 200"/>
+    <path d="M 260 290 V 320 H 90 V 350"/>
+    <path d="M 260 320 V 350"/>
+    <path d="M 260 320 H 430 V 350"/>
+  </g>
+</svg></figure>
   </div>
 </section>
 

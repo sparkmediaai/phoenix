@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="topology" viewBox="0 0 520 460" role="img" aria-labelledby="topo-title" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title id="topo-title">Controls topology: HMI, PLC, remote I/O and the network between them</title>
+  <g id="g-hmi">
+    <rect x="160" y="20" width="200" height="120" rx="8"/>
+    <rect x="178" y="36" width="164" height="76" rx="4"/>
+    <path d="M 192 100 L 224 70 L 252 88 L 290 52 L 328 78"/>
+    <text x="260" y="132" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">HMI</text>
+  </g>
+  <g id="g-plc">
+    <rect x="190" y="200" width="140" height="90" rx="6"/>
+    <path d="M 206 224 H 314 M 206 244 H 314 M 206 264 H 274"/>
+    <circle cx="300" cy="264" r="6" stroke="#C4542C"/>
+    <text x="260" y="282" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">PLC</text>
+  </g>
+  <g id="g-io">
+    <rect x="30" y="350" width="120" height="70" rx="6"/>
+    <rect x="200" y="350" width="120" height="70" rx="6"/>
+    <rect x="370" y="350" width="120" height="70" rx="6"/>
+    <path d="M 46 372 H 134 M 46 392 H 134 M 216 372 H 304 M 216 392 H 304 M 386 372 H 474 M 386 392 H 474"/>
+    <text x="90" y="440" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">I/O</text>
+    <text x="260" y="440" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">I/O</text>
+    <text x="430" y="440" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">drives</text>
+  </g>
+  <g id="g-net" stroke="#C4542C">
+    <path d="M 260 140 V 200"/>
+    <path d="M 260 290 V 320 H 90 V 350"/>
+    <path d="M 260 320 V 350"/>
+    <path d="M 260 320 H 430 V 350"/>
+  </g>
+</svg>

@@ -42,3 +42,18 @@ html.motion .hero-media .hero-video { opacity: 1; }
 .stat { display: flex; align-items: baseline; gap: 14px; margin: .2em 0; }
 .stat .num { font: 600 clamp(2rem, 4vw, 3rem)/1 var(--serif); color: var(--ember); letter-spacing: -.01em; }
 .stat .lbl { color: var(--ink-soft); }
+
+/* Pinned sequences */
+.pin-grid { display: grid; gap: 40px; grid-template-columns: minmax(0, 1fr) minmax(280px, 460px); align-items: center; }
+.pin-steps { display: grid; gap: 40px; }
+.pin-step { max-width: 46ch; }
+.pin-figure { margin: 0; }
+@media (min-width: 768px) {
+  html.motion .band.pin { min-height: 100svh; display: flex; align-items: center; }
+  html.motion .pin-steps { align-content: center; min-height: 40vh; }
+  html.motion .pin-step { grid-area: 1 / 1; }
+}
+@media (max-width: 860px) {
+  .pin-grid { grid-template-columns: 1fr; }
+  .pin-figure { max-width: 360px; margin-inline: auto; }
+}

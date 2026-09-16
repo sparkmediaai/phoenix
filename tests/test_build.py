@@ -86,3 +86,13 @@ def test_figure_helper():
     out = b.figure("cost-figure.svg", "From $1,000 to $350.")
     assert out.startswith('<figure class="art" data-reveal>') and "{{inline:art/cost-figure.svg}}" in out
     assert "<figcaption>From $1,000 to $350.</figcaption>" in out
+
+
+def test_pinned_helper_and_oem_page():
+    b = load_build()
+    out = b.pinned([("A", "B", "C", "#g-hmi"), ("D", "E", "F", "#g-plc")], "topology.svg")
+    assert 'data-pin data-pin-length="4"' in out
+    assert out.count('class="pin-step" data-step') == 2
+    assert 'data-step-draw="#g-hmi"' in out and "{{inline:art/topology.svg}}" in out
+    html = b.shell(b.PAGES["for-oems/index.html"], "for-oems/index.html")
+    assert html.count("data-step-draw") == 4 and 'id="topology"' in html

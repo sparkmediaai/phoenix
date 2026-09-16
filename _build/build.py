@@ -165,6 +165,20 @@ def figure(svg_name, caption, cls=""):
             % ((" " + cls) if cls else "", svg_name, caption))
 
 
+def pinned(steps, svg_name, length=None):
+    """A section that pins while its steps play beside a drawing that draws
+    itself one group per step. With motion off the steps stack under each
+    other beside the finished drawing."""
+    length = length or len(steps) + 2
+    items = "".join(
+        '      <div class="pin-step" data-step data-step-draw="%s"><div class="eyebrow">%s</div><h2>%s</h2><p>%s</p></div>\n'
+        % (sel, eyebrow, heading, text) for eyebrow, heading, text, sel in steps)
+    return ('<section class="band pin" data-pin data-pin-length="%d">\n  <div class="inner pin-grid">\n'
+            '    <div class="pin-steps">\n%s    </div>\n'
+            '    <figure class="art pin-figure">{{inline:art/%s}}</figure>\n  </div>\n</section>'
+            % (length, items, svg_name))
+
+
 MOTION_SCRIPTS = ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js"]
 
 
@@ -485,26 +499,7 @@ PAGES["for-oems/index.html"] = dict(
     actions=[("Start an application review", "/start/")],
     body=note("The 'part-time employee for my customer' line is Russell's own (8 Sep, 16:37). "
               "The three-to-eight-hours-a-week figure and the taper after three to six months are his too.") + """
-<section class="band">
-  <div class="inner narrow" data-reveal>
-    <h2>Before you buy anything</h2>
-    <p>You send the machine, not a part number. Phoenix looks at the function, the environment, the
-    quantity and the cost target, and comes back with a control architecture and a price at your
-    volume. If the software needs a routine written, Russell writes it and you paste it in. If the
-    hardware needs a custom mount or a branded bezel, the factory quotes it. None of this is billed.</p>
-
-    <h2>The first application</h2>
-    <p>The first machine on a new platform is where a supplier is either a partner or a problem. Phoenix
-    commits engineering hours to it, three to eight a week if that is what it takes, until the first
-    unit is running. After the first three to six months that tapers, because it has to, and by then
-    your team owns the platform.</p>
-
-    <h2>Then, production</h2>
-    <p>Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Illinois,
-    and keeps the factory relationship warm so the next revision costs less than the last one. When a
-    distributor makes sense for inventory, we will say so. When it does not, we will say that too.</p>
-  </div>
-</section>
+%(path)s
 
 <section class="band band-tint">
   <div class="inner">
@@ -534,12 +529,24 @@ PAGES["for-oems/index.html"] = dict(
     </dl>
   </div>
 </section>
-""" % dict(cards=cards([
-        ("HMI and touchscreens", "Operator interfaces from small panel displays to full-glass fronts, branded to your machine."),
-        ("PLC and controllers", "Controllers sized to the machine, with application code support from Phoenix."),
-        ("I/O and networking", "Remote I/O, fieldbus and the network layout to make it all talk."),
-        ("Custom operator panels", "Cab operating panels, hall stations, glass fronts with integrated phone, at production cost."),
-    ], "two")),
+""" % dict(
+        path=pinned([
+            ("Step one", "Send the machine, not a part number.",
+             "Phoenix looks at the function, the environment, the quantity and the cost target, and comes back with an operator interface sized to the job.", "#g-hmi"),
+            ("Step two", "A controller sized to the machine.",
+             "If the software needs a routine written, Russell writes it and you paste it in. If the hardware needs a custom mount or a branded bezel, the factory quotes it. None of this is billed.", "#g-plc"),
+            ("Step three", "I/O, drives and the first application.",
+             "The first machine on a new platform is where a supplier is either a partner or a problem. Phoenix commits three to eight engineering hours a week until the first unit is running.", "#g-io"),
+            ("Step four", "Then, production.",
+             "Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Illinois, and keeps the factory relationship warm so the next revision costs less than the last one.", "#g-net"),
+        ], "topology.svg"),
+        cards=cards([
+            ("HMI and touchscreens", "Operator interfaces from small panel displays to full-glass fronts, branded to your machine."),
+            ("PLC and controllers", "Controllers sized to the machine, with application code support from Phoenix."),
+            ("I/O and networking", "Remote I/O, fieldbus and the network layout to make it all talk."),
+            ("Custom operator panels", "Cab operating panels, hall stations, glass fronts with integrated phone, at production cost."),
+        ], "two"),
+    ),
 )
 
 PAGES["capabilities/index.html"] = dict(
