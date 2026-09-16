@@ -73,18 +73,39 @@ def ffmpeg():
     return imageio_ffmpeg.get_ffmpeg_exe()
 
 
-def cut_video(src, out_dir, name, start, seconds, width=1280, poster_at=None):
+def cut_video(src, out_dir, name, start, seconds, width=1280, poster_at=None, stabilize=False):
+    """Cut an 8-second-ish muted loop as WebM and MP4, plus a WebP poster.
+
+    With stabilize=True the window is run through ffmpeg's two-pass vidstab
+    (detect, then transform with a 5% zoom to hide the borders), which takes
+    the handheld wobble out of phone footage. The poster is then taken from
+    the stabilised MP4 so it matches the loop's framing.
+    """
     os.makedirs(out_dir, exist_ok=True)
-    common = [ffmpeg(), "-y", "-ss", str(start), "-t", str(seconds), "-i", src,
-              "-vf", "scale=%d:-2,fps=24" % width, "-an"]
-    webm = os.path.join(out_dir, name + ".webm")
-    mp4 = os.path.join(out_dir, name + ".mp4")
+    filters = "scale=%d:-2,fps=24" % width
+    if stabilize:
+        # The transform file is named relatively and ffmpeg runs in out_dir,
+        # because a Windows drive letter's colon breaks filter-option parsing.
+        trf = name + ".trf"
+        subprocess.run([ffmpeg(), "-y", "-ss", str(start), "-t", str(seconds), "-i", os.path.abspath(src),
+                        "-vf", "vidstabdetect=shakiness=8:accuracy=15:result=" + trf,
+                        "-f", "null", "-"], check=True, cwd=out_dir)
+        filters = ("vidstabtransform=input=%s:smoothing=40:zoom=5:optzoom=0:crop=black:interpol=bicubic,"
+                   % trf) + filters
+    common = [ffmpeg(), "-y", "-ss", str(start), "-t", str(seconds), "-i", os.path.abspath(src), "-vf", filters, "-an"]
+    webm = os.path.abspath(os.path.join(out_dir, name + ".webm"))
+    mp4 = os.path.abspath(os.path.join(out_dir, name + ".mp4"))
     poster_png = os.path.join(out_dir, name + "-poster.png")
-    subprocess.run(common + ["-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "36", "-row-mt", "1", webm], check=True)
+    subprocess.run(common + ["-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "36", "-row-mt", "1", webm], check=True, cwd=out_dir)
     subprocess.run(common + ["-c:v", "libx264", "-crf", "27", "-preset", "slow", "-pix_fmt", "yuv420p",
-                             "-movflags", "+faststart", mp4], check=True)
-    subprocess.run([ffmpeg(), "-y", "-ss", str(poster_at if poster_at is not None else start), "-i", src,
-                    "-frames:v", "1", "-vf", "scale=%d:-2" % width, poster_png], check=True)
+                             "-movflags", "+faststart", mp4], check=True, cwd=out_dir)
+    if stabilize:
+        os.remove(os.path.join(out_dir, trf))
+        at = (poster_at - start) if poster_at is not None else 0
+        subprocess.run([ffmpeg(), "-y", "-ss", str(at), "-i", mp4, "-frames:v", "1", poster_png], check=True)
+    else:
+        subprocess.run([ffmpeg(), "-y", "-ss", str(poster_at if poster_at is not None else start), "-i", src,
+                        "-frames:v", "1", "-vf", "scale=%d:-2" % width, poster_png], check=True)
     poster = os.path.join(out_dir, name + "-poster.webp")
     Image.open(poster_png).convert("RGB").save(poster, "WEBP", quality=80, method=6)
     os.remove(poster_png)
@@ -102,7 +123,7 @@ def run(picks_path=PICKS, images=True, video=True, og=True):
     if video and picks.get("video"):
         v = picks["video"]
         for path in cut_video(os.path.join(ORIGINALS, v["src"]), VIDEO, v["name"], v["start"], v["seconds"],
-                               poster_at=v.get("poster_at")):
+                               poster_at=v.get("poster_at"), stabilize=bool(v.get("stabilize"))):
             print("wrote", os.path.relpath(path, ROOT), os.path.getsize(path) // 1024, "KB")
     if og and picks.get("og"):
         o = picks["og"]

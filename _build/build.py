@@ -421,7 +421,7 @@ PAGES["index.html"] = dict(
                "Specified, cost-engineered and supported by an engineer who has done it for twenty years, "
                "not pulled from a catalog and shipped with a wish.",
     actions=[("Start an application review", "/start/"), ("Meet us at PACK EXPO", "/pack-expo/")],
-    hero_video=dict(name="hero", alt="A die-cutting head running behind its glass guard, with the laser guide line lit"),
+    hero_video=dict(name="hero", alt="A multi-station automation machine on the shop floor, pneumatic slides and valve manifolds on a blue frame"),
     hero_steps=[
         ("Proof one", "Engineered to the target.", "A $1,000 operator panel taken back to the factory and re-engineered to $350 at 2,500 units. Not discounted. Redesigned."),
         ("Proof two", "A panel with your name on it.", "Your logo on the bezel, your mounting, your price at your quantity. The big brands will not discuss it below a seven-figure order."),

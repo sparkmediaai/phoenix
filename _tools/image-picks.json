@@ -1,27 +1,131 @@
 {
   "images": [
-    {"src": "Elevator Hall Station", "name": "elevator-hall-station", "crop": null,
-     "alt": "Elevator hall station with call display", "review": "clean: no brand, no face"},
-    {"src": "Elevator Hall Station Screen", "name": "hall-station-screen", "crop": null,
-     "alt": "Hall station screen showing car position", "review": "clean: no brand, no face"},
-    {"src": "Control Panel", "name": "control-panel", "crop": [220, 320, 1380, 1280],
-     "alt": "Control panel with PLC, I/O and wiring, built for an OEM machine", "review": "clean: generic component labels only (WEG breakers, unbranded sensors), no supplier or customer name, no face; cropped tighter to drop a cluttered shop background and the lower relay/contactor rows, bringing both files under budget"},
-    {"src": "factory-automation-remote-io", "name": "factory-automation-remote-i-o", "crop": [50, 180, 1450, 1250],
-     "alt": "Remote I/O modules wired into a factory automation enclosure", "review": "original filename carried the supplier's name, so renamed on disk (local rename only, git-ignored) before referencing it here; the photo itself shows only generic FIOA/FIOD module labels and wiring, no supplier name, no face -- passes visual review, kept; cropped tighter to drop the busiest wire-bundle mass, bringing both files under budget"},
-    {"src": "Barcode verification", "name": "barcode-verification", "crop": null,
-     "alt": "Barcode verification station on a packaging line", "review": "clean: shows a generic third-party service sticker (D&D Tech Service), not the supplier or a customer, no face"},
-    {"src": "Pad Printing Machine", "name": "pad-printing-machine", "crop": null,
-     "alt": "Pad printing machine with touchscreen operator control", "review": "clean: operator seen from behind only, not a recognizable face; machine markings are a third-party model number, not the supplier or a customer"},
-    {"src": "T-Shirt Print Curing", "name": "print-curing", "crop": [0, 300, 2100, 2400],
-     "alt": "Print curing line with temperature control interface", "review": "clean: only a hand/leg visible, no face, no brand; cropped tighter to drop background shelving and an illegible wall calendar, and to bring both files under budget"},
-    {"src": "Municipal Waste Water Plant", "name": "waste-water-plant", "crop": [640, 632, 1451, 1240],
-     "alt": "Exterior of a municipal waste water treatment plant, with aeration basins and the operations building", "review": "clean: no legible brand; a person standing in the building's doorway is small, side-on and not recognizable at the delivered widths; cropped to roughly 4:3 to match the industries card, which is 4:3 and covers, so the whole frame is seen: the covered basin and its railings across the middle, the operations building filling the right, the aeration basin bottom right, and lawn only in the bottom-left corner. Four candidate crops were compared as thumbnails; the two that excluded the doorway figure had to cut the operations building in half, or drop it entirely, or fall under 800px wide, which would have made the two srcset files identical"},
-    {"src": "Agriculture soil sampling", "name": "soil-sampling-rig", "crop": [0, 380, 1050, 2220],
-     "alt": "Hydraulic soil-sampling rig with carousel control", "review": "clean: tractor in background carries no legible name or logo, no face; cropped tighter to the rig's carousel control and emergency stop, dropping most of the busy tractor engine bay, to bring the industries page under its page-weight budget"},
-    {"src": "Soil Sampler", "name": "soil-sampler", "crop": [880, 0, 4000, 3000],
-     "alt": "Soil sampler control and logging interface", "review": "cropped to remove a parked car and its legible license plate from the left edge of frame; remaining cabinet interior is clean, no brand, no face"}
+    {
+      "src": "Elevator Hall Station",
+      "name": "elevator-hall-station",
+      "crop": null,
+      "alt": "Elevator hall station with call display",
+      "review": "clean: no brand, no face"
+    },
+    {
+      "src": "Elevator Hall Station Screen",
+      "name": "hall-station-screen",
+      "crop": null,
+      "alt": "Hall station screen showing car position",
+      "review": "clean: no brand, no face"
+    },
+    {
+      "src": "Control Panel",
+      "name": "control-panel",
+      "crop": [
+        220,
+        320,
+        1380,
+        1280
+      ],
+      "alt": "Control panel with PLC, I/O and wiring, built for an OEM machine",
+      "review": "clean: generic component labels only (WEG breakers, unbranded sensors), no supplier or customer name, no face; cropped tighter to drop a cluttered shop background and the lower relay/contactor rows, bringing both files under budget"
+    },
+    {
+      "src": "factory-automation-remote-io",
+      "name": "factory-automation-remote-i-o",
+      "crop": [
+        50,
+        180,
+        1450,
+        1250
+      ],
+      "alt": "Remote I/O modules wired into a factory automation enclosure",
+      "review": "original filename carried the supplier's name, so renamed on disk (local rename only, git-ignored) before referencing it here; the photo itself shows only generic FIOA/FIOD module labels and wiring, no supplier name, no face -- passes visual review, kept; cropped tighter to drop the busiest wire-bundle mass, bringing both files under budget"
+    },
+    {
+      "src": "Barcode verification",
+      "name": "barcode-verification",
+      "crop": null,
+      "alt": "Barcode verification station on a packaging line",
+      "review": "clean: shows a generic third-party service sticker (D&D Tech Service), not the supplier or a customer, no face"
+    },
+    {
+      "src": "Pad Printing Machine",
+      "name": "pad-printing-machine",
+      "crop": null,
+      "alt": "Pad printing machine with touchscreen operator control",
+      "review": "clean: operator seen from behind only, not a recognizable face; machine markings are a third-party model number, not the supplier or a customer"
+    },
+    {
+      "src": "T-Shirt Print Curing",
+      "name": "print-curing",
+      "crop": [
+        0,
+        300,
+        2100,
+        2400
+      ],
+      "alt": "Print curing line with temperature control interface",
+      "review": "clean: only a hand/leg visible, no face, no brand; cropped tighter to drop background shelving and an illegible wall calendar, and to bring both files under budget"
+    },
+    {
+      "src": "Municipal Waste Water Plant",
+      "name": "waste-water-plant",
+      "crop": [
+        640,
+        632,
+        1451,
+        1240
+      ],
+      "alt": "Exterior of a municipal waste water treatment plant, with aeration basins and the operations building",
+      "review": "clean: no legible brand; a person standing in the building's doorway is small, side-on and not recognizable at the delivered widths; cropped to roughly 4:3 to match the industries card, which is 4:3 and covers, so the whole frame is seen: the covered basin and its railings across the middle, the operations building filling the right, the aeration basin bottom right, and lawn only in the bottom-left corner. Four candidate crops were compared as thumbnails; the two that excluded the doorway figure had to cut the operations building in half, or drop it entirely, or fall under 800px wide, which would have made the two srcset files identical"
+    },
+    {
+      "src": "Agriculture soil sampling",
+      "name": "soil-sampling-rig",
+      "crop": [
+        0,
+        380,
+        1050,
+        2220
+      ],
+      "alt": "Hydraulic soil-sampling rig with carousel control",
+      "review": "clean: tractor in background carries no legible name or logo, no face; cropped tighter to the rig's carousel control and emergency stop, dropping most of the busy tractor engine bay, to bring the industries page under its page-weight budget"
+    },
+    {
+      "src": "Soil Sampler",
+      "name": "soil-sampler",
+      "crop": [
+        880,
+        0,
+        4000,
+        3000
+      ],
+      "alt": "Soil sampler control and logging interface",
+      "review": "cropped to remove a parked car and its legible license plate from the left edge of frame; remaining cabinet interior is clean, no brand, no face"
+    }
   ],
-  "video": {"src": "Die cutter barcode verification", "name": "hero", "start": 39, "seconds": 8, "poster_at": 41.0,
-            "review": "checked contact sheet at 5s steps (0 to 75s) plus a 1s-step pass over the 37-49s window; 39-47s holds the die-cutting head running behind its glass guard with the red laser guide line visible, generic tick-mark scale and unmarked control buttons only, no legible supplier or customer name, no face -- clean, chosen; footage is handheld so the loop itself carries motion blur throughout, but the poster frame at 41.0s scored highest on a Laplacian-variance sharpness pass over 39-47s at 0.25s steps (var 255 vs 195-219 for the runners-up), visibly crisper than the original 39.0s poster"},
-  "og": {"src": "Control Panel", "crop": [220, 320, 1380, 1280]}
+  "video": {
+    "src": "Video Feb 08, 10 21 00 AM.mov",
+    "name": "hero",
+    "start": 0,
+    "seconds": 8,
+    "stabilize": true,
+    "poster_at": 2.0,
+    "review": "1080p shop-floor clip of a blue-framed multi-station automation machine with pneumatic slides and valve manifolds; reviewed all 29 s on a 1 s contact sheet plus full-resolution frames at 4 s and 14 s: only handwritten STATION tape labels, no supplier or customer name, no face; 0-8 s is the calmest window before the camera walks; stabilised with vidstab (5% zoom); poster is the sharpest frame in the window by Laplacian variance"
+  },
+  "og": {
+    "src": "Control Panel",
+    "crop": [
+      220,
+      320,
+      1380,
+      1280
+    ]
+  },
+  "video_alternate": {
+    "src": "Die cutter barcode verification",
+    "name": "hero",
+    "start": 39,
+    "seconds": 8,
+    "poster_at": 41.0,
+    "review": "checked contact sheet at 5s steps (0 to 75s) plus a 1s-step pass over the 37-49s window; 39-47s holds the die-cutting head running behind its glass guard with the red laser guide line visible, generic tick-mark scale and unmarked control buttons only, no legible supplier or customer name, no face -- clean, chosen; footage is handheld so the loop itself carries motion blur throughout, but the poster frame at 41.0s scored highest on a Laplacian-variance sharpness pass over 39-47s at 0.25s steps (var 255 vs 195-219 for the runners-up), visibly crisper than the original 39.0s poster",
+    "note": "previous hero; the die cutter loop, kept as a documented alternate"
+  }
 }

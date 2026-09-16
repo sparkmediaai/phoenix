@@ -67,3 +67,4 @@ def test_cut_video_accepts_poster_at():
     import inspect
     t = load_tool()
     assert "poster_at" in inspect.signature(t.cut_video).parameters
+    assert "stabilize" in inspect.signature(t.cut_video).parameters
