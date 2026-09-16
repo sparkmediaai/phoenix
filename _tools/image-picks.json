@@ -1,0 +1,27 @@
+{
+  "images": [
+    {"src": "Elevator Hall Station", "name": "elevator-hall-station", "crop": null,
+     "alt": "Elevator hall station with call display", "review": "clean: no brand, no face"},
+    {"src": "Elevator Hall Station Screen", "name": "hall-station-screen", "crop": null,
+     "alt": "Hall station screen showing car position", "review": "clean: no brand, no face"},
+    {"src": "Control Panel", "name": "control-panel", "crop": [220, 320, 1380, 1280],
+     "alt": "Control panel with PLC, I/O and wiring, built for an OEM machine", "review": "clean: generic component labels only (WEG breakers, unbranded sensors), no supplier or customer name, no face; cropped tighter to drop a cluttered shop background and the lower relay/contactor rows, bringing both files under budget"},
+    {"src": "factory-automation-remote-io", "name": "factory-automation-remote-i-o", "crop": [50, 180, 1450, 1250],
+     "alt": "Remote I/O modules wired into a factory automation enclosure", "review": "original filename carried the supplier's name, so renamed on disk (local rename only, git-ignored) before referencing it here; the photo itself shows only generic FIOA/FIOD module labels and wiring, no supplier name, no face -- passes visual review, kept; cropped tighter to drop the busiest wire-bundle mass, bringing both files under budget"},
+    {"src": "Barcode verification", "name": "barcode-verification", "crop": null,
+     "alt": "Barcode verification station on a packaging line", "review": "clean: shows a generic third-party service sticker (D&D Tech Service), not the supplier or a customer, no face"},
+    {"src": "Pad Printing Machine", "name": "pad-printing-machine", "crop": null,
+     "alt": "Pad printing machine with touchscreen operator control", "review": "clean: operator seen from behind only, not a recognizable face; machine markings are a third-party model number, not the supplier or a customer"},
+    {"src": "T-Shirt Print Curing", "name": "print-curing", "crop": [0, 300, 2100, 2400],
+     "alt": "Print curing line with temperature control interface", "review": "clean: only a hand/leg visible, no face, no brand; cropped tighter to drop background shelving and an illegible wall calendar, and to bring both files under budget"},
+    {"src": "Municipal Waste Water Plant", "name": "waste-water-plant", "crop": [0, 691, 2048, 1536],
+     "alt": "Municipal waste water treatment plant control room", "review": "clean: wide exterior shot, no legible brand, distant figure not recognizable; cropped tighter (less sky) to bring the 1600 file under budget"},
+    {"src": "Agriculture soil sampling", "name": "soil-sampling-rig", "crop": [0, 0, 1936, 2400],
+     "alt": "Hydraulic soil-sampling rig with carousel control", "review": "clean: tractor in background carries no legible name or logo, no face; cropped off a strip of pavement/wheel at the bottom to bring both files under budget"},
+    {"src": "Soil Sampler", "name": "soil-sampler", "crop": [880, 0, 4000, 3000],
+     "alt": "Soil sampler control and logging interface", "review": "cropped to remove a parked car and its legible license plate from the left edge of frame; remaining cabinet interior is clean, no brand, no face"}
+  ],
+  "video": {"src": "Die cutter barcode verification", "name": "hero", "start": 0, "seconds": 8,
+            "review": "set start after Task 5 Step 1"},
+  "og": {"src": "Elevator Hall Station", "crop": null}
+}
