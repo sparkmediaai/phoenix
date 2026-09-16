@@ -1,0 +1,13 @@
+# Local Claude Code settings. The launch config is committed; the rest is not.
+.claude/*
+!.claude/launch.json
+
+# Client photography that has not been cut for the site stays off GitHub;
+# this repo is public. Only the resized frames in assets/img/ are committed.
+_originals/
+_triage*/
+picks.json
+
+# Python
+__pycache__/
+*.pyc
