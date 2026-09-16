@@ -532,7 +532,7 @@ PAGES["for-oems/index.html"] = dict(
 """ % dict(
         path=pinned([
             ("Step one", "Send the machine, not a part number.",
-             "Phoenix looks at the function, the environment, the quantity and the cost target, and comes back with an operator interface sized to the job.", "#g-hmi"),
+             "Phoenix looks at the function, the environment, the quantity and the cost target, and comes back with a control architecture and a price at your volume.", "#g-hmi"),
             ("Step two", "A controller sized to the machine.",
              "If the software needs a routine written, Russell writes it and you paste it in. If the hardware needs a custom mount or a branded bezel, the factory quotes it. None of this is billed.", "#g-plc"),
             ("Step three", "I/O, drives and the first application.",
