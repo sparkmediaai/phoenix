@@ -12,8 +12,8 @@ uses. Output: assets/img/<name>-1600.webp and <name>-800.webp, never
 upscaled; assets/video/hero.webm, hero.mp4 and hero-poster.webp;
 assets/og.jpg at 1200x630.
 
-Supplier names are stripped from output names by slug(); alt text is
-written by hand in the picks file and reviewed before commit.
+Output names are chosen by hand in the picks file; nothing here derives them
+from the originals' file names.
 """
 import json, os, re, subprocess, sys
 from PIL import Image, ImageOps
@@ -24,12 +24,10 @@ ORIGINALS = os.path.join(ROOT, "_originals")
 IMG = os.path.join(ROOT, "assets", "img")
 VIDEO = os.path.join(ROOT, "assets", "video")
 PICKS = os.path.join(HERE, "image-picks.json")
-STRIP = re.compile(r"\b([supplier]|[supplier])\b", re.I)
 
 
 def slug(name):
-    name = STRIP.sub("", os.path.splitext(name)[0])
-    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    return re.sub(r"[^a-z0-9]+", "-", os.path.splitext(name)[0].lower()).strip("-")
 
 
 def open_image(src):
@@ -38,10 +36,17 @@ def open_image(src):
     return im.convert("RGB")
 
 
+def checked_crop(im, crop):
+    left, top, right, bottom = crop
+    if not (0 <= left < right <= im.width and 0 <= top < bottom <= im.height):
+        raise ValueError("crop %r is outside the %dx%d source" % (crop, im.width, im.height))
+    return im.crop((left, top, right, bottom))
+
+
 def cut_image(src, out_dir, name, crop=None, widths=(1600, 800)):
     im = open_image(src)
     if crop:
-        im = im.crop(tuple(crop))
+        im = checked_crop(im, crop)
     os.makedirs(out_dir, exist_ok=True)
     out = []
     for w in widths:
@@ -57,7 +62,7 @@ def cut_image(src, out_dir, name, crop=None, widths=(1600, 800)):
 def cut_og(src, out_path, crop=None):
     im = open_image(src)
     if crop:
-        im = im.crop(tuple(crop))
+        im = checked_crop(im, crop)
     im = ImageOps.fit(im, (1200, 630), Image.LANCZOS, centering=(0.5, 0.5))
     im.save(out_path, "JPEG", quality=84, optimize=True, progressive=True)
     return out_path

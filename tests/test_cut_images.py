@@ -49,7 +49,15 @@ def test_cut_og_is_1200_by_630(tmp_path):
     assert im.size == (1200, 630) and im.format == "JPEG"
 
 
+def test_cut_image_rejects_crop_outside_source(tmp_path):
+    import pytest
+    t = load_tool()
+    src = make_jpg(tmp_path / "src")
+    with pytest.raises(ValueError):
+        t.cut_image(str(src), str(tmp_path), "bad", crop=[0, 0, 3001, 2000])
+
+
 def test_slug():
     t = load_tool()
     assert t.slug("Elevator Glass Cab Operator Panel") == "elevator-glass-cab-operator-panel"
-    assert t.slug("[supplier] Factory Automation Remote I_O") == "factory-automation-remote-i-o"
+    assert t.slug("Photo Aug 08, 11 36 48 AM.jpg") == "photo-aug-08-11-36-48-am"
