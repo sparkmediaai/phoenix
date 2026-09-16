@@ -10,7 +10,7 @@ Russell Homans. Built by SparkMedia under the September 2026 SOW, Phase 1
 **Working notes:** add `?notes` to any page, e.g. `/for-oems/?notes`
 **Deadline:** PACK EXPO International, McCormick Place, 28 September to 1 October 2026.
 
-Every page carries `noindex,nofollow`. That comes off when the client signs
+The navigation is five headers (Machine Builders, Products, Proof, Support, Company), each a menu of pages, plus the Talk to Russ button; all of it is the `NAV` and `CTA` tables in `_build/build.py`. Every page carries `noindex,nofollow`. That comes off when the client signs
 off, not before. It comes off by itself when `BASE` in `_build/build.py`
 equals `PRODUCTION`, which `set_domain.py` handles.
 
@@ -40,13 +40,19 @@ else writes HTML; if you edit `index.html` directly the next build discards it.
 
 | Page | Purpose |
 |---|---|
-| `/` | Positioning, the three differentiators, the twenty-year proof, fit and not-fit, how it starts. |
-| `/for-oems/` | The OEM path: pre-sale engineering, first-application support, production, straight answers. |
-| `/capabilities/` | Hardware families and engineering services. No supplier names. |
-| `/industries/` | Every industry named on the calls or shown in the Drive photographs. |
-| `/about/` | Russell Homans. Needs his bio, credentials and a photograph. |
+| `/` | Positioning, the two doors (machine builders, products), the three differentiators, the proof, fit and not-fit, how it starts. |
+| `/machine-builders/custom-controls/` | What can be built to a customer's print, the hardware families and the engineering services. |
+| `/machine-builders/design-win/` | How one approved part carries across a lineup; the pinned four-step path; straight answers. |
+| `/machine-builders/industries/` | The three lead industries, then every industry Phoenix controls run in. |
+| `/machine-builders/industries/{packaging,residential-elevators,food-equipment}/` | Machines served and the controls on them, one page each. |
+| `/products/{hmis,plcs,io-and-communication,cross-reference,datasheets}/` | The catalog side, scaffolded: what each page will list and how to get the numbers until it does. No part numbers are invented. |
+| `/proof/case-studies/` | The cab operating panel: problem, what was built, result. |
+| `/proof/custom-builds/` | The photograph gallery. |
+| `/support/{software,warranty-and-rma}/` | Scaffolded until Russell supplies the downloads and the terms. |
+| `/company/{about-russ,supply-chain,certifications,contact}/` | Who Phoenix is. Certifications is empty until Russell approves the wording. |
+| `/talk-to-russ/` | The Talk to Russ form: what you build, how many a year, what controls now, then contact. |
 | `/pack-expo/` | The QR-code landing for the show floor. |
-| `/start/` | The application-review intake: machine, volume, current controls, need, then contact. |
+| `/for-oems/`, `/capabilities/`, `/industries/`, `/about/`, `/start/` | Stubs that send the visitor to the page's new address. |
 
 `_build/build.py` also holds the only facts about where the site lives:
 

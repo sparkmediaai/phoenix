@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Moved | Phoenix Automation Solutions</title>
-<meta name="description" content="This page has moved.">
+<title>Talk to Russ | Phoenix Automation Solutions</title>
+<meta name="description" content="Four questions about your machine. Russell reviews every submission personally.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
 <meta name="theme-color" content="#1F1A17">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Phoenix Automation Solutions">
-<meta property="og:title" content="Moved | Phoenix Automation Solutions">
-<meta property="og:description" content="This page has moved.">
-<link rel="canonical" href="https://phoenix.sparkmedia.ai/capabilities/">
-<meta property="og:url" content="https://phoenix.sparkmedia.ai/capabilities/">
+<meta property="og:title" content="Talk to Russ | Phoenix Automation Solutions">
+<meta property="og:description" content="Four questions about your machine. Russell reviews every submission personally.">
+<link rel="canonical" href="https://phoenix.sparkmedia.ai/talk-to-russ/">
+<meta property="og:url" content="https://phoenix.sparkmedia.ai/talk-to-russ/">
 <meta property="og:image" content="https://phoenix.sparkmedia.ai/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -26,8 +26,7 @@
 <link rel="stylesheet" href="/assets/site.css?v=626a7848">
 <link rel="stylesheet" href="/assets/forms.css?v=ae802e4a">
 <link rel="stylesheet" href="/assets/motion.css?v=de9c970a">
-<meta http-equiv="refresh" content="0; url=/machine-builders/custom-controls/">
-<script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");</script>
+<script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
 </head>
 <body>
 
@@ -88,16 +87,64 @@
 
 <header class="hero hero-plain">
   <div class="hero-body">
-    <div class="eyebrow">Moved</div>
-    <h1>This page has a new address.</h1>
-    <p>It is now at <a href="/machine-builders/custom-controls/">/machine-builders/custom-controls/</a>. You will be taken there in a moment.</p>
-    <div class="hero-actions">
-      <a class="btn btn-solid" href="/machine-builders/custom-controls/">Go there now</a></div>
-    
+    <div class="eyebrow">Talk to Russ</div>
+    <h1>Three questions about the machine.</h1>
+    <p>What you build, how many a year, what controls are on it now. Then how to reach you. Russ reads every one and replies within two business days, with a straight answer either way.</p>
   </div>
 </header>
 
 <main id="main">
+<aside class="note"><b>Working note</b> Posts to FORM_ENDPOINT in _build/build.py; empty until Phoenix's GoHighLevel sub-account exists. Field names and option strings must match the CRM exactly; see assets/forms.js. Qualification thresholds are to be agreed with Russell.</aside>
+
+<section class="band">
+  <div class="inner narrow">
+    <form class="inquiry" method="post" action="#" novalidate>
+      <fieldset data-wizard-step>
+        <legend>1. The machine</legend>
+        <label>What does the machine do? <input name="machine_type" placeholder="e.g. rotary die cutter with barcode verification" required></label>
+      </fieldset>
+      <fieldset data-wizard-step>
+        <legend>2. Volume and controls</legend>
+        <div class="row two">
+          <label>How many do you build a year?
+            <select name="annual_volume" required>
+              <option value="">Choose one</option><option>Under 50</option><option>50 to 250</option><option>250 to 1,000</option><option>1,000 to 5,000</option><option>Over 5,000</option>
+            </select>
+          </label>
+          <label>What controls are on it now?
+            <select name="current_controls" required>
+              <option value="">Choose one</option><option>Allen-Bradley / Rockwell</option><option>Siemens</option><option>Omron</option><option>Automation Direct</option><option>Maple Systems</option><option>Relay logic / no PLC</option><option>Other</option><option>Not sure</option>
+            </select>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset data-wizard-step>
+        <legend>3. What you need (optional)</legend>
+        <label>What do you need? <textarea name="application" rows="4" placeholder="A cost target, a custom panel, a platform change, an application that has to work first time..."></textarea></label>
+        <label>Link to a spec, drawing or photo (optional) <input type="url" name="spec_link" placeholder="https://"></label>
+      </fieldset>
+      <fieldset data-wizard-step>
+        <legend>4. You</legend>
+        <div class="row two">
+          <label>Company <input name="company" autocomplete="organization" required></label>
+          <label>Your role <input name="role" autocomplete="organization-title" placeholder="Controls engineer, VP Engineering..."></label>
+        </div>
+        <div class="row two">
+          <label>First name <input name="first_name" autocomplete="given-name" required></label>
+          <label>Last name <input name="last_name" autocomplete="family-name" required></label>
+        </div>
+        <div class="row two">
+          <label>Work email <input type="email" name="email" autocomplete="email" required></label>
+          <label>Phone <input type="tel" name="phone" autocomplete="tel"></label>
+        </div>
+      </fieldset>
+      <!-- Honeypot. Humans never see it; scrapers fill it. Do not remove. -->
+      <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+      <p class="form-actions"><button class="btn btn-solid" type="submit">Send for review</button></p>
+      <p class="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
 
 </main>
 
@@ -155,10 +202,10 @@
     <a class="notes-off" href="?">Hide working notes</a>
   </div>
 </footer>
-<div class="cta-bar"><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></div>
 
 <script src="/assets/nav.js?v=68a28358" defer></script>
 <script src="/assets/forms.js?v=f34a02c9" defer></script>
 <script src="/assets/wizard.js?v=8b508f3b" defer></script>
+<script>(function(h){if(!h.classList.contains("motion"))return;function off(){h.classList.remove("motion")}["/assets/vendor/gsap.min.js?v=ca5f3b30","/assets/vendor/ScrollTrigger.min.js?v=73a8d7ab","/assets/motion.js?v=35f46a1b"].forEach(function(s){var e=document.createElement("script");e.src=s;e.async=false;e.onerror=off;document.body.appendChild(e)});window.__motionTimer=setTimeout(function(){if(!window.__motionReady)off()},4000)})(document.documentElement)</script>
 </body>
 </html>

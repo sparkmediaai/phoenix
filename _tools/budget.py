@@ -10,10 +10,21 @@ is over budget.
 import os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUDGET = {"index.html": 1_500_000, "pack-expo/index.html": 400_000}
+BUDGET = {"index.html": 1_500_000, "pack-expo/index.html": 400_000,
+          # A gallery is photographs by definition: ten of them, all lazy-loaded below the
+          # fold, and a phone takes the 800-px files. The budget counts the 1600-px files.
+          "proof/custom-builds/index.html": 1_800_000}
 DEFAULT = 1_000_000
-PAGES = ["index.html", "for-oems/index.html", "capabilities/index.html", "industries/index.html",
-         "about/index.html", "pack-expo/index.html", "start/index.html", "404.html"]
+def pages():
+    """Every built page: index.html files anywhere under the root, plus 404.html."""
+    out = []
+    for dirpath, dirnames, filenames in os.walk(ROOT):
+        dirnames[:] = [d for d in dirnames if not d.startswith((".", "_"))
+                       and d not in ("assets", "docs", "tests", "logos", "node_modules")]
+        for f in filenames:
+            if f == "index.html" or (f == "404.html" and dirpath == ROOT):
+                out.append(os.path.relpath(os.path.join(dirpath, f), ROOT).replace(os.sep, "/"))
+    return sorted(out)
 REF = re.compile(r'(?:href|src)="(/assets/[^"?]+)|srcset="([^"]+)|"(/assets/vendor/[^"?]+|/assets/motion\.js)')
 
 
@@ -40,7 +51,7 @@ def weigh(page):
 
 def main():
     bad = 0
-    for page in PAGES:
+    for page in pages():
         total, budget = weigh(page), BUDGET.get(page, DEFAULT)
         flag = "" if total <= budget else "   OVER"
         print("%-28s %8.0f KB of %5.0f KB%s" % (page, total / 1024, budget / 1024, flag))

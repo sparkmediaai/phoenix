@@ -63,19 +63,37 @@ p { margin: 0 0 1em; }
 .wordmark { display: flex; align-items: center; text-decoration: none; margin-right: auto; }
 .wordmark .logo { display: block; height: 44px; width: auto; }
 .vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.site-nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
-.site-nav a { text-decoration: none; font: 500 .92rem/1 var(--sans); padding: 8px 0; border-bottom: 1px solid transparent; }
-.site-nav a:hover, .site-nav a[aria-current="page"] { border-bottom-color: var(--gold); }
+.site-nav .menu { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.menu-item { position: relative; }
+.menu-head { background: none; border: 0; color: inherit; font: 500 .92rem/1 var(--sans); padding: 10px 10px; cursor: pointer; border-bottom: 1px solid transparent; }
+.menu-item.is-section > .menu-head, .menu-head:hover, .menu-head[aria-expanded="true"] { border-bottom-color: var(--gold); }
+.menu-panel { display: none; position: absolute; left: 0; top: 100%; min-width: 320px; background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 18px 40px rgba(31,26,23,.18); padding: 14px 6px 8px; z-index: 60; }
+.menu-item:hover > .menu-panel, .menu-item:focus-within > .menu-panel, .menu-item.open > .menu-panel { display: block; }
+.menu-intro { margin: 0 14px 8px; font: 500 .8rem/1.4 var(--sans); color: var(--ink-soft); }
+.menu-panel ul { list-style: none; margin: 0; padding: 0; }
+.menu-panel a { display: block; padding: 9px 14px; border-radius: 3px; text-decoration: none; }
+.menu-panel a:hover, .menu-panel a[aria-current="page"] { background: var(--sand); }
+.menu-panel a b { display: block; font: 600 .95rem/1.3 var(--sans); }
+.menu-panel a span { display: block; font: 400 .82rem/1.4 var(--sans); color: var(--ink-soft); }
 .nav-toggle { display: none; background: none; border: 0; color: inherit; font: 600 .8rem/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; align-items: center; gap: 8px; cursor: pointer; }
 .nav-bars { display: inline-block; width: 20px; }
 .nav-bars i { display: block; height: 2px; background: currentColor; margin: 4px 0; }
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .site-head .btn { display: none; }
   .nav-toggle { display: inline-flex; }
-  .site-nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--ink); padding: 8px var(--gutter) 20px; border-top: 1px solid #3a322d; }
+  .site-nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--ink); padding: 8px var(--gutter) 20px; border-top: 1px solid #3a322d; max-height: calc(100vh - var(--head-h)); overflow: auto; }
   .site-nav.open { display: block; }
-  .site-nav ul { flex-direction: column; gap: 0; }
-  .site-nav a { display: block; padding: 14px 0; border-bottom: 1px solid #3a322d; font-size: 1.05rem; }
+  .site-nav .menu { flex-direction: column; gap: 0; }
+  .menu-head { display: block; width: 100%; text-align: left; padding: 14px 0; border-bottom: 1px solid #3a322d; font-size: 1.05rem; }
+  .menu-head::after { content: "+"; float: right; color: var(--gold); }
+  .menu-head[aria-expanded="true"]::after { content: "\2013"; }
+  .menu-panel { position: static; min-width: 0; background: none; color: inherit; border: 0; box-shadow: none; padding: 4px 0 10px; display: none; }
+  .menu-item:hover > .menu-panel, .menu-item:focus-within > .menu-panel { display: none; }
+  .menu-item.open > .menu-panel { display: block; }
+  .menu-intro { color: #CFC5B8; margin-left: 0; }
+  .menu-panel a { padding: 10px 0 10px 12px; border-left: 2px solid #3a322d; border-radius: 0; }
+  .menu-panel a:hover, .menu-panel a[aria-current="page"] { background: none; border-left-color: var(--gold); }
+  .menu-panel a span { color: #CFC5B8; }
 }
 
 /* Hero */
@@ -175,3 +193,12 @@ html.notes .notes-off { display: inline; }
 .timeline li { padding: 0 0 18px 24px; position: relative; }
 .timeline li::before { content: ""; position: absolute; left: -7px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--ember); }
 .timeline b { display: block; font-family: var(--serif); font-size: 1.15rem; }
+
+/* The two doors on the homepage, and cards that are links */
+.doors { padding-top: clamp(32px, 5vw, 56px); }
+.door { display: block; padding: clamp(22px, 3vw, 36px); background: #fff; border: 1px solid var(--line); border-radius: 4px; text-decoration: none; transition: transform .2s, box-shadow .2s; }
+.door:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(31,26,23,.08); }
+.door h2 { font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
+.door p { margin: 0; color: var(--ink-soft); }
+a.card h3 { color: var(--ink); }
+.contact-addr { font-size: 1.05rem; }

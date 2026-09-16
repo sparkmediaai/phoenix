@@ -52,27 +52,56 @@ FORM_ENDPOINT = ""
 CONTACT_EMAIL = "russell@phoenixautomationsolutions.example"   # TODO: the one inbox
 PHONE = ""                                                     # TODO: the one number
 
-# Primary navigation and the one invitation that sits beside it.
+# Primary navigation: five headers, each a menu of pages, plus the one button.
+# A header is a grouping, not a page; its intro line sits at the top of the
+# open menu. Each page entry is (label, href, one-line summary). The page
+# table's `nav` value names the page label; the header lights up when one of
+# its pages is current.
 NAV = [
-    ("For OEMs", "/for-oems/"),
-    ("Capabilities", "/capabilities/"),
-    ("Industries", "/industries/"),
-    ("About", "/about/"),
+    ("Machine Builders", "For OEMs who want controls designed for their machine.", [
+        ("Custom Controls", "/machine-builders/custom-controls/",
+         "Built to your print: logo on the bezel, panel cutout, mounting pattern, I/O count."),
+        ("How a Design Win Works", "/machine-builders/design-win/",
+         "One approved part across your whole machine lineup, from first call to production."),
+        ("Industries", "/machine-builders/industries/",
+         "Packaging, residential elevators and food equipment: the machines and the controls on them."),
+    ]),
+    ("Products", "For integrators, panel shops and maintenance buyers who already know what they need.", [
+        ("HMIs", "/products/hmis/", "Touchscreens by screen size, with specs and stock status."),
+        ("PLCs and HMI/PLC Combos", "/products/plcs/", "Controllers and all-in-one units, with specs and stock status."),
+        ("I/O and Communication Modules", "/products/io-and-communication/",
+         "Add-on inputs and outputs, plus Ethernet, serial and Modbus options."),
+        ("Cross-Reference", "/products/cross-reference/",
+         "Phoenix replacements matched to the brands already in your panel."),
+        ("Datasheets", "/products/datasheets/", "Spec sheets and dimension drawings for every product."),
+    ]),
+    ("Proof", "Evidence that the work holds up.", [
+        ("Case Studies", "/proof/case-studies/", "Real jobs: the problem, what was built, the result."),
+        ("Custom Builds", "/proof/custom-builds/", "Custom parts installed in real machines."),
+    ]),
+    ("Support", "For current customers.", [
+        ("Software, Manuals and Firmware", "/support/software/",
+         "Programming software, user manuals and firmware updates."),
+        ("Warranty and RMA", "/support/warranty-and-rma/", "Warranty terms and how to return a part."),
+    ]),
+    ("Company", "Who Phoenix is.", [
+        ("About Russ", "/company/about-russ/", "Russ's background, his introduction and how he works with customers."),
+        ("Supply Chain", "/company/supply-chain/", "The factory relationship and the stock held in Mokena."),
+        ("Certifications", "/company/certifications/", "Product certifications and company credentials."),
+        ("Contact", "/company/contact/", "One phone number, one email, the Mokena address."),
+    ]),
 ]
-CTA = ("Start an application review", "/start/")
+CTA = ("Talk to Russ", "/talk-to-russ/")
 
-FOOTER = [
-    ("Work with Phoenix", [
-        ("For OEM machine builders", "/for-oems/"),
-        ("Start an application review", "/start/"),
-        ("PACK EXPO 2026", "/pack-expo/"),
-    ]),
-    ("What we do", [
-        ("Capabilities", "/capabilities/"),
-        ("Industries", "/industries/"),
-        ("About Russell Homans", "/about/"),
-    ]),
-]
+# Where the old URLs went. Each becomes a stub that sends the visitor on;
+# the PACK EXPO QR code and anything already shared keep working.
+MOVED = {
+    "for-oems/index.html": "/machine-builders/design-win/",
+    "capabilities/index.html": "/machine-builders/custom-controls/",
+    "industries/index.html": "/machine-builders/industries/",
+    "about/index.html": "/company/about-russ/",
+    "start/index.html": "/talk-to-russ/",
+}
 
 ADDRESS = "Mokena, Illinois<br>Southwest of Chicago"     # TODO: street address
 OG_ALT = "A control panel built for an OEM machine by Phoenix Automation Solutions"
@@ -167,6 +196,19 @@ def cards(items, cls="three"):
     return '<div class="cards %s" data-reveal="stagger">\n%s\n    </div>' % (cls, "\n".join(out))
 
 
+def linked_cards(items, cls="three"):
+    """Cards that are links: (title, href, text, image_name or None, alt or None)."""
+    out = []
+    for title, href, text, image, alt in items:
+        media = ""
+        if image:
+            media = ('<div class="card-media"><div class="card-shift" data-parallax="0.12">'
+                     '{{img:%s|%s|class="card-img"}}</div></div>' % (image, html_attr(alt)))
+        out.append('      <a class="card" href="%s">%s<div class="card-body"><h3>%s</h3><p>%s</p></div></a>'
+                   % (href, media, title, text))
+    return '<div class="cards %s" data-reveal="stagger">\n%s\n    </div>' % (cls, "\n".join(out))
+
+
 def steps(items):
     return '<ol class="steps" data-reveal="stagger">\n%s\n    </ol>' % "\n".join(
         '      <li><h3>%s</h3><p>%s</p></li>' % (t, p) for t, p in items)
@@ -216,20 +258,39 @@ def motion_loader(root):
 
 
 # -------------------------------------------------------------------- shell
+def moved(to):
+    """A stub for an old URL: says where the page went and sends the visitor on."""
+    return dict(nav=None, motion=False, title="Moved | %s" % SITE, desc="This page has moved.",
+                head='<meta http-equiv="refresh" content="0; url=%s">' % to + chr(10),
+                eyebrow="Moved", h1="This page has a new address.",
+                standfirst='It is now at <a href="%s">%s</a>. You will be taken there in a moment.' % (to, to),
+                actions=[("Go there now", to)], body="")
+
+
 def shell(page, path="index.html"):
     """Wrap one page's body in the site chrome."""
     root = URL_ROOT
     url = BASE + (path[:-len("index.html")] if path.endswith("index.html") else path)
-    nav = "\n".join(
-        '        <li><a href="%s"%s>%s</a></li>'
-        % (href, ' aria-current="page"' if page.get("nav") == label else "", label)
-        for label, href in NAV)
+    current = page.get("nav")
+    items = []
+    for i, (head, intro, pages) in enumerate(NAV, 1):
+        here = any(label == current for label, _, _ in pages)
+        links = "".join(
+            '\n          <li><a href="%s"%s><b>%s</b><span>%s</span></a></li>'
+            % (href, ' aria-current="page"' if label == current else "", label, summary)
+            for label, href, summary in pages)
+        items.append(
+            '        <li class="menu-item%s">\n'
+            '          <button type="button" class="menu-head" aria-expanded="false" aria-controls="menu-%d">%s</button>\n'
+            '          <div class="menu-panel" id="menu-%d"><p class="menu-intro">%s</p><ul>%s\n          </ul></div>\n'
+            '        </li>' % (" is-section" if here else "", i, head, i, intro, links))
+    nav = "\n".join(items)
 
     foot = "\n".join(
         '      <div>\n        <h3>%s</h3>\n        <ul>%s</ul>\n      </div>'
-        % (head, "".join('\n          <li><a href="%s">%s</a></li>' % (h, t)
-                         for t, h in links) + "\n        ")
-        for head, links in FOOTER)
+        % (head, "".join('\n          <li><a href="%s">%s</a></li>' % (href, label)
+                         for label, href, _ in pages) + "\n        ")
+        for head, _, pages in NAV)
 
     hero, hero_class, hero_steps = "", "hero-plain", ""
     if page.get("hero_img"):
@@ -322,7 +383,7 @@ def shell(page, path="index.html"):
     <a class="wordmark" href="%(root)s">%(logo)s<span class="vh">%(site)s</span></a>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span class="nav-bars" aria-hidden="true"><i></i><i></i></span><span class="nav-word">Menu</span></button>
     <nav class="site-nav" id="site-nav" aria-label="Primary">
-      <ul>
+      <ul class="menu">
 %(nav)s
       </ul>
     </nav>
@@ -365,7 +426,7 @@ def shell(page, path="index.html"):
                   '<meta name="robots" content="noindex,nofollow">' + chr(10),
         "site": SITE, "logo": LOGO, "nav": nav,
         "cta_href": CTA[1], "cta_text": CTA[0],
-        "cta_bar": "" if path.startswith("start/") else
+        "cta_bar": "" if path.startswith("talk-to-russ/") else
                    '<div class="cta-bar"><a class="btn btn-solid" href="%s">%s</a></div>\n' % (CTA[1], CTA[0]),
         "hero": hero, "hero_class": hero_class,
         "hero_body": "" if page.get("hero_text") is False else
@@ -420,7 +481,7 @@ PAGES["index.html"] = dict(
     standfirst="HMIs, PLCs, I/O and custom operator panels for machines built in the United States. "
                "Specified, cost-engineered and supported by an engineer who has done it for twenty years, "
                "not pulled from a catalog and shipped with a wish.",
-    actions=[("Start an application review", "/start/"), ("Meet us at PACK EXPO", "/pack-expo/")],
+    actions=[("Talk to Russ", "/talk-to-russ/"), ("Meet us at PACK EXPO", "/pack-expo/")],
     hero_video=dict(name="hero", alt="A multi-station automation machine on the shop floor, pneumatic slides and valve manifolds on a blue frame"),
     hero_steps=[
         ("Proof one", "Engineered to the target.", "A $1,000 operator panel taken back to the factory and re-engineered to $350 at 2,500 units. Not discounted. Redesigned."),
@@ -430,6 +491,23 @@ PAGES["index.html"] = dict(
     body=note("Positioning per the 8 Sep session and the SOW: Phoenix is the solution, Russell is the "
               "value, the supplier stays in the background. Every claim here is drawn from the two "
               "transcripts; Russell signs off technical claims before launch.") + """
+<section class="band doors">
+  <div class="inner">
+    <div class="split" data-reveal="stagger">
+      <a class="door" href="/machine-builders/design-win/">
+        <div class="eyebrow">Machine builders</div>
+        <h2>You build a machine and want controls designed for it.</h2>
+        <p>Custom panels built to your print, one approved part across your lineup, an engineer on the first application. Start here.</p>
+      </a>
+      <a class="door" href="/products/hmis/">
+        <div class="eyebrow">Products</div>
+        <h2>You know the part you need.</h2>
+        <p>HMIs, PLCs, I/O and communication modules, cross-references and datasheets, with stock held in Mokena.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="band">
   <div class="inner narrow" data-reveal>
     <div class="eyebrow">What Phoenix is</div>
@@ -466,7 +544,7 @@ PAGES["index.html"] = dict(
         <p class="stat"><span class="num" data-count="350" data-count-prefix="$">$350</span> <span class="lbl">revision two, per unit, at <span data-count="2500" data-count-suffix=" units">2,500 units</span></span></p>
         <p>Because Phoenix took the number back to the factory instead of apologising for the catalog price.</p>
         <p class="muted">Commercial kitchen equipment, screen-printing presses, industrial slicers, municipal
-        water plants and gutter machines run the same way. <a href="/industries/">See the industries.</a></p>
+        water plants and gutter machines run the same way. <a href="/machine-builders/industries/">See the industries.</a></p>
       </div>
       %(cost)s
     </div>
@@ -494,7 +572,7 @@ PAGES["index.html"] = dict(
   <div class="inner narrow" data-reveal>
     <div class="eyebrow">How it starts</div>
     %(steps)s
-    <p class="center"><a class="btn btn-solid" href="/start/">Start an application review</a></p>
+    <p class="center"><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
   </div>
 </section>
 """ % dict(
@@ -521,14 +599,15 @@ PAGES["index.html"] = dict(
     ),
 )
 
-PAGES["for-oems/index.html"] = dict(
-    nav="For OEMs", title="For OEM machine builders | %s" % SITE,
+PAGES["machine-builders/design-win/index.html"] = dict(
+    nav="How a Design Win Works", title="How a design win works | %s" % SITE,
     desc="How Phoenix works with OEM machine builders: application review, cost engineering, custom operator panels and first-application support.",
     eyebrow="For OEM machine builders",
-    h1="Think of us as the controls engineer you did not have to hire.",
-    standfirst="Russell describes it as being a part-time employee of your engineering department. "
-               "Here is what that means in practice.",
-    actions=[("Start an application review", "/start/")],
+    h1="One approved part, across your whole lineup.",
+    standfirst="A builder with six machine models specs the part once and uses it in all six. That is why a "
+               "single win is worth years of orders, and why the sale takes months rather than weeks. Here is "
+               "what the months look like.",
+    actions=[("Talk to Russ", "/talk-to-russ/")],
     body=note("The 'part-time employee for my customer' line is Russell's own (8 Sep, 16:37). "
               "The three-to-eight-hours-a-week figure and the taper after three to six months are his too.") + """
 %(path)s
@@ -537,7 +616,7 @@ PAGES["for-oems/index.html"] = dict(
   <div class="inner">
     <div class="eyebrow">What we supply</div>
     %(cards)s
-    <p class="center"><a class="btn" href="/capabilities/">All capabilities</a></p>
+    <p class="center"><a class="btn" href="/machine-builders/custom-controls/">Custom controls, built to your print</a></p>
   </div>
 </section>
 
@@ -581,22 +660,34 @@ PAGES["for-oems/index.html"] = dict(
     ),
 )
 
-PAGES["capabilities/index.html"] = dict(
-    nav="Capabilities", title="Capabilities | %s" % SITE,
+PAGES["machine-builders/custom-controls/index.html"] = dict(
+    nav="Custom Controls", title="Custom controls, built to your print | %s" % SITE,
     desc="HMI, PLC, I/O, custom operator panels, application programming, cost engineering and sourcing for OEM machine builders.",
-    eyebrow="Capabilities",
-    h1="Controls hardware, and the engineering that makes it fit.",
+    eyebrow="Custom controls",
+    h1="Built to your print, not pulled from a shelf.",
     standfirst="Every capability below has shipped on a production machine. Nothing here is aspirational.",
     body=note("Product families are kept generic on purpose: no supplier names, per the positioning "
               "decision. Add photographs from the Drive folder (glass operator panels, hall stations, "
               "control panel, remote I/O, robot cell, soil sampling rig) as hero_img and inline images.") + """
 <section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">What can be built to your print</div>
+    <ul class="ticks" data-reveal="stagger">
+      <li><b>Your logo on the bezel.</b> Printed or moulded, at production quantity, not as a one-off favour.</li>
+      <li><b>Panel cutout to your dimensions.</b> The opening you already have, so a replacement drops in.</li>
+      <li><b>Your mounting pattern.</b> Hole spacing and fixings to match the machine, not the catalog.</li>
+      <li><b>The I/O count you need.</b> Discrete and analog points sized to the machine, with Ethernet, serial or Modbus as the application asks.</li>
+      <li><b>One part number for the lineup.</b> Approved once, carried across every model that shares the panel.</li>
+    </ul>
+  </div>
+</section>
+<section class="band band-tint">
   <div class="inner">
     <div class="eyebrow">Hardware</div>
     %(hw)s
   </div>
 </section>
-<section class="band band-tint">
+<section class="band">
   <div class="inner">
     <div class="eyebrow">Engineering</div>
     %(eng)s
@@ -618,7 +709,7 @@ PAGES["capabilities/index.html"] = dict(
     ),
 )
 
-PAGES["industries/index.html"] = dict(
+PAGES["machine-builders/industries/index.html"] = dict(
     nav="Industries", title="Industries | %s" % SITE,
     desc="Packaging, residential elevators, commercial kitchen equipment, printing, food processing, water treatment, building products, agriculture and medical equipment: where Phoenix controls run today.",
     eyebrow="Industries",
@@ -631,17 +722,28 @@ PAGES["industries/index.html"] = dict(
               "28 September. Elevators are the twenty-year account.") + """
 <section class="band">
   <div class="inner">
-    %(cards)s
+    <div class="eyebrow">Where Phoenix leads</div>
+    %(lead)s
   </div>
 </section>
 <section class="band band-tint">
+  <div class="inner">
+    <div class="eyebrow">Every industry Phoenix controls run in today</div>
+    %(cards)s
+  </div>
+</section>
+<section class="band">
   <div class="inner narrow center" data-reveal>
     <h2>Building something else?</h2>
     <p>If it is a repeatable machine with a screen and a controller on it, the conversation is the same.</p>
-    <p><a class="btn btn-solid" href="/start/">Start an application review</a></p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
   </div>
 </section>
-""" % dict(cards=cards([
+""" % dict(lead=linked_cards([
+        ("Packaging", "/machine-builders/industries/packaging/", "Die cutters, labellers, case erectors and fillers, with the operator interface and verification built in.", "barcode-verification", "Barcode verification station on a packaging line"),
+        ("Residential elevators", "/machine-builders/industries/residential-elevators/", "Twenty years on one account: cab operating panels, hall stations, and the cost engineering behind revision two.", "elevator-hall-station", "Elevator hall station with call display"),
+        ("Food equipment", "/machine-builders/industries/food-equipment/", "Ovens, mixers and slicers, with the temperature and recipe interfaces that set them.", None, None),
+    ]), cards=cards([
         ("Packaging machinery", "Die cutters with barcode verification, labellers, case erectors, fillers. The $10,000 to $100,000 machines still built in the States.", "barcode-verification", "Barcode verification station on a packaging line"),
         ("Residential elevators", "Twenty years on the same account. Glass cab operating panels, hall stations, and the cost engineering that made revision two possible.", "elevator-hall-station", "Elevator hall station with call display"),
         ("Commercial kitchen equipment", "Ovens and mixers, and the temperature and recipe interfaces that set them."),
@@ -654,8 +756,8 @@ PAGES["industries/index.html"] = dict(
     ], "mosaic")),
 )
 
-PAGES["about/index.html"] = dict(
-    nav="About", title="About Russell Homans | %s" % SITE,
+PAGES["company/about-russ/index.html"] = dict(
+    nav="About Russ", title="About Russ Homans | %s" % SITE,
     desc="Phoenix Automation Solutions is owned and run by Russell Homans, a controls engineer with over twenty years supplying OEM machine builders.",
     eyebrow="About",
     h1="An engineer who owns the company.",
@@ -690,7 +792,7 @@ PAGES["about/index.html"] = dict(
     <ol class="timeline" data-reveal="stagger">
       <li><b>Twenty years, one account.</b> A residential elevator manufacturer has run on Phoenix-supplied controls through every revision of their cab.</li>
       <li><b>$1,000 to $350.</b> A glass cab operating panel re-engineered at the factory to the customer's target, at 2,500 units.</li>
-      <li><b>Nine industries.</b> Packaging, elevators, kitchens, printing, food, water, building products, agriculture, medical. <a href="/industries/">See them.</a></li>
+      <li><b>Nine industries.</b> Packaging, elevators, kitchens, printing, food, water, building products, agriculture, medical. <a href="/machine-builders/industries/">See them.</a></li>
       <li><b>Owner since 2026.</b> Phoenix Automation Solutions, Inc., Mokena, Illinois.</li>
     </ol>
   </div>
@@ -716,7 +818,7 @@ PAGES["pack-expo/index.html"] = dict(
     eyebrow="%(name)s &middot; %(place)s" % SHOW,
     h1="Bring us the machine you wish cost less to control.",
     standfirst="%(dates)s. Russell Homans is on the floor all four days." % SHOW,
-    actions=[("Start an application review", "/start/"), ("What Phoenix does", "/for-oems/")],
+    actions=[("Talk to Russ", "/talk-to-russ/"), ("What Phoenix does", "/machine-builders/design-win/")],
     body=note("This is the QR-code landing. Keep it to one screen of reading. The show is research "
               "for Phoenix as much as sales: the intake form is the instrument.") + """
 <section class="band">
@@ -729,7 +831,7 @@ PAGES["pack-expo/index.html"] = dict(
     </ul>
     <p>That is enough for Russell to tell you, on the spot, whether Phoenix can engineer to your
     target. If it cannot, you will hear that on the spot too.</p>
-    <p><a class="btn btn-solid" href="/start/">Or answer four questions now</a></p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Or answer three questions now</a></p>
   </div>
 </section>
 <section class="band band-tint">
@@ -749,13 +851,13 @@ CONTROLS = ["Allen-Bradley / Rockwell", "Siemens", "Omron", "Automation Direct",
             "Relay logic / no PLC", "Other", "Not sure"]
 VOLUMES = ["Under 50", "50 to 250", "250 to 1,000", "1,000 to 5,000", "Over 5,000"]
 
-PAGES["start/index.html"] = dict(
-    nav=None, title="Start an application review | %s" % SITE,
+PAGES["talk-to-russ/index.html"] = dict(
+    nav=None, title="Talk to Russ | %s" % SITE,
     desc="Four questions about your machine. Russell reviews every submission personally.",
-    eyebrow="Application review",
-    h1="Four questions about the machine.",
-    standfirst="Two minutes. Russell reads every one and replies within two business days, "
-               "with a straight answer either way.",
+    eyebrow="Talk to Russ",
+    h1="Three questions about the machine.",
+    standfirst="What you build, how many a year, what controls are on it now. Then how to reach you. "
+               "Russ reads every one and replies within two business days, with a straight answer either way.",
     body=note("Posts to FORM_ENDPOINT in _build/build.py; empty until Phoenix's GoHighLevel "
               "sub-account exists. Field names and option strings must match the CRM exactly; "
               "see assets/forms.js. Qualification thresholds are to be agreed with Russell.") + """
@@ -782,8 +884,8 @@ PAGES["start/index.html"] = dict(
         </div>
       </fieldset>
       <fieldset data-wizard-step>
-        <legend>3. What you need</legend>
-        <label>What do you need? <textarea name="application" rows="4" placeholder="A cost target, a custom panel, a platform change, an application that has to work first time..." required></textarea></label>
+        <legend>3. What you need (optional)</legend>
+        <label>What do you need? <textarea name="application" rows="4" placeholder="A cost target, a custom panel, a platform change, an application that has to work first time..."></textarea></label>
         <label>Link to a spec, drawing or photo (optional) <input type="url" name="spec_link" placeholder="https://"></label>
       </fieldset>
       <fieldset data-wizard-step>
@@ -811,6 +913,314 @@ PAGES["start/index.html"] = dict(
 """ % dict(volumes="".join("<option>%s</option>" % v for v in VOLUMES),
            controls="".join("<option>%s</option>" % c for c in CONTROLS)),
 )
+
+
+# ---- Machine builders: the three industry pages
+def industry(path, nav_title, title, h1, standfirst, machines, controls, note_text, hero=None, hero_alt=None, photos=()):
+    body = note(note_text) + """
+<section class="band">
+  <div class="inner">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">Machines served</div>
+        <ul class="ticks" data-reveal="stagger">%(machines)s</ul>
+      </div>
+      <div data-reveal>
+        <div class="eyebrow">Controls on them</div>
+        <ul class="ticks" data-reveal="stagger">%(controls)s</ul>
+      </div>
+    </div>
+  </div>
+</section>
+%(photos)s<section class="band band-tint">
+  <div class="inner narrow center" data-reveal>
+    <h2>Building for this industry?</h2>
+    <p>Three questions about the machine and Russ replies within two business days.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+  </div>
+</section>
+""" % dict(machines="".join("<li>%s</li>" % m for m in machines),
+           controls="".join("<li>%s</li>" % c for c in controls),
+           photos=('<section class="band">\n  <div class="inner">\n    <div class="eyebrow">Installed</div>\n    %s\n  </div>\n</section>\n'
+                   % cards(photos, "two")) if photos else "")
+    page = dict(nav="Industries", title="%s | %s" % (title, SITE), desc=standfirst, eyebrow=nav_title, h1=h1,
+                standfirst=standfirst, actions=[("Talk to Russ", "/talk-to-russ/")], body=body)
+    if hero:
+        page.update(hero_img=hero, hero_alt=hero_alt)
+    PAGES[path] = page
+
+
+industry("machine-builders/industries/packaging/index.html", "Packaging",
+         "Packaging machinery", "Controls for the packaging machines still built in the States.",
+         "Die cutters, labellers, case erectors and fillers in the $10,000 to $100,000 range, built in repeatable models by OEMs with their own engineers.",
+         ["Rotary and flatbed die cutters with barcode verification", "Labellers and print-and-apply stations", "Case erectors, sealers and fillers", "Conveying and accumulation between them"],
+         ["Panel-mount touchscreen HMIs for recipe, count and fault display", "Compact PLCs sized to the machine, with application code support", "Remote I/O and barcode verification tied together over Ethernet or serial", "Operator panels branded to the machine builder"],
+         "Packaging leads because PACK EXPO is the reason this site exists on 28 September. Machines listed are the kinds Russell named on the calls and the die cutter in the Drive footage; Russell to confirm the list.",
+         hero="barcode-verification-1600.webp", hero_alt="Barcode verification station on a packaging line",
+         photos=[("Barcode verification on the line", "A verification station reading every code before the product leaves the machine.", "barcode-verification", "Barcode verification station on a packaging line"),
+                 ("Print curing", "Temperature control on a curing line, set from the operator interface.", "print-curing", "Print curing line with temperature control interface")])
+
+industry("machine-builders/industries/residential-elevators/index.html", "Residential elevators",
+         "Residential elevators", "Twenty years on one account, through every revision of the cab.",
+         "Cab operating panels, hall stations and the controls behind them, for a manufacturer of residential elevators that has run on Phoenix-supplied parts for close to two decades.",
+         ["Residential and home elevators, from single homes to thousand-unit developments", "Cab operating panels with integrated display and phone", "Hall stations with call display and car position", "Machine-room and controller interfaces"],
+         ["All-glass cab operating panels engineered to a cost target at 2,500 units", "Hall station screens", "Discrete and analog I/O for car and hall signals", "Serial and Ethernet links to the elevator controller"],
+         "The elevator customer is the twenty-year account (28 Aug call). Cab-panel photographs showing the customer's own splash screen are held back until Russell clears them; the hall station photographs are clean.",
+         hero="elevator-hall-station-1600.webp", hero_alt="Elevator hall station with call display",
+         photos=[("Hall station", "Call display and car position, at the landing.", "elevator-hall-station", "Elevator hall station with call display"),
+                 ("Hall station screen", "The screen itself, showing car position and readiness.", "hall-station-screen", "Hall station screen showing car position")])
+
+industry("machine-builders/industries/food-equipment/index.html", "Food equipment",
+         "Food equipment", "Temperature, recipe and portion control for commercial food machines.",
+         "Ovens, mixers and slicers for commercial kitchens and food processors, with the interfaces that set temperature, run recipes and control portions.",
+         ["Commercial ovens and cooking lines", "Dough and ingredient mixers", "Industrial slicers and portioning equipment", "Washdown environments"],
+         ["Touchscreen HMIs for temperature and recipe control", "PLCs and HMI/PLC combination units", "Analog I/O for temperature sensing and control", "Washdown-rated interfaces where the machine needs them"],
+         "Commercial kitchen equipment, bakery mixers and industrial slicers are all from the 28 Aug call. No photographs exist yet; add them when Russell supplies installed examples.")
+
+
+# ---- Products: the catalog side, scaffolded until product data exists
+def product_page(path, nav_label, title, h1, standfirst, will_list, how_now, note_text):
+    PAGES[path] = dict(
+        nav=nav_label, title="%s | %s" % (title, SITE), desc=standfirst, eyebrow="Products", h1=h1,
+        standfirst=standfirst, actions=[("Talk to Russ", "/talk-to-russ/"), ("Cross-reference a part", "/products/cross-reference/")],
+        body=note(note_text) + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">What this page will list</div>
+    <ul class="ticks" data-reveal="stagger">%(will)s</ul>
+  </div>
+</section>
+<section class="band band-tint">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">Until the catalog is up</div>
+    <p>%(now)s</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+  </div>
+</section>
+""" % dict(will="".join("<li>%s</li>" % w for w in will_list), now=how_now))
+
+
+CATALOG_NOTE = ("Product pages are scaffolding: the structure is set, the parts are not listed. Populating "
+                "them needs the product line, specs, dimension drawings and stock counts from Russell, and the "
+                "decision on which brands are named. No part numbers are invented here.")
+product_page("products/hmis/index.html", "HMIs", "HMIs", "Touchscreens, listed by screen size.",
+             "Panel-mount HMIs from small text displays to full-glass fronts, with the specs, cutout dimensions and stock status for each.",
+             ["Every screen size Phoenix stocks, smallest to largest", "Resolution, brightness, touch type and rated environment", "Panel cutout and mounting pattern", "Communication ports: Ethernet, serial, Modbus", "In stock in Mokena, or the lead time if not"],
+             "Tell Russ the screen size, the machine and the protocol you need to talk to, and he will send the spec sheet and the stock position the same day.",
+             CATALOG_NOTE)
+product_page("products/plcs/index.html", "PLCs and HMI/PLC Combos", "PLCs and HMI/PLC combos", "Controllers, and all-in-one units.",
+             "Compact PLCs sized to the machine, and combination units that put the controller behind the screen, with specs and stock status.",
+             ["Controllers by I/O count and program memory", "HMI/PLC combination units by screen size", "Scan time, expansion capacity and communication options", "Programming software and firmware for each", "In stock in Mokena, or the lead time if not"],
+             "Tell Russ the I/O count, the machine and whether you want the controller behind the screen, and he will send the spec sheet and the stock position the same day.",
+             CATALOG_NOTE)
+product_page("products/io-and-communication/index.html", "I/O and Communication Modules", "I/O and communication modules", "Add-on inputs and outputs, and the links between them.",
+             "Discrete and analog I/O expansion, remote I/O, and the Ethernet, serial and Modbus modules that tie a panel together.",
+             ["Discrete input and output modules by point count", "Analog modules for temperature, pressure and level", "Remote I/O over the fieldbus the machine already uses", "Ethernet, serial and Modbus communication modules", "In stock in Mokena, or the lead time if not"],
+             "Tell Russ the point count, the signal types and the network on the machine, and he will send the spec sheet and the stock position the same day.",
+             CATALOG_NOTE)
+product_page("products/cross-reference/index.html", "Cross-Reference", "Cross-reference", "The Phoenix part that matches what is in your panel now.",
+             "Replacements matched to the brands already in a customer's panel, by function, form factor and communication, so the swap is a drop-in.",
+             ["Matched by screen size and cutout, or by I/O count and form factor", "Matched by protocol, so the machine keeps talking", "A note on what changes in the program, if anything", "The datasheet for the Phoenix part beside the one you have"],
+             "Send Russ the part number you have today and the machine it sits in. He will come back with the Phoenix equivalent, what changes in the program, and whether it is on the shelf.",
+             CATALOG_NOTE + " The cross-reference table itself needs Russell's list of the brands and models he replaces most.")
+product_page("products/datasheets/index.html", "Datasheets", "Datasheets", "Spec sheets and dimension drawings for every product.",
+             "Downloadable specifications and dimension drawings, one per part, for the engineer who needs the numbers rather than the pitch.",
+             ["One PDF per part: electrical, environmental and mechanical specifications", "Dimension drawings with cutout and mounting pattern", "Communication and pinout details", "Revision and date on every sheet"],
+             "Until the library is online, Russ sends datasheets by email the same day. Tell him the part or the function.",
+             CATALOG_NOTE)
+
+
+# ---- Proof
+PAGES["proof/case-studies/index.html"] = dict(
+    nav="Case Studies", title="Case studies | %s" % SITE,
+    desc="Real jobs, written up as the problem, what was built, and the result. The cab operating panel goes first.",
+    eyebrow="Proof", h1="Real jobs: the problem, what was built, the result.",
+    standfirst="Every case study here is a machine that shipped. Customers are named only where they have agreed to be.",
+    actions=[("Talk to Russ", "/talk-to-russ/")],
+    body=note("The cab operating panel story is from the 28 Aug call (31:37) and the 8 Sep session. The "
+              "customer stays unnamed until Russell clears it, and the pricing needs his sign-off before "
+              "launch, per the SOW.") + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">Case study one</div>
+    <h2>The glass cab operating panel: $1,000 to $350 at 2,500 units.</h2>
+    <h3>The problem</h3>
+    <p>A residential elevator manufacturer, a Phoenix customer for close to twenty years, needed a new cab
+    operating panel for its next cab: all glass, an integrated display, and a phone mounted on the back
+    because the code requires one. Revision one came in near $1,000 a unit. The customer said it was too
+    expensive, and it was.</p>
+    <h3>What was built</h3>
+    <p>Instead of losing the job, Phoenix took the target back to the factory: $350 to $400 a unit at a
+    first quantity of 2,500. The part was redesigned for that machine and that price rather than pulled
+    from a shelf. Same function, same glass front, same phone, on its second revision now.</p>
+    <h3>The result</h3>
+    <p class="stat"><span class="num" data-count="350" data-count-prefix="$">$350</span> <span class="lbl">per unit at <span data-count="2500" data-count-suffix=" units">2,500 units</span>, against $1,000 for revision one</span></p>
+    <p>One approved part, carried across the customer's cab lineup. That is what a design win looks like
+    from the builder's side of the table.</p>
+  </div>
+</section>
+<section class="band band-tint">
+  <div class="inner narrow center" data-reveal>
+    <h2>More to come.</h2>
+    <p>Packaging, water treatment and printing jobs are being written up in the same shape. If you want to
+    know whether Phoenix has done a machine like yours, ask.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+  </div>
+</section>
+""",
+)
+
+PAGES["proof/custom-builds/index.html"] = dict(
+    nav="Custom Builds", title="Custom builds | %s" % SITE,
+    desc="Custom parts installed in real machines: operator panels, control panels, remote I/O and the machines around them.",
+    eyebrow="Proof", h1="Custom parts, installed in real machines.",
+    standfirst="Nothing here is a render. Every photograph is a Phoenix-supplied part on a machine that runs.",
+    actions=[("Talk to Russ", "/talk-to-russ/")],
+    body=note("The gallery is the ten photographs that passed the branding review. The cab operating panel "
+              "photographs join it when Russell clears the customer's splash screen.") + """
+<section class="band">
+  <div class="inner">
+    %(gallery)s
+  </div>
+</section>
+""" % dict(gallery=cards([
+        ("Hall station", "Residential elevator, call display and car position.", "elevator-hall-station", "Elevator hall station with call display"),
+        ("Hall station screen", "The display itself, at the landing.", "hall-station-screen", "Hall station screen showing car position"),
+        ("Control panel", "An OEM machine's panel, opened up with the wiring showing.", "control-panel", "Control panel with PLC, I/O and wiring, built for an OEM machine"),
+        ("Remote I/O", "Modules wired into a factory automation enclosure.", "factory-automation-remote-i-o", "Remote I/O modules wired into a factory automation enclosure"),
+        ("Barcode verification", "A verification station on a packaging line.", "barcode-verification", "Barcode verification station on a packaging line"),
+        ("Pad printing", "Touchscreen operator control on a pad printer.", "pad-printing-machine", "Pad printing machine with touchscreen operator control"),
+        ("Print curing", "Temperature control on a curing line.", "print-curing", "Print curing line with temperature control interface"),
+        ("Waste water treatment", "A municipal plant that runs on Phoenix-supplied controls.", "waste-water-plant", "Exterior of a municipal waste water treatment plant, with aeration basins and the operations building"),
+        ("Soil-sampling rig", "Hydraulic carousel control in the field.", "soil-sampling-rig", "Hydraulic soil-sampling rig with carousel control"),
+        ("Soil sampler interface", "Control and logging on the rig.", "soil-sampler", "Soil sampler control and logging interface"),
+    ], "mosaic")),
+)
+
+
+# ---- Support
+def support_page(path, nav_label, title, h1, standfirst, items, now, note_text):
+    PAGES[path] = dict(
+        nav=nav_label, title="%s | %s" % (title, SITE), desc=standfirst, eyebrow="Support", h1=h1,
+        standfirst=standfirst, actions=[("Contact Phoenix", "/company/contact/")],
+        body=note(note_text) + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">What this page will hold</div>
+    <ul class="ticks" data-reveal="stagger">%(items)s</ul>
+  </div>
+</section>
+<section class="band band-tint">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">For now</div>
+    <p>%(now)s</p>
+    <p><a class="btn btn-solid" href="/company/contact/">Contact Phoenix</a></p>
+  </div>
+</section>
+""" % dict(items="".join("<li>%s</li>" % i for i in items), now=now))
+
+
+support_page("support/software/index.html", "Software, Manuals and Firmware", "Software, manuals and firmware",
+             "Programming software, user manuals and firmware.",
+             "Downloads for current customers: the programming software for each controller and HMI, the user manuals, and firmware updates with their release notes.",
+             ["Programming software by product family, with the version and the date", "User manuals as PDF", "Firmware updates with release notes and the products they apply to", "Sample code from application support, where Russ has written it for you"],
+             "Current customers get software, manuals and firmware from Russ directly, the same day. Say which product and which version you are on.",
+             "Scaffolding. The download library depends on what the product line's software and manuals are and on how they may be distributed; Russell decides.")
+support_page("support/warranty-and-rma/index.html", "Warranty and RMA", "Warranty and RMA",
+             "Warranty terms, and how to return a part.",
+             "The warranty on Phoenix-supplied hardware, what it covers, and the return process when a part needs to come back.",
+             ["Warranty term and what it covers, by product family", "How to request a return authorisation", "Where to ship, and what to include", "Turnaround on repair or replacement"],
+             "Until the terms are posted, email Russ with the part, the serial number and what happened. He answers within two business days.",
+             "Scaffolding. Warranty terms and the RMA process need Russell's wording; nothing is stated here until he supplies it.")
+
+
+# ---- Company
+PAGES["company/supply-chain/index.html"] = dict(
+    nav="Supply Chain", title="Supply chain | %s" % SITE,
+    desc="A direct factory relationship of seventeen years, and stock held in Mokena, Illinois.",
+    eyebrow="Company", h1="A factory that answers the phone, and a shelf in Mokena.",
+    standfirst="Purchasing wants to know a supplier can keep delivering. Here is how Phoenix does.",
+    actions=[("Talk to Russ", "/talk-to-russ/")],
+    body=note("Positioning decision: the factory partner is not named on the site. Footage from the production "
+              "floor is in hand but shows the partner's signage, so it stays off the page until Russell "
+              "decides whether it may be used at all. The seventeen-year figure is from the brand direction.") + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <h2>The factory relationship</h2>
+    <p>Phoenix has worked with the same factory for seventeen years. It is a direct relationship: Russ has
+    stood on that floor, twice, and the engineers there answer him the same week. A million-dollar
+    opportunity does not register with the largest control vendors. At this factory it gets engineers on
+    a plane.</p>
+    <p>That is what makes custom work possible at OEM quantities: a bezel with your logo, a cutout to your
+    dimensions, an I/O count to your machine, at a price set against your volume rather than a list.</p>
+    <h2>Stock in Mokena</h2>
+    <p>Repeatable models mean repeatable orders. Phoenix holds stock, reboxes and ships from Mokena,
+    Illinois, southwest of Chicago, so a production run is not waiting on a container. Lead time and stock
+    position are stated on every product page as the catalog comes online.</p>
+    <h2>Footage from the floor</h2>
+    <p class="muted">Video from the production floor is in hand and will appear here once cleared.</p>
+  </div>
+</section>
+""",
+)
+
+PAGES["company/certifications/index.html"] = dict(
+    nav="Certifications", title="Certifications | %s" % SITE,
+    desc="Product certifications and company credentials for Phoenix Automation Solutions.",
+    eyebrow="Company", h1="Certifications and credentials.",
+    standfirst="Product certifications by product family, and the company's credentials, listed as Russ approves the wording.",
+    actions=[("Talk to Russ", "/talk-to-russ/")],
+    body=note("Russell offered the certifications and credentials list on the 28 Aug call (54:14). Nothing "
+              "is listed until he supplies it; a certification claim that is wrong is worse than none.") + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">Product certifications</div>
+    <p class="muted">Listed by product family as the catalog comes online.</p>
+    <div class="eyebrow">Company credentials</div>
+    <p class="muted">Russ's credentials and the company's, in his approved wording.</p>
+    <p>If a certification matters to your application today, ask. Russ will tell you what the part carries
+    and what it does not.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+  </div>
+</section>
+""",
+)
+
+PAGES["company/contact/index.html"] = dict(
+    nav="Contact", title="Contact | %s" % SITE,
+    desc="One phone number, one email address and the Mokena, Illinois address for Phoenix Automation Solutions.",
+    eyebrow="Company", h1="One number, one inbox, one address.",
+    standfirst="Phoenix Automation Solutions, Inc., Mokena, Illinois, southwest of Chicago.",
+    actions=[("Talk to Russ", "/talk-to-russ/")],
+    body=note("PHONE, CONTACT_EMAIL and the street address are placeholders in _build/build.py until Russell "
+              "picks the one number and the one inbox (8 Sep, 13:58). The request form is the Talk to Russ "
+              "form; a second copy here would split the CRM feed.") + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="split">
+      <div>
+        <div class="eyebrow">Reach Phoenix</div>
+        <address class="addr contact-addr">%(address)s%(contact)s</address>
+      </div>
+      <div>
+        <div class="eyebrow">Building a machine?</div>
+        <p>The fastest route to Russ is the three-question form: what you build, how many a year, what
+        controls are on it now. He reads every one and replies within two business days.</p>
+        <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+""" % dict(address=ADDRESS,
+           contact=('<br><a href="tel:%s">%s</a>' % (re.sub(r"[^\d+]", "", PHONE), PHONE) if PHONE else
+                    '<br><span class="muted">Phone number to be confirmed.</span>')
+                   + '<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL)),
+)
+
+
+# ---- The old addresses
+for old_path, new_url in MOVED.items():
+    PAGES[old_path] = moved(new_url)
 
 PAGES["404.html"] = dict(
     nav=None, motion=False, title="Not found | %s" % SITE, desc="That page is not here.",

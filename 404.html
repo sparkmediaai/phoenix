@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=b0295fa2">
+<link rel="stylesheet" href="/assets/site.css?v=626a7848">
 <link rel="stylesheet" href="/assets/forms.css?v=ae802e4a">
 <link rel="stylesheet" href="/assets/motion.css?v=de9c970a">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");</script>
@@ -37,14 +37,51 @@
     <a class="wordmark" href="/"><img class="logo" src="/assets/logo-header.webp" width="450" height="133" alt="" decoding="async"><span class="vh">Phoenix Automation Solutions</span></a>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span class="nav-bars" aria-hidden="true"><i></i><i></i></span><span class="nav-word">Menu</span></button>
     <nav class="site-nav" id="site-nav" aria-label="Primary">
-      <ul>
-        <li><a href="/for-oems/">For OEMs</a></li>
-        <li><a href="/capabilities/">Capabilities</a></li>
-        <li><a href="/industries/">Industries</a></li>
-        <li><a href="/about/">About</a></li>
+      <ul class="menu">
+        <li class="menu-item">
+          <button type="button" class="menu-head" aria-expanded="false" aria-controls="menu-1">Machine Builders</button>
+          <div class="menu-panel" id="menu-1"><p class="menu-intro">For OEMs who want controls designed for their machine.</p><ul>
+          <li><a href="/machine-builders/custom-controls/"><b>Custom Controls</b><span>Built to your print: logo on the bezel, panel cutout, mounting pattern, I/O count.</span></a></li>
+          <li><a href="/machine-builders/design-win/"><b>How a Design Win Works</b><span>One approved part across your whole machine lineup, from first call to production.</span></a></li>
+          <li><a href="/machine-builders/industries/"><b>Industries</b><span>Packaging, residential elevators and food equipment: the machines and the controls on them.</span></a></li>
+          </ul></div>
+        </li>
+        <li class="menu-item">
+          <button type="button" class="menu-head" aria-expanded="false" aria-controls="menu-2">Products</button>
+          <div class="menu-panel" id="menu-2"><p class="menu-intro">For integrators, panel shops and maintenance buyers who already know what they need.</p><ul>
+          <li><a href="/products/hmis/"><b>HMIs</b><span>Touchscreens by screen size, with specs and stock status.</span></a></li>
+          <li><a href="/products/plcs/"><b>PLCs and HMI/PLC Combos</b><span>Controllers and all-in-one units, with specs and stock status.</span></a></li>
+          <li><a href="/products/io-and-communication/"><b>I/O and Communication Modules</b><span>Add-on inputs and outputs, plus Ethernet, serial and Modbus options.</span></a></li>
+          <li><a href="/products/cross-reference/"><b>Cross-Reference</b><span>Phoenix replacements matched to the brands already in your panel.</span></a></li>
+          <li><a href="/products/datasheets/"><b>Datasheets</b><span>Spec sheets and dimension drawings for every product.</span></a></li>
+          </ul></div>
+        </li>
+        <li class="menu-item">
+          <button type="button" class="menu-head" aria-expanded="false" aria-controls="menu-3">Proof</button>
+          <div class="menu-panel" id="menu-3"><p class="menu-intro">Evidence that the work holds up.</p><ul>
+          <li><a href="/proof/case-studies/"><b>Case Studies</b><span>Real jobs: the problem, what was built, the result.</span></a></li>
+          <li><a href="/proof/custom-builds/"><b>Custom Builds</b><span>Custom parts installed in real machines.</span></a></li>
+          </ul></div>
+        </li>
+        <li class="menu-item">
+          <button type="button" class="menu-head" aria-expanded="false" aria-controls="menu-4">Support</button>
+          <div class="menu-panel" id="menu-4"><p class="menu-intro">For current customers.</p><ul>
+          <li><a href="/support/software/"><b>Software, Manuals and Firmware</b><span>Programming software, user manuals and firmware updates.</span></a></li>
+          <li><a href="/support/warranty-and-rma/"><b>Warranty and RMA</b><span>Warranty terms and how to return a part.</span></a></li>
+          </ul></div>
+        </li>
+        <li class="menu-item">
+          <button type="button" class="menu-head" aria-expanded="false" aria-controls="menu-5">Company</button>
+          <div class="menu-panel" id="menu-5"><p class="menu-intro">Who Phoenix is.</p><ul>
+          <li><a href="/company/about-russ/"><b>About Russ</b><span>Russ's background, his introduction and how he works with customers.</span></a></li>
+          <li><a href="/company/supply-chain/"><b>Supply Chain</b><span>The factory relationship and the stock held in Mokena.</span></a></li>
+          <li><a href="/company/certifications/"><b>Certifications</b><span>Product certifications and company credentials.</span></a></li>
+          <li><a href="/company/contact/"><b>Contact</b><span>One phone number, one email, the Mokena address.</span></a></li>
+          </ul></div>
+        </li>
       </ul>
     </nav>
-    <a class="btn btn-solid" href="/start/">Start an application review</a>
+    <a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a>
   </div>
 </header>
 
@@ -66,19 +103,44 @@
 <footer class="site-foot">
   <div class="inner">
       <div>
-        <h3>Work with Phoenix</h3>
+        <h3>Machine Builders</h3>
         <ul>
-          <li><a href="/for-oems/">For OEM machine builders</a></li>
-          <li><a href="/start/">Start an application review</a></li>
-          <li><a href="/pack-expo/">PACK EXPO 2026</a></li>
+          <li><a href="/machine-builders/custom-controls/">Custom Controls</a></li>
+          <li><a href="/machine-builders/design-win/">How a Design Win Works</a></li>
+          <li><a href="/machine-builders/industries/">Industries</a></li>
         </ul>
       </div>
       <div>
-        <h3>What we do</h3>
+        <h3>Products</h3>
         <ul>
-          <li><a href="/capabilities/">Capabilities</a></li>
-          <li><a href="/industries/">Industries</a></li>
-          <li><a href="/about/">About Russell Homans</a></li>
+          <li><a href="/products/hmis/">HMIs</a></li>
+          <li><a href="/products/plcs/">PLCs and HMI/PLC Combos</a></li>
+          <li><a href="/products/io-and-communication/">I/O and Communication Modules</a></li>
+          <li><a href="/products/cross-reference/">Cross-Reference</a></li>
+          <li><a href="/products/datasheets/">Datasheets</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Proof</h3>
+        <ul>
+          <li><a href="/proof/case-studies/">Case Studies</a></li>
+          <li><a href="/proof/custom-builds/">Custom Builds</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/support/software/">Software, Manuals and Firmware</a></li>
+          <li><a href="/support/warranty-and-rma/">Warranty and RMA</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/company/about-russ/">About Russ</a></li>
+          <li><a href="/company/supply-chain/">Supply Chain</a></li>
+          <li><a href="/company/certifications/">Certifications</a></li>
+          <li><a href="/company/contact/">Contact</a></li>
         </ul>
       </div>
     <div>
@@ -92,9 +154,9 @@
     <a class="notes-off" href="?">Hide working notes</a>
   </div>
 </footer>
-<div class="cta-bar"><a class="btn btn-solid" href="/start/">Start an application review</a></div>
+<div class="cta-bar"><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></div>
 
-<script src="/assets/nav.js?v=ce182b56" defer></script>
+<script src="/assets/nav.js?v=68a28358" defer></script>
 <script src="/assets/forms.js?v=f34a02c9" defer></script>
 <script src="/assets/wizard.js?v=8b508f3b" defer></script>
 </body>

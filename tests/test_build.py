@@ -136,7 +136,7 @@ def test_pinned_helper_and_oem_page():
     assert 'data-pin data-pin-length="3"' in out
     assert out.count('class="pin-step" data-step') == 2
     assert 'data-step-draw="#g-hmi"' in out and "{{inline:art/topology.svg}}" in out
-    html = b.shell(b.PAGES["for-oems/index.html"], "for-oems/index.html")
+    html = b.shell(b.PAGES["machine-builders/design-win/index.html"], "machine-builders/design-win/index.html")
     assert html.count("data-step-draw") == 4 and 'id="topology"' in html
 
 
@@ -149,10 +149,10 @@ def test_cards_accept_images():
 
 def test_photo_pages():
     b = load_build()
-    for path in ("capabilities/index.html", "industries/index.html", "pack-expo/index.html"):
+    for path in ("machine-builders/custom-controls/index.html", "machine-builders/industries/index.html", "pack-expo/index.html"):
         html = b.shell(b.PAGES[path], path)
         assert "/assets/img/" in html, path
-    about = b.shell(b.PAGES["about/index.html"], "about/index.html")
+    about = b.shell(b.PAGES["company/about-russ/index.html"], "company/about-russ/index.html")
     assert 'data-count="20"' in about and 'class="timeline"' in about
     assert 'class="portrait-frame"' in about
     expo = b.shell(b.PAGES["pack-expo/index.html"], "pack-expo/index.html")
@@ -165,7 +165,34 @@ def test_photo_pages():
 
 def test_intake_has_four_wizard_steps():
     b = load_build()
-    html = b.shell(b.PAGES["start/index.html"], "start/index.html")
+    html = b.shell(b.PAGES["talk-to-russ/index.html"], "talk-to-russ/index.html")
     assert html.count("<fieldset data-wizard-step>") == 4
     assert "/assets/wizard.js?v=" in html
     assert html.count('<legend>') == 4
+
+
+def test_navigation_has_five_headers_and_every_page_exists():
+    b = load_build()
+    html = b.shell(b.PAGES["index.html"], "index.html")
+    assert html.count('class="menu-head"') == 5
+    assert 'href="/talk-to-russ/">Talk to Russ</a>' in html
+    for head, intro, pages in b.NAV:
+        assert intro in html
+        for label, href, summary in pages:
+            assert href in html and summary in html
+            assert href.strip("/") + "/index.html" in b.PAGES, href
+
+
+def test_current_page_lights_its_header():
+    b = load_build()
+    html = b.shell(b.PAGES["products/hmis/index.html"], "products/hmis/index.html")
+    assert 'class="menu-item is-section"' in html and html.count("is-section") == 1
+    assert '<a href="/products/hmis/" aria-current="page">' in html
+
+
+def test_old_urls_redirect():
+    b = load_build()
+    for old, new in b.MOVED.items():
+        html = b.shell(b.PAGES[old], old)
+        assert 'http-equiv="refresh" content="0; url=%s"' % new in html
+        assert "motion.js" not in html
