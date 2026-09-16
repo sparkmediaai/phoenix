@@ -71,3 +71,18 @@ def test_cinematic_hero_markup():
     assert 'rel="preload" as="image" href="/assets/video/hero-poster.webp"' in html
     assert html.count('data-step') == 3
     assert 'data-hold' in html and 'data-dim' in html
+
+
+def test_homepage_has_cost_figure_and_counts():
+    b = load_build()
+    html = b.shell(b.PAGES["index.html"], "index.html")
+    assert 'data-count="2500"' in html and 'data-count="350"' in html and 'data-count="1000"' in html
+    assert 'id="cost-figure"' in html and "data-draw" in html
+    assert 'id="panel-front"' in html
+
+
+def test_figure_helper():
+    b = load_build()
+    out = b.figure("cost-figure.svg", "From $1,000 to $350.")
+    assert out.startswith('<figure class="art" data-reveal>') and "{{inline:art/cost-figure.svg}}" in out
+    assert "<figcaption>From $1,000 to $350.</figcaption>" in out

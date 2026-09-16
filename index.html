@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/site.css?v=7b32dc09">
 <link rel="stylesheet" href="/assets/forms.css?v=53fdd355">
-<link rel="stylesheet" href="/assets/motion.css?v=392790e9">
+<link rel="stylesheet" href="/assets/motion.css?v=1e59b443">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
 </head>
 <body>
@@ -93,25 +93,59 @@
 <section class="band band-tint">
   <div class="inner">
     <div class="eyebrow">Three things a catalog cannot do</div>
-    <div class="cards three" data-reveal="stagger">
+    <div class="split wide-left">
+      <div class="cards one" data-reveal="stagger">
       <div class="card"><div class="card-body"><h3>Engineering before the order</h3><p>Application review, control architecture, network layout, sample code you can paste into your program. Pre-sale, at no charge, because the first application has to work.</p></div></div>
       <div class="card"><div class="card-body"><h3>Built to your target</h3><p>Your logo on the bezel. Your mounting. Your price point at your quantity. Customisation the big brands will not discuss below a seven-figure order.</p></div></div>
       <div class="card"><div class="card-body"><h3>A factory that answers the phone</h3><p>A million-dollar opportunity does not register with the largest control vendors. At our factory partner it gets engineers on a plane.</p></div></div>
+    </div>
+      <figure class="art art-tall" data-reveal><svg xmlns="http://www.w3.org/2000/svg" id="panel-front" viewBox="0 0 320 420" role="img" aria-labelledby="panel-title" data-draw fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title id="panel-title">Line drawing of a custom glass operator panel: display, buttons, nameplate</title>
+  <rect x="20" y="20" width="280" height="380" rx="14"/>
+  <rect x="44" y="48" width="232" height="150" rx="6"/>
+  <path d="M 60 176 L 110 120 L 150 150 L 200 96 L 260 130"/>
+  <circle cx="80" cy="250" r="16"/>
+  <circle cx="160" cy="250" r="16"/>
+  <circle cx="240" cy="250" r="16"/>
+  <circle cx="80" cy="310" r="16"/>
+  <circle cx="160" cy="310" r="16"/>
+  <circle cx="240" cy="310" r="16"/>
+  <rect x="96" y="352" width="128" height="26" rx="4" stroke="#C4542C"/>
+  <path d="M 112 365 H 208" stroke="#C4542C" stroke-dasharray="3 5"/>
+</svg><figcaption>A panel engineered to your target, with your name on the bezel.</figcaption></figure>
     </div>
   </div>
 </section>
 
 <section class="band">
-  <div class="inner narrow" data-reveal>
-    <div class="eyebrow">Proof</div>
-    <h2>One customer, twenty years. Same engineer.</h2>
-    <p>A residential elevator manufacturer has run on Phoenix-supplied controls for close to two decades,
-    through every revision of their cab. The current project is an all-glass cab operating panel with an
-    integrated phone. Revision one landed near $1,000 a unit. The target was $350 to $400. Revision two
-    hits it at production quantity, because Phoenix took the number back to the factory instead of
-    apologising for the catalog price.</p>
-    <p class="muted">Commercial kitchen equipment, screen-printing presses, industrial slicers, municipal
-    water plants and gutter machines run the same way. <a href="/industries/">See the industries.</a></p>
+  <div class="inner">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">Proof</div>
+        <h2>One customer, twenty years. Same engineer.</h2>
+        <p>A residential elevator manufacturer has run on Phoenix-supplied controls for close to two decades,
+        through every revision of their cab. The current project is an all-glass cab operating panel with an
+        integrated phone.</p>
+        <p class="stat"><span class="num" data-count="1000" data-count-prefix="$">$1,000</span> <span class="lbl">revision one, per unit</span></p>
+        <p class="stat"><span class="num" data-count="350" data-count-prefix="$">$350</span> <span class="lbl">revision two, per unit, at <span data-count="2500" data-count-suffix=" units">2,500 units</span></span></p>
+        <p>Because Phoenix took the number back to the factory instead of apologising for the catalog price.</p>
+        <p class="muted">Commercial kitchen equipment, screen-printing presses, industrial slicers, municipal
+        water plants and gutter machines run the same way. <a href="/industries/">See the industries.</a></p>
+      </div>
+      <figure class="art" data-reveal><svg xmlns="http://www.w3.org/2000/svg" id="cost-figure" viewBox="0 0 640 320" role="img" aria-labelledby="cost-title" data-draw fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title id="cost-title">Revision one at $1,000 a unit against revision two at $350 at 2,500 units</title>
+  <line x1="60" y1="270" x2="600" y2="270"/>
+  <line x1="60" y1="270" x2="60" y2="40"/>
+  <rect x="140" y="60" width="120" height="210" rx="3" stroke="#C4542C"/>
+  <rect x="380" y="196" width="120" height="74" rx="3" stroke="#C4542C"/>
+  <path d="M 90 196 H 570" stroke-dasharray="6 8"/>
+  <path d="M 270 120 C 320 110 350 150 372 186"/>
+  <path d="M 362 176 L 372 186 L 376 172"/>
+  <text x="200" y="300" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="14">Revision one</text>
+  <text x="440" y="300" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="14">Revision two</text>
+  <text x="580" y="190" text-anchor="end" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">target: $350 to $400</text>
+</svg><figcaption>Revision one against revision two, at production quantity.</figcaption></figure>
+    </div>
   </div>
 </section>
 

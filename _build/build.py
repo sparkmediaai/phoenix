@@ -159,6 +159,12 @@ def steps(items):
         '      <li><h3>%s</h3><p>%s</p></li>' % (t, p) for t, p in items)
 
 
+def figure(svg_name, caption, cls=""):
+    """An inlined drawing that draws itself as it scrolls in, with a caption."""
+    return ('<figure class="art%s" data-reveal>{{inline:art/%s}}<figcaption>%s</figcaption></figure>'
+            % ((" " + cls) if cls else "", svg_name, caption))
+
+
 MOTION_SCRIPTS = ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js"]
 
 
@@ -394,21 +400,30 @@ PAGES["index.html"] = dict(
 <section class="band band-tint">
   <div class="inner">
     <div class="eyebrow">Three things a catalog cannot do</div>
-    %(cards)s
+    <div class="split wide-left">
+      %(cards)s
+      %(panel)s
+    </div>
   </div>
 </section>
 
 <section class="band">
-  <div class="inner narrow" data-reveal>
-    <div class="eyebrow">Proof</div>
-    <h2>One customer, twenty years. Same engineer.</h2>
-    <p>A residential elevator manufacturer has run on Phoenix-supplied controls for close to two decades,
-    through every revision of their cab. The current project is an all-glass cab operating panel with an
-    integrated phone. Revision one landed near $1,000 a unit. The target was $350 to $400. Revision two
-    hits it at production quantity, because Phoenix took the number back to the factory instead of
-    apologising for the catalog price.</p>
-    <p class="muted">Commercial kitchen equipment, screen-printing presses, industrial slicers, municipal
-    water plants and gutter machines run the same way. <a href="/industries/">See the industries.</a></p>
+  <div class="inner">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">Proof</div>
+        <h2>One customer, twenty years. Same engineer.</h2>
+        <p>A residential elevator manufacturer has run on Phoenix-supplied controls for close to two decades,
+        through every revision of their cab. The current project is an all-glass cab operating panel with an
+        integrated phone.</p>
+        <p class="stat"><span class="num" data-count="1000" data-count-prefix="$">$1,000</span> <span class="lbl">revision one, per unit</span></p>
+        <p class="stat"><span class="num" data-count="350" data-count-prefix="$">$350</span> <span class="lbl">revision two, per unit, at <span data-count="2500" data-count-suffix=" units">2,500 units</span></span></p>
+        <p>Because Phoenix took the number back to the factory instead of apologising for the catalog price.</p>
+        <p class="muted">Commercial kitchen equipment, screen-printing presses, industrial slicers, municipal
+        water plants and gutter machines run the same way. <a href="/industries/">See the industries.</a></p>
+      </div>
+      %(cost)s
+    </div>
   </div>
 </section>
 
@@ -447,7 +462,9 @@ PAGES["index.html"] = dict(
             ("A factory that answers the phone",
              "A million-dollar opportunity does not register with the largest control vendors. At our factory "
              "partner it gets engineers on a plane."),
-        ]),
+        ], "one"),
+        panel=figure("panel-front.svg", "A panel engineered to your target, with your name on the bezel.", "art-tall"),
+        cost=figure("cost-figure.svg", "Revision one against revision two, at production quantity."),
         fit="".join("<li><b>%s</b> %s</li>" % f for f in FIT),
         notfit="".join("<li>%s</li>" % n for n in NOT_FIT),
         steps=steps([

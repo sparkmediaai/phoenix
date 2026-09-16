@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="cost-figure" viewBox="0 0 640 320" role="img" aria-labelledby="cost-title" data-draw fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title id="cost-title">Revision one at $1,000 a unit against revision two at $350 at 2,500 units</title>
+  <line x1="60" y1="270" x2="600" y2="270"/>
+  <line x1="60" y1="270" x2="60" y2="40"/>
+  <rect x="140" y="60" width="120" height="210" rx="3" stroke="#C4542C"/>
+  <rect x="380" y="196" width="120" height="74" rx="3" stroke="#C4542C"/>
+  <path d="M 90 196 H 570" stroke-dasharray="6 8"/>
+  <path d="M 270 120 C 320 110 350 150 372 186"/>
+  <path d="M 362 176 L 372 186 L 376 172"/>
+  <text x="200" y="300" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="14">Revision one</text>
+  <text x="440" y="300" text-anchor="middle" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="14">Revision two</text>
+  <text x="580" y="190" text-anchor="end" fill="currentColor" stroke="none" font-family="Inter, system-ui, sans-serif" font-size="13">target: $350 to $400</text>
+</svg>

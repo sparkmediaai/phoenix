@@ -29,3 +29,16 @@ html.motion .hero-media .hero-video { opacity: 1; }
   html.motion .hero-step { grid-area: 1 / 1; text-align: center; }
 }
 @media (max-width: 767px) { .hero-media { inset: 0; } }
+
+/* Drawings and figures */
+.art { margin: 0; color: var(--ink-soft); }
+.art svg { width: 100%; height: auto; }
+.art figcaption { font: 500 .85rem/1.5 var(--sans); color: var(--ink-soft); margin-top: 10px; }
+.art-tall { max-width: 320px; margin-inline: auto; }
+.band-dark .art { color: #CFC5B8; }
+.cards.one { grid-template-columns: 1fr; }
+.split.wide-left { grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); align-items: center; }
+@media (max-width: 760px) { .split.wide-left { grid-template-columns: 1fr; } }
+.stat { display: flex; align-items: baseline; gap: 14px; margin: .2em 0; }
+.stat .num { font: 600 clamp(2rem, 4vw, 3rem)/1 var(--serif); color: var(--ember); letter-spacing: -.01em; }
+.stat .lbl { color: var(--ink-soft); }

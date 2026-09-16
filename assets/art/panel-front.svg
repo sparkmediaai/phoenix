@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="panel-front" viewBox="0 0 320 420" role="img" aria-labelledby="panel-title" data-draw fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title id="panel-title">Line drawing of a custom glass operator panel: display, buttons, nameplate</title>
+  <rect x="20" y="20" width="280" height="380" rx="14"/>
+  <rect x="44" y="48" width="232" height="150" rx="6"/>
+  <path d="M 60 176 L 110 120 L 150 150 L 200 96 L 260 130"/>
+  <circle cx="80" cy="250" r="16"/>
+  <circle cx="160" cy="250" r="16"/>
+  <circle cx="240" cy="250" r="16"/>
+  <circle cx="80" cy="310" r="16"/>
+  <circle cx="160" cy="310" r="16"/>
+  <circle cx="240" cy="310" r="16"/>
+  <rect x="96" y="352" width="128" height="26" rx="4" stroke="#C4542C"/>
+  <path d="M 112 365 H 208" stroke="#C4542C" stroke-dasharray="3 5"/>
+</svg>
