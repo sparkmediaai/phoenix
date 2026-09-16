@@ -1,11 +1,11 @@
-// The inquiry form. Posts JSON straight to the GoHighLevel inbound webhook in
-// window.FORM_ENDPOINT, the way The Valley's forms do.
+// The application-review form. Posts JSON straight to the GoHighLevel inbound
+// webhook in window.FORM_ENDPOINT, the way The Valley's forms do.
 //
 // Because there is no server, every rule the CRM depends on is enforced here:
-// the exact option strings, guest_count as a number, phone to E.164,
-// submitted_at at submit. A value that is not on the allowlist is dropped
-// rather than sent -- an empty CRM field is at least visible, a wrong one is
-// not.
+// the exact option strings, phone to E.164, submitted_at at submit. A value
+// that is not on the allowlist is dropped rather than sent -- an empty CRM
+// field is at least visible, a wrong one is not. The option lists must match
+// CONTROLS and VOLUMES in _build/build.py; change both together.
 //
 // The honeypot: the "website" field is hidden from people and filled by
 // scrapers. A filled honeypot is silently accepted and never posted. It is the
@@ -18,12 +18,18 @@
   var endpoint = window.FORM_ENDPOINT || "";
   var email = window.CONTACT_EMAIL || "";
 
-  var EVENT_TYPES = ["Wedding", "Celebration", "Corporate", "Other"];
-  var SEASONS = ["Spring", "Summer", "Autumn", "Winter"];
+  var CONTROLS = ["Allen-Bradley / Rockwell", "Siemens", "Omron", "Automation Direct", "Maple Systems",
+                  "Relay logic / no PLC", "Other", "Not sure"];
+  var VOLUMES = ["Under 50", "50 to 250", "250 to 1,000", "1,000 to 5,000", "Over 5,000"];
 
   function say(msg, cls) {
     status.textContent = msg;
     status.className = "form-status" + (cls ? " " + cls : "");
+  }
+
+  function val(name) {
+    var el = form.elements[name];
+    return el ? (el.value || "").trim() : "";
   }
 
   function e164(raw) {
@@ -36,21 +42,21 @@
   }
 
   function collect() {
-    var f = form.elements;
-    var out = {
-      first_name: f.first_name.value.trim(),
-      last_name: f.last_name.value.trim(),
-      email: f.email.value.trim(),
-      phone: e164(f.phone.value),
-      event_type: EVENT_TYPES.indexOf(f.event_type.value) >= 0 ? f.event_type.value : "",
-      guest_count: f.guest_count.value ? parseInt(f.guest_count.value, 10) : null,
-      event_date: f.event_date.value || "",
-      season: SEASONS.indexOf(f.season.value) >= 0 ? f.season.value : "",
-      message: f.message.value.trim(),
+    return {
+      machine_type: val("machine_type"),
+      annual_volume: VOLUMES.indexOf(val("annual_volume")) >= 0 ? val("annual_volume") : "",
+      current_controls: CONTROLS.indexOf(val("current_controls")) >= 0 ? val("current_controls") : "",
+      application: val("application"),
+      spec_link: /^https?:\/\//i.test(val("spec_link")) ? val("spec_link") : "",
+      company: val("company"),
+      role: val("role"),
+      first_name: val("first_name"),
+      last_name: val("last_name"),
+      email: val("email"),
+      phone: e164(val("phone")),
       source: location.hostname + location.pathname,
       submitted_at: new Date().toISOString()
     };
-    return out;
   }
 
   function invalid(name, yes) {
@@ -60,7 +66,8 @@
 
   function validate(d) {
     var ok = true;
-    ["first_name", "last_name", "email", "event_type"].forEach(function (k) {
+    ["machine_type", "annual_volume", "current_controls", "application",
+     "company", "first_name", "last_name", "email"].forEach(function (k) {
       var bad = !d[k];
       invalid(k, bad); if (bad) ok = false;
     });
@@ -71,8 +78,7 @@
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     if (form.elements.website && form.elements.website.value) {
-      // Honeypot filled: pretend it worked, post nothing.
-      say("Thank you. We will be in touch.", "ok");
+      say("Thank you. Russell will be in touch.", "ok");
       form.reset();
       return;
     }
@@ -80,7 +86,7 @@
     if (!validate(data)) { say("Please check the highlighted fields.", "err"); return; }
 
     if (!endpoint) {
-      say("Inquiries are not open online yet. Please email " + email + " and we will reply within a business day.", "err");
+      say("Online submissions are not open yet. Please email the same details to " + email + " and Russell will reply within two business days.", "err");
       return;
     }
 
@@ -92,7 +98,7 @@
       body: JSON.stringify(data)
     }).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
-      say("Thank you. Someone from the team will reply within a business day.", "ok");
+      say("Thank you. Russell reads every submission and will reply within two business days.", "ok");
       form.reset();
     }).catch(function () {
       say("That did not go through. Please email " + email + " instead; nothing you typed has been lost.", "err");

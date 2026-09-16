@@ -10,7 +10,7 @@
   --ember: #C4542C;        /* the one accent */
   --ember-deep: #9E3F1F;
   --gold: #C89B4A;
-  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --serif: "Barlow Semi Condensed", "Arial Narrow", sans-serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --measure: 62ch;
   --gutter: clamp(16px, 4vw, 40px);
@@ -26,7 +26,7 @@ body {
 }
 img, svg, video { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
-h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.12; margin: 0 0 .5em; letter-spacing: -.01em; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.08; margin: 0 0 .5em; letter-spacing: -.005em; }
 h1 { font-size: clamp(2.2rem, 5.5vw, 4.2rem); }
 h2 { font-size: clamp(1.7rem, 3.4vw, 2.6rem); }
 h3 { font-size: 1.35rem; }
@@ -60,7 +60,7 @@ p { margin: 0 0 1em; }
   min-height: var(--head-h); display: flex; align-items: center;
 }
 .site-head .inner { display: flex; align-items: center; gap: 24px; padding-block: 12px; }
-.wordmark { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 1.25rem/1 var(--serif); margin-right: auto; }
+.wordmark { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 1.15rem/1 var(--serif); letter-spacing: .01em; margin-right: auto; }
 .wordmark .mark { width: 34px; height: 34px; }
 .wordmark .mark svg { width: 100%; height: 100%; }
 .site-nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
@@ -133,3 +133,26 @@ html.notes .note { display: block; margin: 0 auto 8px; width: min(1160px, 100% -
 html.notes .note b { font-weight: 600; margin-right: 6px; }
 html.notes .notes-on { display: none; }
 html.notes .notes-off { display: inline; }
+
+/* Dark band, two-column split, the fit and not-fit lists */
+.band-dark { background: var(--ink); color: var(--paper); }
+.band-dark .eyebrow { color: var(--gold); }
+.band-dark h2 { color: #fff; }
+.split { display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.band-dark .ticks li, .crosses li { border-bottom-color: #3a322d; }
+.ticks li b { display: block; font-weight: 600; }
+.crosses { list-style: none; padding: 0; margin: 0 0 1.5em; }
+.crosses li { padding: 10px 0 10px 30px; border-bottom: 1px solid var(--line); position: relative; color: #CFC5B8; }
+.crosses li::before, .crosses li::after { content: ""; position: absolute; left: 4px; top: 21px; width: 14px; height: 2px; background: #9C9186; transform: rotate(45deg); }
+.crosses li::after { transform: rotate(-45deg); }
+
+/* Numbered steps */
+.steps { list-style: none; counter-reset: step; padding: 0; margin: 0 0 1.5em; display: grid; gap: 22px; }
+.steps li { counter-increment: step; position: relative; padding-left: 64px; }
+.steps li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 50%; background: var(--ember); color: #fff; font: 600 1.2rem/44px var(--serif); text-align: center; }
+.steps h3 { margin-bottom: .2em; }
+.steps p { margin: 0; color: var(--ink-soft); }
+
+/* Questions and answers */
+.faq dt { font: 600 1.15rem/1.3 var(--serif); margin: 1.2em 0 .3em; }
+.faq dd { margin: 0; color: var(--ink-soft); }
