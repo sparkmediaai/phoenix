@@ -57,3 +57,5 @@ html.motion .hero-media .hero-video { opacity: 1; }
   .pin-grid { grid-template-columns: 1fr; }
   .pin-figure { max-width: 360px; margin-inline: auto; }
 }
+
+html.motion .card-shift { transform: scale(1.12); }

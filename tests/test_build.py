@@ -96,3 +96,22 @@ def test_pinned_helper_and_oem_page():
     assert 'data-step-draw="#g-hmi"' in out and "{{inline:art/topology.svg}}" in out
     html = b.shell(b.PAGES["for-oems/index.html"], "for-oems/index.html")
     assert html.count("data-step-draw") == 4 and 'id="topology"' in html
+
+
+def test_cards_accept_images():
+    b = load_build()
+    out = b.cards([("T", "x", "control-panel", "A panel"), ("U", "y")])
+    assert out.count('class="card-shift" data-parallax="0.12"') == 1
+    assert '{{img:control-panel|A panel|class="card-img"}}' in out
+
+
+def test_photo_pages():
+    b = load_build()
+    for path in ("capabilities/index.html", "industries/index.html", "pack-expo/index.html"):
+        html = b.shell(b.PAGES[path], path)
+        assert "/assets/img/" in html, path
+    about = b.shell(b.PAGES["about/index.html"], "about/index.html")
+    assert 'data-count="20"' in about and 'class="timeline"' in about
+    assert 'class="portrait-frame"' in about
+    expo = b.shell(b.PAGES["pack-expo/index.html"], "pack-expo/index.html")
+    assert "data-parallax" not in expo and "data-pin" not in expo and "motion.js" not in expo

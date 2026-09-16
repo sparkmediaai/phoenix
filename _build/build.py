@@ -148,9 +148,14 @@ def note(text):
 
 def cards(items, cls="three"):
     out = []
-    for title, text in items:
-        out.append('      <div class="card"><div class="card-body"><h3>%s</h3><p>%s</p></div></div>'
-                   % (title, text))
+    for item in items:
+        title, text = item[0], item[1]
+        media = ""
+        if len(item) == 4:
+            media = ('<div class="card-media"><div class="card-shift" data-parallax="0.12">'
+                     '{{img:%s|%s|class="card-img"}}</div></div>' % (item[2], html_attr(item[3])))
+        out.append('      <div class="card">%s<div class="card-body"><h3>%s</h3><p>%s</p></div></div>'
+                   % (media, title, text))
     return '<div class="cards %s" data-reveal="stagger">\n%s\n    </div>' % (cls, "\n".join(out))
 
 
@@ -572,10 +577,10 @@ PAGES["capabilities/index.html"] = dict(
 </section>
 """ % dict(
         hw=cards([
-            ("HMI and touchscreen interfaces", "Panel-mount displays for temperature, recipe and machine control. Branded bezels, custom mounting."),
-            ("PLCs and machine controllers", "Sized to the machine. Application support included, so the software learning curve is ours before it is yours."),
-            ("I/O, drives and networking", "Remote I/O, fieldbus, sensor integration, barcode verification and the network layout that ties it together."),
-            ("Custom operator panels", "All-glass cab operating panels, hall stations and fixtures engineered to a cost target at production quantity."),
+            ("HMI and touchscreen interfaces", "Panel-mount displays for temperature, recipe and machine control. Branded bezels, custom mounting.", "hall-station-screen", "Hall station screen showing car position"),
+            ("PLCs and machine controllers", "Sized to the machine. Application support included, so the software learning curve is ours before it is yours.", "control-panel", "Control panel with PLC, I/O and wiring, built for an OEM machine"),
+            ("I/O, drives and networking", "Remote I/O, fieldbus, sensor integration, barcode verification and the network layout that ties it together.", "factory-automation-remote-i-o", "Remote I/O modules wired into a factory automation enclosure"),
+            ("Custom operator panels", "All-glass cab operating panels, hall stations and fixtures engineered to a cost target at production quantity.", "elevator-hall-station", "Elevator hall station with call display"),
         ], "two"),
         eng=cards([
             ("Application review", "The machine, the environment, the volume, the target. A control architecture and a price at your quantity, before any order."),
@@ -610,16 +615,16 @@ PAGES["industries/index.html"] = dict(
   </div>
 </section>
 """ % dict(cards=cards([
-        ("Packaging machinery", "Die cutters with barcode verification, labellers, case erectors, fillers. The $10,000 to $100,000 machines still built in the States."),
-        ("Residential elevators", "Twenty years on the same account. Glass cab operating panels, hall stations, and the cost engineering that made revision two possible."),
+        ("Packaging machinery", "Die cutters with barcode verification, labellers, case erectors, fillers. The $10,000 to $100,000 machines still built in the States.", "barcode-verification", "Barcode verification station on a packaging line"),
+        ("Residential elevators", "Twenty years on the same account. Glass cab operating panels, hall stations, and the cost engineering that made revision two possible.", "elevator-hall-station", "Elevator hall station with call display"),
         ("Commercial kitchen equipment", "Ovens and mixers, and the temperature and recipe interfaces that set them."),
-        ("Printing and finishing", "Screen-printing presses, pad printers and print-curing lines with operator control at the press."),
+        ("Printing and finishing", "Screen-printing presses, pad printers and print-curing lines with operator control at the press.", "pad-printing-machine", "Pad printing machine with touchscreen operator control"),
         ("Food processing", "Industrial slicers and portioning equipment with washdown-rated interfaces."),
-        ("Water and wastewater", "Municipal treatment plants: load balancing, remote I/O and operator screens that run for decades."),
+        ("Water and wastewater", "Municipal treatment plants: load balancing, remote I/O and operator screens that run for decades.", "waste-water-plant", "Exterior of a municipal waste water treatment plant, with aeration basins and the operations building"),
         ("Building products machinery", "Seamless gutter machines and roll-forming lines that run from a truck."),
-        ("Agriculture and field equipment", "Hydraulic soil-sampling rigs with carousel control and logging."),
+        ("Agriculture and field equipment", "Hydraulic soil-sampling rigs with carousel control and logging.", "soil-sampling-rig", "Hydraulic soil-sampling rig with carousel control"),
         ("Medical and rehabilitation equipment", "Controls and operator interfaces for therapy and rehabilitation machines."),
-    ])),
+    ], "mosaic")),
 )
 
 PAGES["about/index.html"] = dict(
@@ -633,15 +638,38 @@ PAGES["about/index.html"] = dict(
               "the years-in-business figure, and whether the bench of contract engineers is public. "
               "Everything below is drawn from the calls and wants his sign-off.") + """
 <section class="band">
+  <div class="inner">
+    <div class="split">
+      <div data-reveal>
+        <h2>Russell Homans, owner and engineer</h2>
+        <p class="stat"><span class="num" data-count="20" data-count-suffix="+">20+</span> <span class="lbl">years specifying, programming and supporting OEM controls</span></p>
+        <p>Russell has specified, programmed and supported controls for OEM machine builders for more than
+        two decades, and has owned Phoenix outright since the start of 2026. He writes application code,
+        lays out networks, walks a customer's engineer through a platform's known problems before they hit
+        them, and takes cost targets back to the factory personally. He has stood on that factory's floor.</p>
+        <p>When a project needs more hands than one, Phoenix draws on a bench of contract controls engineers
+        who have worked with Russell for years. Too much work is not a problem Phoenix turns away.</p>
+      </div>
+      <figure class="portrait" data-reveal>
+        <div class="portrait-frame" aria-hidden="true">{{inline:mark.svg}}</div>
+        <figcaption>Photograph to come.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+<section class="band band-tint">
+  <div class="inner narrow">
+    <div class="eyebrow">Proof points</div>
+    <ol class="timeline" data-reveal="stagger">
+      <li><b>Twenty years, one account.</b> A residential elevator manufacturer has run on Phoenix-supplied controls through every revision of their cab.</li>
+      <li><b>$1,000 to $350.</b> A glass cab operating panel re-engineered at the factory to the customer's target, at 2,500 units.</li>
+      <li><b>Nine industries.</b> Packaging, elevators, kitchens, printing, food, water, building products, agriculture, medical. <a href="/industries/">See them.</a></li>
+      <li><b>Owner since 2026.</b> Phoenix Automation Solutions, Inc., Mokena, Illinois.</li>
+    </ol>
+  </div>
+</section>
+<section class="band">
   <div class="inner narrow" data-reveal>
-    <h2>Russell Homans, owner and engineer</h2>
-    <p>Russell has specified, programmed and supported controls for OEM machine builders for more than
-    two decades, and has owned Phoenix outright since the start of 2026. He writes application code,
-    lays out networks, walks a customer's engineer through a platform's known problems before they hit
-    them, and takes cost targets back to the factory personally. He has stood on that factory's floor.</p>
-    <p>When a project needs more hands than one, Phoenix draws on a bench of contract controls engineers
-    who have worked with Russell for years. Too much work is not a problem Phoenix turns away.</p>
-
     <h2>What Phoenix is becoming</h2>
     <p>For most of its history Phoenix supplied one control platform to a handful of loyal customers.
     That platform is not going anywhere. What is changing is breadth: additional product lines are
@@ -657,6 +685,7 @@ PAGES["about/index.html"] = dict(
 PAGES["pack-expo/index.html"] = dict(
     nav=None, motion=False, title="Meet Phoenix at PACK EXPO 2026 | %s" % SITE,
     desc="Phoenix Automation Solutions at PACK EXPO International, McCormick Place, September 28 to October 1, 2026.",
+    hero_img="barcode-verification-1600.webp", hero_alt="Barcode verification station on a packaging line",
     eyebrow="%(name)s &middot; %(place)s" % SHOW,
     h1="Bring us the machine you wish cost less to control.",
     standfirst="%(dates)s. Russell Homans is on the floor all four days." % SHOW,
