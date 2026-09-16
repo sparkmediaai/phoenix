@@ -60,9 +60,9 @@ p { margin: 0 0 1em; }
   min-height: var(--head-h); display: flex; align-items: center;
 }
 .site-head .inner { display: flex; align-items: center; gap: 24px; padding-block: 12px; }
-.wordmark { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 1.15rem/1 var(--serif); letter-spacing: .01em; margin-right: auto; }
-.wordmark .mark { width: 34px; height: 34px; }
-.wordmark .mark svg { width: 100%; height: 100%; }
+.wordmark { display: flex; align-items: center; text-decoration: none; margin-right: auto; color: #E6DDD1; }
+.wordmark svg { display: block; height: 44px; width: auto; }
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .site-nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
 .site-nav a { text-decoration: none; font: 500 .92rem/1 var(--sans); padding: 8px 0; border-bottom: 1px solid transparent; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { border-bottom-color: var(--gold); }
