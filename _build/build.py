@@ -155,6 +155,23 @@ def steps(items):
         '      <li><h3>%s</h3><p>%s</p></li>' % (t, p) for t, p in items)
 
 
+MOTION_SCRIPTS = ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js"]
+
+
+def motion_loader(root):
+    """Loads GSAP and motion.js in order, only when the gate added html.motion.
+
+    Dynamically inserted scripts are async by default; async=false restores
+    document order. If any script fails, or motion.js has not reported in
+    within four seconds, the motion class comes off so nothing stays hidden.
+    """
+    srcs = ",".join('"%s%s?v=%s"' % (root, s.lstrip("/"), digest(s)) for s in MOTION_SCRIPTS)
+    return ('<script>(function(h){if(!h.classList.contains("motion"))return;'
+            'function off(){h.classList.remove("motion")}'
+            '[%s].forEach(function(s){var e=document.createElement("script");e.src=s;e.async=false;e.onerror=off;document.body.appendChild(e)});'
+            'setTimeout(function(){if(!window.__motionReady)off()},4000)})(document.documentElement)</script>\n' % srcs)
+
+
 # -------------------------------------------------------------------- shell
 def shell(page, path="index.html"):
     """Wrap one page's body in the site chrome."""
@@ -216,7 +233,8 @@ def shell(page, path="index.html"):
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="%(root)sassets/site.css">
 <link rel="stylesheet" href="%(root)sassets/forms.css">
-%(head)s<script>document.documentElement.classList.add("js");window.FORM_ENDPOINT=%(endpoint)s;window.CONTACT_EMAIL=%(email)s;if(/[?&]notes\\b/.test(location.search))document.documentElement.classList.add("notes")</script>
+<link rel="stylesheet" href="%(root)sassets/motion.css?v=%(motion_css_v)s">
+%(head)s<script>document.documentElement.classList.add("js");window.FORM_ENDPOINT=%(endpoint)s;window.CONTACT_EMAIL=%(email)s;if(/[?&]notes\\b/.test(location.search))document.documentElement.classList.add("notes");%(gate)s</script>
 </head>
 <body>
 
@@ -259,7 +277,7 @@ def shell(page, path="index.html"):
 %(cta_bar)s%(foot_js)s
 <script src="%(root)sassets/nav.js" defer></script>
 <script src="%(root)sassets/forms.js" defer></script>
-</body>
+%(loader)s</body>
 </html>
 """ % {
         "title": page["title"], "desc": html_attr(page["desc"]), "root": root,
@@ -277,6 +295,10 @@ def shell(page, path="index.html"):
                      '    <p>%s</p>%s\n  </div>\n' % (page["eyebrow"], page["h1"], page["standfirst"], actions),
         "body": expand(page["body"]), "foot": foot, "address": ADDRESS, "contact": contact,
         "head": page.get("head", ""), "foot_js": page.get("foot_js", ""),
+        "gate": "" if page.get("motion") is False else
+                'if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")',
+        "loader": "" if page.get("motion") is False else motion_loader(root),
+        "motion_css_v": digest("/assets/motion.css"),
     }
 
 
@@ -575,7 +597,7 @@ PAGES["about/index.html"] = dict(
 )
 
 PAGES["pack-expo/index.html"] = dict(
-    nav=None, title="Meet Phoenix at PACK EXPO 2026 | %s" % SITE,
+    nav=None, motion=False, title="Meet Phoenix at PACK EXPO 2026 | %s" % SITE,
     desc="Phoenix Automation Solutions at PACK EXPO International, McCormick Place, September 28 to October 1, 2026.",
     eyebrow="%(name)s &middot; %(place)s" % SHOW,
     h1="Bring us the machine you wish cost less to control.",
@@ -671,7 +693,7 @@ PAGES["start/index.html"] = dict(
 )
 
 PAGES["404.html"] = dict(
-    nav=None, title="Not found | %s" % SITE, desc="That page is not here.",
+    nav=None, motion=False, title="Not found | %s" % SITE, desc="That page is not here.",
     eyebrow="404", h1="That page is not here.",
     standfirst="It may have moved while the site is being built.",
     actions=[("Go to the home page", "/")],
@@ -684,17 +706,22 @@ PAGES["404.html"] = dict(
 # at. GitHub Pages serves assets with a ten-minute cache; without this a fix
 # to site.css is invisible to anyone who looked at the site in the last ten
 # minutes. The hash only changes when the file does.
-ASSET_LINK = re.compile(r'((?:href|src)="/assets/[a-z0-9-]+\.(?:css|js))"')
+ASSET_LINK = re.compile(r'((?:href|src)="/assets/[a-z0-9/-]+\.(?:css|js))"')
 _digest = {}
+
+
+def digest(rel):
+    """Eight hex characters of the asset at root-relative path `rel`."""
+    if rel not in _digest:
+        with open(os.path.join(ROOT, rel.lstrip("/")), "rb") as f:
+            _digest[rel] = hashlib.md5(f.read()).hexdigest()[:8]
+    return _digest[rel]
 
 
 def version_assets(html):
     def stamp(m):
         rel = m.group(1).split('"')[1]
-        if rel not in _digest:
-            with open(os.path.join(ROOT, rel.lstrip("/")), "rb") as f:
-                _digest[rel] = hashlib.md5(f.read()).hexdigest()[:8]
-        return '%s?v=%s"' % (m.group(1), _digest[rel])
+        return '%s?v=%s"' % (m.group(1), digest(rel))
     return ASSET_LINK.sub(stamp, html)
 
 

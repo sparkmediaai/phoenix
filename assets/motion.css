@@ -1,0 +1,8 @@
+/* Motion: hidden initial states, scoped to html.motion, which the shell's
+   gate adds only when the visitor does not prefer reduced motion and the
+   loader has not given up. Without the class nothing here applies. */
+
+html.motion [data-reveal] { opacity: 0; transform: translateY(24px); }
+html.motion [data-reveal="stagger"] { opacity: 1; transform: none; }
+html.motion [data-reveal="stagger"] > * { opacity: 0; transform: translateY(24px); }
+html.motion [data-count] { font-variant-numeric: tabular-nums; }
