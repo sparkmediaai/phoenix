@@ -75,7 +75,7 @@ FOOTER = [
 ]
 
 ADDRESS = "Mokena, Illinois<br>Southwest of Chicago"     # TODO: street address
-OG_ALT = "A custom glass operator panel engineered by Phoenix Automation Solutions"
+OG_ALT = "A control panel built for an OEM machine by Phoenix Automation Solutions"
 
 # PACK EXPO International 2026, McCormick Place, Chicago.
 SHOW = dict(name="PACK EXPO International", dates="September 28 &ndash; October 1, 2026",
@@ -192,13 +192,33 @@ def shell(page, path="index.html"):
                          for t, h in links) + "\n        ")
         for head, links in FOOTER)
 
-    hero, hero_class = "", "hero-plain"
+    hero, hero_class, hero_steps = "", "hero-plain", ""
     if page.get("hero_img"):
         w, h = webp_size(os.path.join(IMG, page["hero_img"]))
         hero_class = "hero-photo"
         hero = ('  <img class="hero-bg" src="%sassets/img/%s" alt="%s" '
                 'width="%d" height="%d" fetchpriority="high" decoding="async">\n'
                 % (root, page["hero_img"], html_attr(page["hero_alt"]), w, h))
+
+    preload = ""
+    if page.get("hero_video"):
+        v = page["hero_video"]
+        poster = "%sassets/video/%s-poster.webp" % (root, v["name"])
+        w, h = webp_size(os.path.join(ROOT, "assets", "video", "%s-poster.webp" % v["name"]))
+        hero_class = "hero-cinema\" data-pin data-pin-length=\"3"
+        preload = '<link rel="preload" as="image" href="%s">\n' % poster
+        hero = ('  <div class="hero-media" data-parallax="0.15">\n'
+                '    <img class="hero-bg" src="%(p)s" alt="%(alt)s" width="%(w)d" height="%(h)d" fetchpriority="high" decoding="async">\n'
+                '    <video class="hero-video" muted loop playsinline preload="none" poster="%(p)s" aria-hidden="true" tabindex="-1">\n'
+                '      <source src="%(r)sassets/video/%(n)s.webm" type="video/webm">\n'
+                '      <source src="%(r)sassets/video/%(n)s.mp4" type="video/mp4">\n'
+                '    </video>\n  </div>\n  <div class="hero-dim" data-dim aria-hidden="true"></div>\n'
+                % dict(p=poster, alt=html_attr(v["alt"]), w=w, h=h, r=root, n=v["name"]))
+        if page.get("hero_steps"):
+            hero_steps = "".join(
+                '    <div class="hero-step" data-step><div class="eyebrow">%s</div><h2>%s</h2><p>%s</p></div>\n' % s
+                for s in page["hero_steps"])
+
     actions = ""
     if page.get("actions"):
         actions = '\n    <div class="hero-actions">%s</div>' % "".join(
@@ -211,6 +231,8 @@ def shell(page, path="index.html"):
         contact += '<br><a href="tel:%s">%s</a>' % (re.sub(r"[^\d+]", "", PHONE), PHONE)
     contact += '<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL)
 
+    hold_attr = " data-hold" if page.get("hero_video") else ""
+
     return """<!doctype html>
 <html lang="en">
 <head>
@@ -221,7 +243,7 @@ def shell(page, path="index.html"):
 %(robots)s<link rel="icon" href="%(root)sassets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="%(root)sassets/icon-180.png">
 <meta name="theme-color" content="#1F1A17">
-<meta property="og:type" content="website">
+%(preload)s<meta property="og:type" content="website">
 <meta property="og:site_name" content="%(site)s">
 <meta property="og:title" content="%(title)s">
 <meta property="og:description" content="%(desc)s">
@@ -258,7 +280,7 @@ def shell(page, path="index.html"):
 </header>
 
 <header class="hero %(hero_class)s">
-%(hero)s%(hero_body)s</header>
+%(hero)s%(hero_body)s%(hero_steps)s</header>
 
 <main id="main">
 %(body)s
@@ -295,8 +317,10 @@ def shell(page, path="index.html"):
                    '<div class="cta-bar"><a class="btn btn-solid" href="%s">%s</a></div>\n' % (CTA[1], CTA[0]),
         "hero": hero, "hero_class": hero_class,
         "hero_body": "" if page.get("hero_text") is False else
-                     '  <div class="hero-body">\n    <div class="eyebrow">%s</div>\n    <h1>%s</h1>\n'
-                     '    <p>%s</p>%s\n  </div>\n' % (page["eyebrow"], page["h1"], page["standfirst"], actions),
+                     '  <div class="hero-body"%s>\n    <div class="eyebrow">%s</div>\n    <h1>%s</h1>\n'
+                     '    <p>%s</p>%s\n  </div>\n' % (hold_attr, page["eyebrow"], page["h1"], page["standfirst"], actions),
+        "hero_steps": ('  <div class="hero-steps">\n%s  </div>\n' % hero_steps) if hero_steps else "",
+        "preload": preload,
         "body": expand(page["body"]), "foot": foot, "address": ADDRESS, "contact": contact,
         "head": page.get("head", ""), "foot_js": page.get("foot_js", ""),
         "gate": "" if page.get("motion") is False else
@@ -345,6 +369,12 @@ PAGES["index.html"] = dict(
                "Specified, cost-engineered and supported by an engineer who has done it for twenty years, "
                "not pulled from a catalog and shipped with a wish.",
     actions=[("Start an application review", "/start/"), ("Meet us at PACK EXPO", "/pack-expo/")],
+    hero_video=dict(name="hero", alt="A packaging machine running with barcode verification, controlled by a Phoenix-engineered operator panel"),
+    hero_steps=[
+        ("Proof one", "Engineered to the target.", "A $1,000 operator panel taken back to the factory and re-engineered to $350 at 2,500 units. Not discounted. Redesigned."),
+        ("Proof two", "A panel with your name on it.", "Your logo on the bezel, your mounting, your price at your quantity. The big brands will not discuss it below a seven-figure order."),
+        ("Proof three", "An engineer on your first application.", "Russell Homans, three to eight hours a week, until the first unit is running on your floor."),
+    ],
     body=note("Positioning per the 8 Sep session and the SOW: Phoenix is the solution, Russell is the "
               "value, the supplier stays in the background. Every claim here is drawn from the two "
               "transcripts; Russell signs off technical claims before launch.") + """

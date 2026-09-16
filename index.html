@@ -9,6 +9,7 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
 <meta name="theme-color" content="#1F1A17">
+<link rel="preload" as="image" href="/assets/video/hero-poster.webp">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Phoenix Automation Solutions">
 <meta property="og:title" content="Phoenix Automation Solutions | Engineered to the target. Not quoted from the shelf.">
@@ -18,14 +19,14 @@
 <meta property="og:image" content="https://phoenix.sparkmedia.ai/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A custom glass operator panel engineered by Phoenix Automation Solutions">
+<meta property="og:image:alt" content="A control panel built for an OEM machine by Phoenix Automation Solutions">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/site.css?v=7b32dc09">
 <link rel="stylesheet" href="/assets/forms.css?v=53fdd355">
-<link rel="stylesheet" href="/assets/motion.css?v=2520ce40">
+<link rel="stylesheet" href="/assets/motion.css?v=e68b6b9c">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
 </head>
 <body>
@@ -48,8 +49,16 @@
   </div>
 </header>
 
-<header class="hero hero-plain">
-  <div class="hero-body">
+<header class="hero hero-cinema" data-pin data-pin-length="3">
+  <div class="hero-media" data-parallax="0.15">
+    <img class="hero-bg" src="/assets/video/hero-poster.webp" alt="A packaging machine running with barcode verification, controlled by a Phoenix-engineered operator panel" width="1280" height="720" fetchpriority="high" decoding="async">
+    <video class="hero-video" muted loop playsinline preload="none" poster="/assets/video/hero-poster.webp" aria-hidden="true" tabindex="-1">
+      <source src="/assets/video/hero.webm" type="video/webm">
+      <source src="/assets/video/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-dim" data-dim aria-hidden="true"></div>
+  <div class="hero-body" data-hold>
     <div class="eyebrow">Controls and operator panels for OEM machine builders</div>
     <h1>Engineered to the target. Not quoted from the shelf.</h1>
     <p>HMIs, PLCs, I/O and custom operator panels for machines built in the United States. Specified, cost-engineered and supported by an engineer who has done it for twenty years, not pulled from a catalog and shipped with a wish.</p>
@@ -57,6 +66,11 @@
       <a class="btn btn-solid" href="/start/">Start an application review</a>
       <a class="btn" href="/pack-expo/">Meet us at PACK EXPO</a></div>
     
+  </div>
+  <div class="hero-steps">
+    <div class="hero-step" data-step><div class="eyebrow">Proof one</div><h2>Engineered to the target.</h2><p>A $1,000 operator panel taken back to the factory and re-engineered to $350 at 2,500 units. Not discounted. Redesigned.</p></div>
+    <div class="hero-step" data-step><div class="eyebrow">Proof two</div><h2>A panel with your name on it.</h2><p>Your logo on the bezel, your mounting, your price at your quantity. The big brands will not discuss it below a seven-figure order.</p></div>
+    <div class="hero-step" data-step><div class="eyebrow">Proof three</div><h2>An engineer on your first application.</h2><p>Russell Homans, three to eight hours a week, until the first unit is running on your floor.</p></div>
   </div>
 </header>
 

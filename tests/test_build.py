@@ -60,3 +60,14 @@ def test_expand_img_emits_srcset(tmp_path, monkeypatch):
     assert 'sizes="(max-width: 800px) 100vw, 800px"' in html
     assert 'width="1600" height="1200"' in html
     assert 'alt="A panel"' in html and 'class="card-img"' in html
+
+
+def test_cinematic_hero_markup():
+    b = load_build()
+    html = b.shell(b.PAGES["index.html"], "index.html")
+    assert 'class="hero hero-cinema" data-pin data-pin-length="3"' in html
+    assert '<video class="hero-video" muted loop playsinline preload="none"' in html
+    assert 'type="video/webm"' in html and 'type="video/mp4"' in html
+    assert 'rel="preload" as="image" href="/assets/video/hero-poster.webp"' in html
+    assert html.count('data-step') == 3
+    assert 'data-hold' in html and 'data-dim' in html
