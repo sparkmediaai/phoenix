@@ -17,3 +17,11 @@
 .inquiry fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 18px; }
 .inquiry legend { font: 600 1.2rem/1.3 var(--serif); margin-bottom: 4px; padding: 0; color: var(--ink); }
 .inquiry fieldset + fieldset { margin-top: 12px; padding-top: 24px; border-top: 1px solid var(--line); }
+
+/* The wizard (JavaScript on). Author rules above give fieldsets, buttons and
+   .form-actions their own `display`, which otherwise outranks the browser's
+   default `[hidden]{display:none}`; !important restores it for wizard state. */
+.wizard [hidden] { display: none !important; }
+.wizard fieldset + fieldset { margin-top: 0; padding-top: 0; border-top: 0; }
+.wizard-nav { display: flex; align-items: center; gap: 12px; margin: 6px 0 0; }
+.wizard-progress { margin-left: auto; font: 500 .85rem/1 var(--sans); color: var(--ink-soft); }

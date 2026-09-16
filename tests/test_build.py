@@ -115,3 +115,11 @@ def test_photo_pages():
     assert 'class="portrait-frame"' in about
     expo = b.shell(b.PAGES["pack-expo/index.html"], "pack-expo/index.html")
     assert "data-parallax" not in expo and "data-pin" not in expo and "motion.js" not in expo
+
+
+def test_intake_has_four_wizard_steps():
+    b = load_build()
+    html = b.shell(b.PAGES["start/index.html"], "start/index.html")
+    assert html.count("<fieldset data-wizard-step>") == 4
+    assert "/assets/wizard.js?v=" in html
+    assert html.count('<legend>') == 4

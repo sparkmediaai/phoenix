@@ -258,7 +258,7 @@ def shell(page, path="index.html"):
 
     hold_attr = " data-hold" if page.get("hero_video") else ""
 
-    return """<!doctype html>
+    return version_assets("""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -328,6 +328,7 @@ def shell(page, path="index.html"):
 %(cta_bar)s%(foot_js)s
 <script src="%(root)sassets/nav.js" defer></script>
 <script src="%(root)sassets/forms.js" defer></script>
+<script src="%(root)sassets/wizard.js" defer></script>
 %(loader)s</body>
 </html>
 """ % {
@@ -352,7 +353,7 @@ def shell(page, path="index.html"):
                 'if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")',
         "loader": "" if page.get("motion") is False else motion_loader(root),
         "motion_css_v": digest("/assets/motion.css"),
-    }
+    })
 
 
 # The header logo: Dave's high-resolution rendering, as a WebP with the grey
@@ -735,9 +736,12 @@ PAGES["start/index.html"] = dict(
 <section class="band">
   <div class="inner narrow">
     <form class="inquiry" method="post" action="#" novalidate>
-      <fieldset>
-        <legend>The machine</legend>
+      <fieldset data-wizard-step>
+        <legend>1. The machine</legend>
         <label>What does the machine do? <input name="machine_type" placeholder="e.g. rotary die cutter with barcode verification" required></label>
+      </fieldset>
+      <fieldset data-wizard-step>
+        <legend>2. Volume and controls</legend>
         <div class="row two">
           <label>How many do you build a year?
             <select name="annual_volume" required>
@@ -750,11 +754,14 @@ PAGES["start/index.html"] = dict(
             </select>
           </label>
         </div>
+      </fieldset>
+      <fieldset data-wizard-step>
+        <legend>3. What you need</legend>
         <label>What do you need? <textarea name="application" rows="4" placeholder="A cost target, a custom panel, a platform change, an application that has to work first time..." required></textarea></label>
         <label>Link to a spec, drawing or photo (optional) <input type="url" name="spec_link" placeholder="https://"></label>
       </fieldset>
-      <fieldset>
-        <legend>You</legend>
+      <fieldset data-wizard-step>
+        <legend>4. You</legend>
         <div class="row two">
           <label>Company <input name="company" autocomplete="organization" required></label>
           <label>Your role <input name="role" autocomplete="organization-title" placeholder="Controls engineer, VP Engineering..."></label>
