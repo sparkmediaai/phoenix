@@ -125,10 +125,14 @@ def expand(body):
     into a real img tag, and an inline placeholder into the file's contents."""
     def one(m):
         name, alt, extra = m.group(1), m.group(2), m.group(3)
-        w, h = webp_size(os.path.join(IMG, name))
-        return ('<img src="%sassets/img/%s" alt="%s" width="%d" '
-                'height="%d" loading="lazy" decoding="async"%s>'
-                % (URL_ROOT, name, alt, w, h, (" " + extra) if extra else ""))
+        big, small = "%s-1600.webp" % name, "%s-800.webp" % name
+        w, h = webp_size(os.path.join(IMG, big))
+        return ('<img src="%(r)sassets/img/%(big)s" '
+                'srcset="%(r)sassets/img/%(small)s 800w, %(r)sassets/img/%(big)s 1600w" '
+                'sizes="(max-width: 800px) 100vw, 800px" alt="%(alt)s" width="%(w)d" height="%(h)d" '
+                'loading="lazy" decoding="async"%(extra)s>'
+                % dict(r=URL_ROOT, big=big, small=small, alt=alt, w=w, h=h,
+                       extra=(" " + extra) if extra else ""))
     body = _IMG.sub(one, body)
 
     def inline(m):

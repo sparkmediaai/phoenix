@@ -46,3 +46,17 @@ def test_homepage_marks_reveals():
     b = load_build()
     html = b.shell(b.PAGES["index.html"], "index.html")
     assert html.count("data-reveal") >= 6
+
+
+def test_expand_img_emits_srcset(tmp_path, monkeypatch):
+    b = load_build()
+    from PIL import Image
+    Image.new("RGB", (1600, 1200)).save(tmp_path / "x-1600.webp", "WEBP")
+    Image.new("RGB", (800, 600)).save(tmp_path / "x-800.webp", "WEBP")
+    monkeypatch.setattr(b, "IMG", str(tmp_path))
+    html = b.expand("{{img:x|A panel|class=\"card-img\"}}")
+    assert 'src="/assets/img/x-1600.webp"' in html
+    assert 'srcset="/assets/img/x-800.webp 800w, /assets/img/x-1600.webp 1600w"' in html
+    assert 'sizes="(max-width: 800px) 100vw, 800px"' in html
+    assert 'width="1600" height="1200"' in html
+    assert 'alt="A panel"' in html and 'class="card-img"' in html
