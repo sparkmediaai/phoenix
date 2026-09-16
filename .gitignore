@@ -11,3 +11,6 @@ picks.json
 # Python
 __pycache__/
 *.pyc
+
+# Logo renderings Dave drops in for review; the canonical one is copied to _tools/brand/.
+logos/
