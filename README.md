@@ -72,6 +72,29 @@ which changes `BASE` and `CNAME` together, rebuilds and link-checks.
 | `_tools/logo_raster.py` | Cuts the header logo from `_tools/brand/phoenix-logo.png`, Dave's high-resolution rendering, into `assets/logo.webp` and a pale-wordmark `assets/logo-header.webp`. |
 | `_tools/make_logo.py` | Draws the logo. The flame-and-bird mark is hand-drawn SVG paths; the wordmark is Michroma (OFL, in `_tools/fonts`) converted to outlines. Writes `assets/logo.svg`, `mark.svg`, `favicon.svg` and `icon-180.png`, which now serve the favicon and touch icon only; `--preview` renders a side-by-side against the client's 532px JPEG, the only artwork supplied. Needs `pip install fonttools resvg-py pillow`. |
 | `_tools/linkcheck.py` | Resolves every internal href, src, srcset and CSS url() against the filesystem. Run it after a build and always after moving the site. |
+| `_tools/cut_images.py` | Cuts the client's originals into `assets/img/`, `assets/video/` and `assets/og.jpg` per `_tools/image-picks.json`. `--images`, `--video` and `--og` run one part on its own; with no flag it runs all three. |
+| `_tools/budget.py` | Sums each page's HTML plus its same-origin CSS, JS and images (largest srcset candidate; the video itself is excluded, since it is `preload="none"`) and checks the total against the weight budgets in the design spec. |
+
+## Motion
+
+Motion is declared, not written. The build puts data attributes on elements
+(`data-reveal`, `data-parallax`, `data-pin` with `data-step`, `data-draw`,
+`data-count`) and `assets/motion.js` animates them with GSAP 3.15 and
+ScrollTrigger, vendored in `assets/vendor/`. An inline gate in the shell adds
+`motion` to `<html>` only when the visitor does not prefer reduced motion,
+and the loader takes it off again if a script fails or `motion.js` has not
+reported in within four seconds. The hidden initial states in
+`assets/motion.css` are scoped to `html.motion`, so with JavaScript off, with
+reduced motion on, or after a failed load, every page is the static site.
+
+The PACK EXPO landing and the 404 opt out with `motion=False` in the page
+table: they load no motion script at all.
+
+Photographs are cut from `_originals/` by `_tools/cut_images.py` according
+to `_tools/image-picks.json`; the hero loop is cut by the same tool. No
+committed file names the supplier; a grep for the supplier's name over the
+repo must stay empty. `python _tools/budget.py` checks every page against
+the weight budgets in the design spec.
 
 ## Local preview
 
@@ -136,3 +159,7 @@ printing and print curing, the factory, and the logo. Originals go in
 - Photographs cut from the Drive folder into `assets/img/`, and a real `assets/og.jpg`.
 - Qualification thresholds for the intake, agreed with Russell.
 - A LinkedIn company page and Google Business Profile link in the footer once they exist.
+- Russell's sign-off on the cost figures shown in the homepage proof and About timeline.
+- Whether factory footage may be used at all.
+- His photograph replaces the portrait placeholder on About.
+- Whether the cab-panel photographs showing the elevator customer's own splash screen may be used; they were left out of the cut.

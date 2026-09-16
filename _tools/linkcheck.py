@@ -15,6 +15,12 @@ PAT = re.compile(r'(?:href|src)="(/[^"#?]*)', re.I)
 SRCSET = re.compile(r'srcset="([^"]+)"', re.I)
 CSSURL = re.compile(r'url\((["\']?)(/[^)"\']+)\1\)')
 SCRIPT = re.compile('<script[^>]*>.*?</script>', re.I | re.S)
+# The motion loader's script tag builds src attributes at runtime from an
+# array of string literals rather than writing src="...", so it is invisible
+# to PAT once SCRIPT has blanked out script bodies. Those literals are the
+# one case where a path built at runtime *is* a literal worth checking, so
+# they are pulled from the untouched HTML before SCRIPT runs.
+VENDOR = re.compile(r'"(/assets/(?:vendor/[^"?]+|motion\.js))')
 
 # Paths the site used to live under. If any of these appear in built HTML the
 # site was moved and something was not rebuilt.
@@ -39,11 +45,12 @@ def resolve(url):
 
 missing, checked, stale = [], 0, []
 for page in pages:
-    text = open(page, encoding="utf-8", errors="replace").read()
+    raw = open(page, encoding="utf-8", errors="replace").read()
+    vendor_urls = set(VENDOR.findall(raw))
     # Script bodies are not markup; a path built at runtime is not a literal.
-    text = SCRIPT.sub(" ", text)
+    text = SCRIPT.sub(" ", raw)
     rel = os.path.relpath(page, ROOT).replace("\\", "/")
-    urls = set(PAT.findall(text)) | {u for _, u in CSSURL.findall(text)}
+    urls = set(PAT.findall(text)) | {u for _, u in CSSURL.findall(text)} | vendor_urls
     for s in SRCSET.findall(text):
         for part in s.split(","):
             bit = part.strip().split(" ")[0]
