@@ -6,3 +6,4 @@ html.motion [data-reveal] { opacity: 0; transform: translateY(24px); }
 html.motion [data-reveal="stagger"] { opacity: 1; transform: none; }
 html.motion [data-reveal="stagger"] > * { opacity: 0; transform: translateY(24px); }
 html.motion [data-count] { font-variant-numeric: tabular-nums; }
+html.motion [data-step] { opacity: 0; transform: translateY(30px); }

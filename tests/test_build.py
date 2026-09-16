@@ -34,3 +34,15 @@ def test_pack_expo_loads_no_motion_script():
     assert "gsap.min.js" not in html
     assert "motion.js" not in html
     assert 'classList.add("motion")' not in html
+
+
+def test_cards_and_steps_stagger():
+    b = load_build()
+    assert 'data-reveal="stagger"' in b.cards([("A", "a"), ("B", "b")])
+    assert 'data-reveal="stagger"' in b.steps([("A", "a")])
+
+
+def test_homepage_marks_reveals():
+    b = load_build()
+    html = b.shell(b.PAGES["index.html"], "index.html")
+    assert html.count("data-reveal") >= 6

@@ -147,11 +147,11 @@ def cards(items, cls="three"):
     for title, text in items:
         out.append('      <div class="card"><div class="card-body"><h3>%s</h3><p>%s</p></div></div>'
                    % (title, text))
-    return '<div class="cards %s">\n%s\n    </div>' % (cls, "\n".join(out))
+    return '<div class="cards %s" data-reveal="stagger">\n%s\n    </div>' % (cls, "\n".join(out))
 
 
 def steps(items):
-    return '<ol class="steps">\n%s\n    </ol>' % "\n".join(
+    return '<ol class="steps" data-reveal="stagger">\n%s\n    </ol>' % "\n".join(
         '      <li><h3>%s</h3><p>%s</p></li>' % (t, p) for t, p in items)
 
 
@@ -345,7 +345,7 @@ PAGES["index.html"] = dict(
               "value, the supplier stays in the background. Every claim here is drawn from the two "
               "transcripts; Russell signs off technical claims before launch.") + """
 <section class="band">
-  <div class="inner narrow">
+  <div class="inner narrow" data-reveal>
     <div class="eyebrow">What Phoenix is</div>
     <h2>A controls engineer on your side of the table.</h2>
     <p>Most suppliers sell you a part and hope it works. Phoenix starts with the machine: what it does,
@@ -365,7 +365,7 @@ PAGES["index.html"] = dict(
 </section>
 
 <section class="band">
-  <div class="inner narrow">
+  <div class="inner narrow" data-reveal>
     <div class="eyebrow">Proof</div>
     <h2>One customer, twenty years. Same engineer.</h2>
     <p>A residential elevator manufacturer has run on Phoenix-supplied controls for close to two decades,
@@ -384,19 +384,19 @@ PAGES["index.html"] = dict(
       <div>
         <div class="eyebrow">Who this is for</div>
         <h2>A good fit looks like this.</h2>
-        <ul class="ticks">%(fit)s</ul>
+        <ul class="ticks" data-reveal="stagger">%(fit)s</ul>
       </div>
       <div>
         <div class="eyebrow">And who it is not for</div>
         <h2>We would rather say so now.</h2>
-        <ul class="crosses">%(notfit)s</ul>
+        <ul class="crosses" data-reveal="stagger">%(notfit)s</ul>
       </div>
     </div>
   </div>
 </section>
 
 <section class="band">
-  <div class="inner narrow">
+  <div class="inner narrow" data-reveal>
     <div class="eyebrow">How it starts</div>
     %(steps)s
     <p class="center"><a class="btn btn-solid" href="/start/">Start an application review</a></p>
@@ -435,7 +435,7 @@ PAGES["for-oems/index.html"] = dict(
     body=note("The 'part-time employee for my customer' line is Russell's own (8 Sep, 16:37). "
               "The three-to-eight-hours-a-week figure and the taper after three to six months are his too.") + """
 <section class="band">
-  <div class="inner narrow">
+  <div class="inner narrow" data-reveal>
     <h2>Before you buy anything</h2>
     <p>You send the machine, not a part number. Phoenix looks at the function, the environment, the
     quantity and the cost target, and comes back with a control architecture and a price at your
@@ -467,7 +467,7 @@ PAGES["for-oems/index.html"] = dict(
   <div class="inner narrow">
     <div class="eyebrow">Straight answers</div>
     <h2>Questions OEM engineers ask first</h2>
-    <dl class="faq">
+    <dl class="faq" data-reveal="stagger">
       <dt>Is this a distributor?</dt>
       <dd>Phoenix supplies hardware, yes. The reason customers stay for twenty years is the engineering
       around it. If you only need a box moved, there are cheaper ways to move a box.</dd>
@@ -545,7 +545,7 @@ PAGES["industries/index.html"] = dict(
   </div>
 </section>
 <section class="band band-tint">
-  <div class="inner narrow center">
+  <div class="inner narrow center" data-reveal>
     <h2>Building something else?</h2>
     <p>If it is a repeatable machine with a screen and a controller on it, the conversation is the same.</p>
     <p><a class="btn btn-solid" href="/start/">Start an application review</a></p>
@@ -575,7 +575,7 @@ PAGES["about/index.html"] = dict(
               "the years-in-business figure, and whether the bench of contract engineers is public. "
               "Everything below is drawn from the calls and wants his sign-off.") + """
 <section class="band">
-  <div class="inner narrow">
+  <div class="inner narrow" data-reveal>
     <h2>Russell Homans, owner and engineer</h2>
     <p>Russell has specified, programmed and supported controls for OEM machine builders for more than
     two decades, and has owned Phoenix outright since the start of 2026. He writes application code,

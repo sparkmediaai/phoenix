@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/site.css?v=7b32dc09">
 <link rel="stylesheet" href="/assets/forms.css?v=53fdd355">
-<link rel="stylesheet" href="/assets/motion.css?v=fc3d1c36">
+<link rel="stylesheet" href="/assets/motion.css?v=2520ce40">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
 </head>
 <body>
@@ -63,7 +63,7 @@
 <aside class="note"><b>Working note</b> The 'part-time employee for my customer' line is Russell's own (8 Sep, 16:37). The three-to-eight-hours-a-week figure and the taper after three to six months are his too.</aside>
 
 <section class="band">
-  <div class="inner narrow">
+  <div class="inner narrow" data-reveal>
     <h2>Before you buy anything</h2>
     <p>You send the machine, not a part number. Phoenix looks at the function, the environment, the
     quantity and the cost target, and comes back with a control architecture and a price at your
@@ -86,7 +86,7 @@
 <section class="band band-tint">
   <div class="inner">
     <div class="eyebrow">What we supply</div>
-    <div class="cards two">
+    <div class="cards two" data-reveal="stagger">
       <div class="card"><div class="card-body"><h3>HMI and touchscreens</h3><p>Operator interfaces from small panel displays to full-glass fronts, branded to your machine.</p></div></div>
       <div class="card"><div class="card-body"><h3>PLC and controllers</h3><p>Controllers sized to the machine, with application code support from Phoenix.</p></div></div>
       <div class="card"><div class="card-body"><h3>I/O and networking</h3><p>Remote I/O, fieldbus and the network layout to make it all talk.</p></div></div>
@@ -100,7 +100,7 @@
   <div class="inner narrow">
     <div class="eyebrow">Straight answers</div>
     <h2>Questions OEM engineers ask first</h2>
-    <dl class="faq">
+    <dl class="faq" data-reveal="stagger">
       <dt>Is this a distributor?</dt>
       <dd>Phoenix supplies hardware, yes. The reason customers stay for twenty years is the engineering
       around it. If you only need a box moved, there are cheaper ways to move a box.</dd>
@@ -152,6 +152,6 @@
 
 <script src="/assets/nav.js?v=ce182b56" defer></script>
 <script src="/assets/forms.js?v=f34a02c9" defer></script>
-<script>(function(h){if(!h.classList.contains("motion"))return;function off(){h.classList.remove("motion")}["/assets/vendor/gsap.min.js?v=bf3fd8ec","/assets/vendor/ScrollTrigger.min.js?v=5445d0e9","/assets/motion.js?v=061e2f20"].forEach(function(s){var e=document.createElement("script");e.src=s;e.async=false;e.onerror=off;document.body.appendChild(e)});setTimeout(function(){if(!window.__motionReady)off()},4000)})(document.documentElement)</script>
+<script>(function(h){if(!h.classList.contains("motion"))return;function off(){h.classList.remove("motion")}["/assets/vendor/gsap.min.js?v=bf3fd8ec","/assets/vendor/ScrollTrigger.min.js?v=5445d0e9","/assets/motion.js?v=d5f51273"].forEach(function(s){var e=document.createElement("script");e.src=s;e.async=false;e.onerror=off;document.body.appendChild(e)});setTimeout(function(){if(!window.__motionReady)off()},4000)})(document.documentElement)</script>
 </body>
 </html>
