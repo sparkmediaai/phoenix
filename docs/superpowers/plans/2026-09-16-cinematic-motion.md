@@ -686,7 +686,7 @@ def test_cut_image_writes_two_widths(tmp_path):
 def test_cut_image_crops_first(tmp_path):
     t = load_tool()
     src = make_jpg(tmp_path / "src")
-    t.cut_image(str(src), str(tmp_path), "sq", crop=[500, 0, 2000, 2000])
+    t.cut_image(str(src), str(tmp_path), "sq", crop=[500, 0, 2500, 2000])
     assert Image.open(tmp_path / "sq-1600.webp").size == (1600, 1600)
 
 
