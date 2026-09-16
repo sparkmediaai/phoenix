@@ -54,6 +54,7 @@
 
   // ---- pinned sequences
   $$("[data-pin]").forEach(function (section) {
+    if (!matchMedia("(min-width: 768px)").matches) return; // pins are desktop-only; phones get the static stacked layout
     var steps = $$("[data-step]", section);
     if (!steps.length) return;
     var length = parseFloat(section.getAttribute("data-pin-length")) || 2;

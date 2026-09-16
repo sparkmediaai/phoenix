@@ -73,7 +73,7 @@ def ffmpeg():
     return imageio_ffmpeg.get_ffmpeg_exe()
 
 
-def cut_video(src, out_dir, name, start, seconds, width=1280):
+def cut_video(src, out_dir, name, start, seconds, width=1280, poster_at=None):
     os.makedirs(out_dir, exist_ok=True)
     common = [ffmpeg(), "-y", "-ss", str(start), "-t", str(seconds), "-i", src,
               "-vf", "scale=%d:-2,fps=24" % width, "-an"]
@@ -83,8 +83,8 @@ def cut_video(src, out_dir, name, start, seconds, width=1280):
     subprocess.run(common + ["-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "36", "-row-mt", "1", webm], check=True)
     subprocess.run(common + ["-c:v", "libx264", "-crf", "27", "-preset", "slow", "-pix_fmt", "yuv420p",
                              "-movflags", "+faststart", mp4], check=True)
-    subprocess.run([ffmpeg(), "-y", "-ss", str(start), "-i", src, "-frames:v", "1",
-                    "-vf", "scale=%d:-2" % width, poster_png], check=True)
+    subprocess.run([ffmpeg(), "-y", "-ss", str(poster_at if poster_at is not None else start), "-i", src,
+                    "-frames:v", "1", "-vf", "scale=%d:-2" % width, poster_png], check=True)
     poster = os.path.join(out_dir, name + "-poster.webp")
     Image.open(poster_png).convert("RGB").save(poster, "WEBP", quality=80, method=6)
     os.remove(poster_png)
@@ -101,7 +101,8 @@ def run(picks_path=PICKS, images=True, video=True, og=True):
                 print("wrote", os.path.relpath(path, ROOT), os.path.getsize(path) // 1024, "KB")
     if video and picks.get("video"):
         v = picks["video"]
-        for path in cut_video(os.path.join(ORIGINALS, v["src"]), VIDEO, v["name"], v["start"], v["seconds"]):
+        for path in cut_video(os.path.join(ORIGINALS, v["src"]), VIDEO, v["name"], v["start"], v["seconds"],
+                               poster_at=v.get("poster_at")):
             print("wrote", os.path.relpath(path, ROOT), os.path.getsize(path) // 1024, "KB")
     if og and picks.get("og"):
         o = picks["og"]

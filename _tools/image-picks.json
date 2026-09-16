@@ -21,7 +21,7 @@
     {"src": "Soil Sampler", "name": "soil-sampler", "crop": [880, 0, 4000, 3000],
      "alt": "Soil sampler control and logging interface", "review": "cropped to remove a parked car and its legible license plate from the left edge of frame; remaining cabinet interior is clean, no brand, no face"}
   ],
-  "video": {"src": "Die cutter barcode verification", "name": "hero", "start": 39, "seconds": 8,
-            "review": "checked contact sheet at 5s steps (0 to 75s) plus a 1s-step pass over the 37-49s window; 39-47s holds the die-cutting head running behind its glass guard with the red laser guide line visible, generic tick-mark scale and unmarked control buttons only, no legible supplier or customer name, no face -- clean, chosen"},
+  "video": {"src": "Die cutter barcode verification", "name": "hero", "start": 39, "seconds": 8, "poster_at": 41.0,
+            "review": "checked contact sheet at 5s steps (0 to 75s) plus a 1s-step pass over the 37-49s window; 39-47s holds the die-cutting head running behind its glass guard with the red laser guide line visible, generic tick-mark scale and unmarked control buttons only, no legible supplier or customer name, no face -- clean, chosen; footage is handheld so the loop itself carries motion blur throughout, but the poster frame at 41.0s scored highest on a Laplacian-variance sharpness pass over 39-47s at 0.25s steps (var 255 vs 195-219 for the runners-up), visibly crisper than the original 39.0s poster"},
   "og": {"src": "Control Panel", "crop": [220, 320, 1380, 1280]}
 }

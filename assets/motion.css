@@ -6,10 +6,12 @@ html.motion [data-reveal] { opacity: 0; transform: translateY(24px); }
 html.motion [data-reveal="stagger"] { opacity: 1; transform: none; }
 html.motion [data-reveal="stagger"] > * { opacity: 0; transform: translateY(24px); }
 html.motion [data-count] { font-variant-numeric: tabular-nums; }
-html.motion [data-step] { opacity: 0; transform: translateY(30px); }
+@media (min-width: 768px) { html.motion [data-step] { opacity: 0; transform: translateY(30px); } }
 
 /* The cinematic hero. Without html.motion it is a tall photo hero with the
-   three proofs listed under the headline. */
+   three proofs listed under the headline. Pins are desktop-only (motion.js
+   skips them under 768px too), so under that width nothing here hides a
+   step -- phones always get the static stacked layout. */
 .hero-cinema { min-height: 100svh; align-items: center; }
 .hero-media { position: absolute; inset: -8% 0; overflow: hidden; }
 .hero-media .hero-bg, .hero-media .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -22,6 +24,8 @@ html.motion .hero-media .hero-video { opacity: 1; }
 .hero-step h2 { color: #fff; }
 .hero-step p { color: #E6DDD1; font-size: 1.1rem; }
 .hero-step .eyebrow { color: var(--gold); }
-html.motion .hero-steps { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 var(--gutter); pointer-events: none; }
-html.motion .hero-step { grid-area: 1 / 1; text-align: center; }
-@media (max-width: 767px) { .hero-media { inset: 0; } html.motion .hero-step { text-align: left; } }
+@media (min-width: 768px) {
+  html.motion .hero-steps { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 var(--gutter); pointer-events: none; }
+  html.motion .hero-step { grid-area: 1 / 1; text-align: center; }
+}
+@media (max-width: 767px) { .hero-media { inset: 0; } }

@@ -61,3 +61,9 @@ def test_slug():
     t = load_tool()
     assert t.slug("Elevator Glass Cab Operator Panel") == "elevator-glass-cab-operator-panel"
     assert t.slug("Photo Aug 08, 11 36 48 AM.jpg") == "photo-aug-08-11-36-48-am"
+
+
+def test_cut_video_accepts_poster_at():
+    import inspect
+    t = load_tool()
+    assert "poster_at" in inspect.signature(t.cut_video).parameters
