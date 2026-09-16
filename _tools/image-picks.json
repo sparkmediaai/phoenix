@@ -23,5 +23,5 @@
   ],
   "video": {"src": "Die cutter barcode verification", "name": "hero", "start": 0, "seconds": 8,
             "review": "set start after Task 5 Step 1"},
-  "og": {"src": "Elevator Hall Station", "crop": null}
+  "og": {"src": "Control Panel", "crop": [220, 320, 1380, 1280]}
 }
