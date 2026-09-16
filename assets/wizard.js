@@ -51,7 +51,7 @@
   next.addEventListener("click", function () { if (stepValid(current)) show(current + 1, 1); });
   back.addEventListener("click", function () { show(current - 1, -1); });
   form.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA" && current < steps.length - 1) { e.preventDefault(); next.click(); }
+    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA" && e.target.tagName !== "BUTTON" && current < steps.length - 1) { e.preventDefault(); next.click(); }
   });
   // If forms.js flags a field on a hidden step, jump to it.
   form.addEventListener("submit", function () {
