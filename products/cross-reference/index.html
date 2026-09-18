@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cross-reference | Phoenix Automation Solutions</title>
-<meta name="description" content="Replacements matched to the brands already in a customer's panel, by function, form factor and communication, so the swap is a drop-in.">
+<meta name="description" content="What a Phoenix HMI talks to, and how to match a Phoenix part to the one in your panel now.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Phoenix Automation Solutions">
 <meta property="og:title" content="Cross-reference | Phoenix Automation Solutions">
-<meta property="og:description" content="Replacements matched to the brands already in a customer's panel, by function, form factor and communication, so the swap is a drop-in.">
+<meta property="og:description" content="What a Phoenix HMI talks to, and how to match a Phoenix part to the one in your panel now.">
 <link rel="canonical" href="https://phoenix.sparkmedia.ai/products/cross-reference/">
 <meta property="og:url" content="https://phoenix.sparkmedia.ai/products/cross-reference/">
 <meta property="og:image" content="https://phoenix.sparkmedia.ai/assets/og.jpg">
@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=626a7848">
+<link rel="stylesheet" href="/assets/site.css?v=eb7bf31c">
 <link rel="stylesheet" href="/assets/forms.css?v=ae802e4a">
 <link rel="stylesheet" href="/assets/motion.css?v=de9c970a">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
@@ -34,7 +34,7 @@
 
 <header class="site-head">
   <div class="inner">
-    <a class="wordmark" href="/"><img class="logo" src="/assets/logo-header.webp" width="450" height="133" alt="" decoding="async"><span class="vh">Phoenix Automation Solutions</span></a>
+    <a class="wordmark" href="/"><img class="logo" src="/assets/logo-header.webp" width="450" height="111" alt="" decoding="async"><span class="vh">Phoenix Automation Solutions</span></a>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span class="nav-bars" aria-hidden="true"><i></i><i></i></span><span class="nav-word">Menu</span></button>
     <nav class="site-nav" id="site-nav" aria-label="Primary">
       <ul class="menu">
@@ -89,28 +89,37 @@
   <div class="hero-body">
     <div class="eyebrow">Products</div>
     <h1>The Phoenix part that matches what is in your panel now.</h1>
-    <p>Replacements matched to the brands already in a customer's panel, by function, form factor and communication, so the swap is a drop-in.</p>
+    <p>Match by cutout, by I/O count and by protocol. Send Russ the part number you have and he will do it for you.</p>
     <div class="hero-actions">
       <a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a>
-      <a class="btn" href="/products/cross-reference/">Cross-reference a part</a></div>
+      <a class="btn" href="/products/hmis/">HMIs</a></div>
     
   </div>
 </header>
 
 <main id="main">
-<aside class="note"><b>Working note</b> Product pages are scaffolding: the structure is set, the parts are not listed. Populating them needs the product line, specs, dimension drawings and stock counts from Russell, and the decision on which brands are named. No part numbers are invented here. The cross-reference table itself needs Russell's list of the brands and models he replaces most.</aside>
+<aside class="note"><b>Working note</b> The driver list is from the manufacturer's current rugged-HMI datasheet. A model-by-model replacement table needs Russell's list of the brands and models he replaces most; none is invented here.</aside>
 
 <section class="band">
-  <div class="inner narrow" data-reveal>
-    <div class="eyebrow">What this page will list</div>
-    <ul class="ticks" data-reveal="stagger"><li>Matched by screen size and cutout, or by I/O count and form factor</li><li>Matched by protocol, so the machine keeps talking</li><li>A note on what changes in the program, if anything</li><li>The datasheet for the Phoenix part beside the one you have</li></ul>
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">Drivers on the panel</div>
+      <h2>What a Phoenix HMI already talks to.</h2>
+      <p class="family-intro">The controller stays where it is. The HMI speaks its protocol, so the swap is a screen and a program, not a panel redesign.</p>
+    </div>
+    <div class="spec-wrap" data-reveal><table class="spec"><caption>Communication drivers</caption><thead><tr><th scope="col">Make or protocol</th><th scope="col">Driver</th></tr></thead><tbody><tr><th scope="row">Allen-Bradley</th><td>DF1 serial; EtherNet/IP (PCCC); Logix 5000 series</td></tr><tr><th scope="row">Siemens</th><td>Profinet PLCs</td></tr><tr><th scope="row">Modbus</th><td>RTU master and slave; ASCII master; TCP master (client)</td></tr><tr><th scope="row">Delta</th><td>PLCs</td></tr><tr><th scope="row">Panasonic</th><td>FP series PLCs</td></tr><tr><th scope="row">Toshiba</th><td>Inverters; Link-port series PLCs</td></tr><tr><th scope="row">Anything with a serial port</th><td>Universal serial driver (ASCII)</td></tr><tr><th scope="row">IIoT</th><td>MQTT publish and subscribe, with three quality-of-service levels</td></tr></tbody></table></div>
   </div>
 </section>
 <section class="band band-tint">
   <div class="inner narrow" data-reveal>
-    <div class="eyebrow">Until the catalog is up</div>
-    <p>Send Russ the part number you have today and the machine it sits in. He will come back with the Phoenix equivalent, what changes in the program, and whether it is on the shelf.</p>
-    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+    <div class="eyebrow">How to cross-reference</div>
+    <ul class="ticks" data-reveal="stagger">
+      <li><b>By cutout.</b> 4.3, 7, 10.1, 12.1 and 15 inch. Give Russ the panel cutout you have and he will tell you which bezel drops in, or have one made that does.</li>
+      <li><b>By I/O count.</b> Fixed and expandable PLCs to 16 modules; HMI/PLC units with the I/O on the back.</li>
+      <li><b>By protocol.</b> Serial, Ethernet, Modbus RTU and TCP, MQTT where the data has to leave the machine.</li>
+      <li><b>By what changes in the program.</b> Russ will say, before you order, what has to be rewritten and what does not.</li>
+    </ul>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Send Russ the part number</a></p>
   </div>
 </section>
 

@@ -14,3 +14,6 @@ __pycache__/
 
 # Logo renderings Dave drops in for review; the canonical one is copied to _tools/brand/.
 logos/
+
+# The 2025 Wayback archive of the old site Dave downloaded for content research. Names the supplier throughout; never committed.
+phoenixsalesinc.com*/

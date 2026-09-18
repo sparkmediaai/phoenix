@@ -45,11 +45,11 @@ else writes HTML; if you edit `index.html` directly the next build discards it.
 | `/machine-builders/design-win/` | How one approved part carries across a lineup; the pinned four-step path; straight answers. |
 | `/machine-builders/industries/` | The three lead industries, then every industry Phoenix controls run in. |
 | `/machine-builders/industries/{packaging,residential-elevators,food-equipment}/` | Machines served and the controls on them, one page each. |
-| `/products/{hmis,plcs,io-and-communication,cross-reference,datasheets}/` | The catalog side, scaffolded: what each page will list and how to get the numbers until it does. No part numbers are invented. |
+| `/products/{hmis,plcs,io-and-communication,cross-reference,datasheets}/` | The catalog side: product families with specification tables and real part numbers, approvals per family, the communication-driver list, and how to get a datasheet. Family names are generic; the manufacturer and its trademarks are never named, and a test fails the build if they appear. |
 | `/proof/case-studies/` | The cab operating panel: problem, what was built, result. |
 | `/proof/custom-builds/` | The photograph gallery. |
 | `/support/{software,warranty-and-rma}/` | Scaffolded until Russell supplies the downloads and the terms. |
-| `/company/{about-russ,supply-chain,certifications,contact}/` | Who Phoenix is. Certifications is empty until Russell approves the wording. |
+| `/company/{about-russ,supply-chain,certifications,contact}/` | Who Phoenix is. Certifications lists approvals by product family from the manufacturer's current documentation, pending Russell's confirmation and the UL file numbers. |
 | `/talk-to-russ/` | The Talk to Russ form: what you build, how many a year, what controls now, then contact. |
 | `/pack-expo/` | The QR-code landing for the show floor. |
 | `/for-oems/`, `/capabilities/`, `/industries/`, `/about/`, `/start/` | Stubs that send the visitor to the page's new address. |
@@ -75,7 +75,7 @@ which changes `BASE` and `CNAME` together, rebuilds and link-checks.
 | `_build/build.py` | The shell, the site facts and the page table. |
 | `_build/set_domain.py` | Moves the site to a new hostname. |
 | `_build/make_social.py` | Placeholder `assets/og.jpg` and `assets/icon-180.png`. Needs Pillow. |
-| `_tools/logo_raster.py` | Cuts the header logo from `_tools/brand/phoenix-logo.png`, Dave's high-resolution rendering, into a pale-wordmark `assets/logo-header.webp` at 450px, three times the width the header draws it at. |
+| `_tools/logo_raster.py` | Cuts the header logo, `assets/logo-header.webp`, from `_tools/brand/phoenix-logo.png`: the company's own "Phoenix Automation Solutions, Inc." lockup, rendered from the vector artwork on its December 2024 product mailer. The grey wordmark is recoloured pale for the ink header. |
 | `_tools/make_logo.py` | Draws the logo. The flame-and-bird mark is hand-drawn SVG paths; the wordmark is Michroma (OFL, in `_tools/fonts`) converted to outlines. Writes `assets/logo.svg`, `mark.svg`, `favicon.svg` and `icon-180.png`, which now serve the favicon and touch icon only; `--preview` renders a side-by-side against the client's 532px JPEG, the only artwork supplied. Needs `pip install fonttools resvg-py pillow`. |
 | `_tools/linkcheck.py` | Resolves every internal href, src, srcset and CSS url() against the filesystem. Run it after a build and always after moving the site. |
 | `_tools/cut_images.py` | Cuts the client's originals into `assets/img/`, `assets/video/` and `assets/og.jpg` per `_tools/image-picks.json`. `--images`, `--video` and `--og` run one part on its own; with no flag it runs all three. |

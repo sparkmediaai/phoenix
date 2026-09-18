@@ -196,3 +196,40 @@ def test_old_urls_redirect():
         html = b.shell(b.PAGES[old], old)
         assert 'http-equiv="refresh" content="0; url=%s"' % new in html
         assert "motion.js" not in html
+
+
+def test_product_pages_carry_real_part_numbers():
+    b = load_build()
+    hmis = b.shell(b.PAGES["products/hmis/index.html"], "products/hmis/index.html")
+    plcs = b.shell(b.PAGES["products/plcs/index.html"], "products/plcs/index.html")
+    io_ = b.shell(b.PAGES["products/io-and-communication/index.html"], "products/io-and-communication/index.html")
+    assert "FP4070TN" in hmis and "FP6151CN-M" in hmis and '<table class="spec">' in hmis
+    assert "FL055-0808N-V2" in plcs and "FLAD0202P-SO" in plcs
+    assert "FL001D-1600-V3" in io_ and "GWY920-LTE-S2" in io_
+
+
+def test_no_page_names_the_manufacturer_or_its_trademarks():
+    b = load_build()
+    # The words themselves must not appear in this public repo either, so the
+    # list is stored reversed: the manufacturer's name and domain, its head
+    # office street, and its product-family and software trademarks.
+    banned = [w[::-1] for w in ["uner", "scinortceleuner", "daor renab", "lenapixelf", "cigolixelf", "tfosixelf", "mzirp"]]
+    for path, page in b.PAGES.items():
+        html = b.shell(page, path).lower()
+        words = set(__import__("re").findall(r"[a-z]+", html))
+        for word in banned:
+            hit = (word in words) if " " not in word and len(word) <= 5 else (word in html)
+            assert not hit, (path, word[::-1])
+
+
+def test_certifications_lists_approvals_by_family():
+    b = load_build()
+    html = b.shell(b.PAGES["company/certifications/index.html"], "company/certifications/index.html")
+    assert "Approvals by product family" in html and "UL Listed Class I Division 2" in html
+    assert html.count("<tr>") >= 12
+
+
+def test_spec_table_marks_row_headers():
+    b = load_build()
+    out = b.spec_table("Cap", ["A", "B"], [["P-1", "x"]])
+    assert '<caption>Cap</caption>' in out and '<th scope="row">P-1</th><td>x</td>' in out

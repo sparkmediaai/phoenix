@@ -209,6 +209,16 @@ def linked_cards(items, cls="three"):
     return '<div class="cards %s" data-reveal="stagger">\n%s\n    </div>' % (cls, "\n".join(out))
 
 
+def spec_table(caption, headers, rows):
+    """A specification table. First cell of each row is the row header (the part number)."""
+    head = "".join('<th scope="col">%s</th>' % h for h in headers)
+    body = "".join(
+        "<tr>%s</tr>" % "".join(('<th scope="row">%s</th>' if i == 0 else "<td>%s</td>") % c
+                                for i, c in enumerate(r)) for r in rows)
+    return ('<div class="spec-wrap" data-reveal><table class="spec"><caption>%s</caption>'
+            '<thead><tr>%s</tr></thead><tbody>%s</tbody></table></div>' % (caption, head, body))
+
+
 def steps(items):
     return '<ol class="steps" data-reveal="stagger">\n%s\n    </ol>' % "\n".join(
         '      <li><h3>%s</h3><p>%s</p></li>' % (t, p) for t, p in items)
@@ -978,56 +988,261 @@ industry("machine-builders/industries/food-equipment/index.html", "Food equipmen
          "Commercial kitchen equipment, bakery mixers and industrial slicers are all from the 28 Aug call. No photographs exist yet; add them when Russell supplies installed examples.")
 
 
-# ---- Products: the catalog side, scaffolded until product data exists
-def product_page(path, nav_label, title, h1, standfirst, will_list, how_now, note_text):
+# ---- Products: the catalog side. Specifications are from the manufacturer's
+# February 2025 documentation. The manufacturer and its family trademarks are
+# never named (tests enforce it); part numbers are, because the catalog buyer
+# arrives by searching for the one he already knows.
+STOCK_BAND = """
+<section class="band band-tint">
+  <div class="inner narrow center" data-reveal>
+    <div class="eyebrow">Stock and lead time</div>
+    <h2>Ask for the position on any part number.</h2>
+    <p>Stock is held in Mokena, Illinois. Send Russ the part number and the quantity and he will tell you
+    what is on the shelf and the lead time on the rest, the same day.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a> &nbsp; <a class="btn" href="/products/datasheets/">Datasheets</a></p>
+  </div>
+</section>
+"""
+CATALOG_NOTE = ("Specifications are taken from the manufacturer's February 2025 brochure and current datasheets. "
+                "Russell to confirm which part numbers he stocks in Mokena, and every approvals line, before launch. "
+                "The manufacturer and its product-family trademarks are deliberately not named; part numbers are.")
+
+
+def family(eyebrow, heading, intro, features, table, approvals):
+    return """
+<section class="band">
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">%s</div>
+      <h2>%s</h2>
+      <p class="family-intro">%s</p>
+      <ul class="ticks">%s</ul>
+    </div>
+    %s
+    <p class="approvals"><b>Approvals:</b> %s</p>
+  </div>
+</section>
+""" % (eyebrow, heading, intro, "".join("<li>%s</li>" % f for f in features), table, approvals)
+
+
+def catalog_page(path, nav_label, title, h1, standfirst, families):
     PAGES[path] = dict(
         nav=nav_label, title="%s | %s" % (title, SITE), desc=standfirst, eyebrow="Products", h1=h1,
-        standfirst=standfirst, actions=[("Talk to Russ", "/talk-to-russ/"), ("Cross-reference a part", "/products/cross-reference/")],
-        body=note(note_text) + """
+        standfirst=standfirst,
+        actions=[("Talk to Russ", "/talk-to-russ/"), ("Cross-reference a part", "/products/cross-reference/")],
+        body=note(CATALOG_NOTE) + "".join(families) + STOCK_BAND)
+
+
+catalog_page(
+    "products/hmis/index.html", "HMIs", "HMIs", "Touchscreens from 4.3 to 15 inch.",
+    "Four families of panel-mount HMI: basic, advanced, rugged metal-housing, and HTML5 web panels. "
+    "Every one is 24 VDC, IP66 at the front, and programmed in an IEC 61131-3 environment with free software.",
+    [
+        family("Basic HMI", "4.3 and 7 inch, for the machine that needs a screen and not a computer.",
+               "Colour TFT with resistive touch. Trends, alarms, data logging, recipes and a built-in web server.",
+               ["RS232 and RS485 serial; Ethernet on the TN models", "USB Type-C for programming, upload and download; one USB host",
+                "IEC 61131-3 programming environment", "IP66 protection for front-panel mounting"],
+               spec_table("Basic HMI part numbers", ["Part number", "Screen", "Serial", "Ethernet", "USB"], [
+                   ["FP2043T-V2", "4.3 in TFT", "1 port (RS232 and RS485)", "No", "Type-C + host"],
+                   ["FP2043TN-V2", "4.3 in TFT", "1 port (RS232 and RS485)", "Yes", "Type-C + host"],
+                   ["FP2070T-V2", "7 in TFT", "2 ports (RS232/RS485)", "No", "Type-C + host"],
+                   ["FP2070TN-V2", "7 in TFT", "2 ports (RS232/RS485)", "Yes", "Type-C + host"]]),
+               "CE, UL Listed Class I Division 2, RoHS, IP66 front."),
+        family("Advanced HMI", "4.3 to 15 inch, with the connectivity built in.",
+               "For complex applications: VNC server, email, FTP host and client, MQTT and web server on the panel itself.",
+               ["4 GB eMMC and 512 MB RAM; real-time clock; microSDHC slot", "10/100 Ethernet, RS232/RS485 serial, USB Type-C and USB host",
+                "Trends, alarms, data logging and recipe management", "IEC 61131-3 programming environment; IP66 front"],
+               spec_table("Advanced HMI part numbers", ["Part number", "Screen", "Serial", "Ethernet", "Storage"], [
+                   ["FP4043TN", "4.3 in resistive", "1 x RS232/RS485", "1 x 10/100", "4 GB + microSDHC"],
+                   ["FP4070TN", "7 in resistive", "2 x RS232/RS485", "1 x 10/100", "4 GB + microSDHC"],
+                   ["FP4101TN", "10.1 in resistive", "2 x RS232/RS485", "1 x 10/100", "4 GB + microSDHC"],
+                   ["FP4121TN", "12.1 in resistive", "2 x RS232/RS485", "1 x 10/100", "4 GB + microSDHC"],
+                   ["FP4151TN-V2", "15 in resistive", "2 x RS232/RS485", "1 x 10/100", "4 GB + microSDHC"]]),
+               "CE, UL Listed Class I Division 2, RoHS, IP66 front."),
+        family("Rugged HMI", "Metal housing, bonded glass, readable in direct sun.",
+               "Capacitive touch behind optically bonded glass at 1,000 nits, a quad-core Cortex-A53 at 1.4 GHz, "
+               "and a PLC function built in. Made for outdoor and washdown-adjacent machines.",
+               ["Operating temperature -20 to 70 &deg;C; IP66 front", "Two Ethernet ports, one of them gigabit; two RS232/RS485 serial ports",
+                "FTP, HTTPS, MQTT and email; data logging to microSDHC", "Ladder, instruction list, structured text, SFC and function block diagram"],
+               spec_table("Rugged HMI part numbers", ["Part number", "Screen", "Memory", "Ethernet", "USB"], [
+                   ["FP6070CN-M", "7 in, 1024 x 600, PCAP", "8 GB eMMC, 1 GB RAM", "10/100 + 10/100/1000", "Type-C + 2 host"],
+                   ["FP6101CN-M", "10.1 in, 1024 x 600, PCAP", "8 GB eMMC, 1 GB RAM", "10/100 + 10/100/1000", "Type-C + 2 host"],
+                   ["FP6121CN-M", "12.1 in XGA, PCAP", "8 GB eMMC, 1 GB RAM", "10/100 + 10/100/1000", "Type-C + 2 host"],
+                   ["FP6151CN-M", "15.1 in XGA, PCAP", "8 GB eMMC, 1 GB RAM", "10/100 + 10/100/1000", "Type-C + 2 host"],
+                   ["FP7070CN-M", "7 in, 1024 x 600, capacitive", "4 GB flash, 1 GB RAM", "10/100 + 10/100/1000", "Type-C + 2 host"],
+                   ["FP7101CN-M", "10.1 in, 1280 x 800, capacitive", "4 GB flash, 1 GB RAM", "10/100 + 10/100/1000", "Type-C + 2 host"]]),
+               "FP7 metal-housing models: CE, UL Class I Division 2, IP66, RoHS, REACH. FP6 models: IP66 front; ask for the current listing."),
+        family("Web panels", "An HTML5 browser in an industrial bezel.",
+               "Thin clients for machines whose interface is already a web application. Point the panel at any web server and it runs.",
+               ["4.3, 7 and 10.1 inch", "Chromium-based HTML5 browser on the Plus and capacitive models; a microbrowser on the Lite",
+                "Capacitive, high-brightness and metal-housing options", "IP66 protection for front-panel mounting"],
+               spec_table("Web panel part numbers", ["Part number", "Screen", "Browser", "Housing"], [
+                   ["WP2043TN Lite / WP2070TN Lite / WP2101TN Lite", "4.3 / 7 / 10.1 in", "Microbrowser thin client", "Plastic"],
+                   ["WP6043TN Plus / WP6070TN Plus / WP6101TN Plus", "4.3 / 7 / 10.1 in", "Chromium, HTML5", "Plastic"],
+                   ["WP7043CN / WP7070CN / WP7101CN", "4.3 / 7 / 10.1 in capacitive", "Chromium, HTML5", "Plastic"],
+                   ["WP7070CN-M / WP7101CN-M", "7 / 10.1 in PCAP", "Chromium, HTML5", "Metal"]]),
+               "Lite: CE, UL Class I Division 2, IP66. Plus: CE, UL, RoHS, IP66. Capacitive models: IP66 front; ask for the current listing."),
+    ])
+
+catalog_page(
+    "products/plcs/index.html", "PLCs and HMI/PLC Combos", "PLCs and HMI/PLC combos",
+    "Controllers, and the units that put one behind the screen.",
+    "DIN-rail PLCs with a 32-bit processor and high-speed I/O, expansion to 16 modules, and HMI/PLC combination "
+    "units with pluggable or built-in I/O. All programmed in IEC 61131-3 with free software.",
+    [
+        family("Eco PLC", "The small controller, for the machine with a fixed job.",
+               "DIN-rail mounted, 32-bit RISC processor, relay or transistor outputs, expandable to 8 modules.",
+               ["8 bi-directional digital inputs: 2 single-phase high-speed counters to 25 kHz, or 8 to 10 kHz, or quadrature to 10 kHz",
+                "6 outputs, relay or NPN transistor; 3 high-speed outputs to 10 kHz on the transistor model",
+                "2 serial ports (RS232 and RS485) and USB Type-C", "IEC 61131-3 programming environment"],
+               spec_table("Eco PLC part numbers", ["Part number", "Inputs", "Outputs", "Ports", "Expansion"], [
+                   ["FL004-0806N-V2", "8 DI, high-speed capable", "6 NPN transistor", "2 serial, USB Type-C", "Up to 8 modules"],
+                   ["FL004-0806R-V2", "8 DI, high-speed capable", "6 relay", "2 serial, USB Type-C", "Up to 8 modules"]]),
+               "CE. Ask for the current UL listing."),
+        family("Standard PLC", "200 kHz counting, Ethernet when you need it, 16 expansion modules.",
+               "The same DIN-rail form with faster I/O: four single-phase counters or quadrature to 200 kHz, and four high-speed outputs to 200 kHz.",
+               ["8 bi-directional digital inputs; 8 NPN or 6 relay outputs", "2 serial ports (RS232 and RS485) and USB Type-C; Ethernet on the FL055",
+                "Expandable to 16 modules", "IEC 61131-3: ladder, function block, structured text, SFC, instruction list"],
+               spec_table("Standard PLC part numbers", ["Part number", "Inputs", "Outputs", "Ethernet", "Expansion"], [
+                   ["FL005-0808N-V2", "8 DI, 200 kHz capable", "8 NPN (4 to 200 kHz)", "No", "Up to 16 modules"],
+                   ["FL005-0806R-V2", "8 DI, 200 kHz capable", "6 relay", "No", "Up to 16 modules"],
+                   ["FL055-0808N-V2", "8 DI, 200 kHz capable", "8 NPN (4 to 200 kHz)", "Yes", "Up to 16 modules"],
+                   ["FL055-0806R-V2", "8 DI, 200 kHz capable", "6 relay", "Yes", "Up to 16 modules"]]),
+               "FL055: CE, UL Class I Division 2. FL005: ask for the current listing."),
+        family("Expansion modules", "Digital, analog and load cell, on the PLC's own bus.",
+               "Snap-on modules for the eco and standard PLCs.",
+               ["Digital: 8 in, 8 out (NPN or relay), or 8 in and 8 out", "Analog: 4 inputs at 16 bit (0 to 10 V, 4 to 20 mA, 0 to 20 mA) and 2 outputs at 12 bit",
+                "Load cell: 2 channels, 24-bit, up to 500 conversions a second, 4- or 6-wire strain gauge, one digital output per channel outside the scan"],
+               spec_table("Expansion module part numbers", ["Part number", "Inputs", "Outputs"], [
+                   ["FLD0800-V2", "8 digital", "None"], ["FLD0008N-V2", "None", "8 NPN"], ["FLD0008R-V2", "None", "8 relay"],
+                   ["FLD0808N-V2", "8 digital", "8 NPN"], ["FLD0808R-V2", "8 digital", "8 relay"],
+                   ["FLA0402L-V2", "4 analog, 16 bit", "2 analog, 12 bit"],
+                   ["FLAD0202P-SO", "2 load cell channels, 24 bit", "2 digital"]]),
+               "Load cell module: CE, cUL Class I Division 2, RoHS. Others: ask for the current listing."),
+        family("HMI/PLC combination units", "One part number for the screen, the controller and the I/O.",
+               "A basic or advanced HMI with the PLC function inside and the I/O plugged into the back, or built in. "
+               "No separate controller, one program, one cutout.",
+               ["Pluggable I/O modules: 1 on the 4.3 inch, 3 on the 7 inch, 5 on the 10.1 inch",
+                "Built-in I/O models add 4 high-speed inputs to 200 kHz, RTD and thermocouple inputs, and analog outputs",
+                "Available with built-in LTE", "IP66 front; IEC 61131-3 programming environment"],
+               spec_table("HMI/PLC combination part numbers", ["Part number", "Screen", "I/O", "Ethernet"], [
+                   ["FP2043T-E / FP2043TN-E", "4.3 in", "1 pluggable module", "TN model"],
+                   ["FP2070T-E / FP2070TN-E", "7 in", "3 pluggable modules", "TN model"],
+                   ["FP4043TN-E", "4.3 in", "1 pluggable module", "Yes"],
+                   ["FP4070TN-E", "7 in", "3 pluggable modules", "Yes"],
+                   ["FP4101TN-E", "10.1 in", "5 pluggable modules", "Yes"],
+                   ["FP2043TN-LE1208N-A0402U", "4.3 in", "12 DI, 8 NPN out, 4 AI (2 V/I, 2 RTD/TC), 2 AO, + 1 module", "Yes"],
+                   ["FP2043TN-LE1208P-A0402U", "4.3 in", "12 DI, 8 PNP out, 4 AI (2 V/I, 2 RTD/TC), 2 AO, + 1 module", "Yes"],
+                   ["FP2070TN-LE2016RP-A0402U", "7 in", "20 DI, 16 out (12 relay, 4 PNP), 4 AI, 2 AO, + 3 modules", "Yes"]]),
+               "CE, UL Class I Division 2, IP66 front; RoHS on the basic series."),
+    ])
+
+catalog_page(
+    "products/io-and-communication/index.html", "I/O and Communication Modules", "I/O and communication modules",
+    "Remote I/O, and the links between machines.",
+    "Modbus RTU field I/O that sets up with DIP switches, an EtherCAT remote I/O block, an LTE gateway, "
+    "protocol converters and a serial signal converter.",
+    [
+        family("Field I/O, Modbus RTU", "Remote points on two wires, configured with switches.",
+               "Compact DIN-rail modules that expand any Modbus master. Address, baud rate and parity are set on DIP switches; "
+               "the digital modules need no configuration software at all.",
+               ["2-wire RS485 on a pluggable terminal block", "An LED for every input and output, plus power and communication",
+                "Relay, NPN and PNP output versions", "A 3-phase energy module measures voltage, current, frequency and power, with 4 DI and 4 DO"],
+               spec_table("Field I/O part numbers", ["Part number", "Points"], [
+                   ["FIOA-0800-L-B", "8 analog inputs, 0 to 10 V or 4 to 20 mA, 12 bit"],
+                   ["FIOA-0402-U-B / FIOA-0402-U-16-B", "4 universal analog inputs (V, mA, RTD, thermocouple), 2 analog outputs; 12 or 16 bit"],
+                   ["FL001D-1600-V3", "16 digital inputs"],
+                   ["FL001D-0008R-V3", "8 relay outputs"],
+                   ["FL001D-0016N-V3 / -0016P-V3 / -0016R-V3", "16 outputs: NPN, PNP or relay"],
+                   ["FL001D-0404N-V3 / -0404P-V3 / -0404R-V3", "4 inputs, 4 outputs: NPN, PNP or relay"],
+                   ["FL001D-0808N-V3 / -0808P-V3 / -0808R-V3", "8 inputs, 8 outputs: NPN, PNP or relay"]]),
+               "CE, with UL as an option. Say so when you order."),
+        family("EtherCAT remote I/O", "Sixteen configurable digital points and twelve analog, in 50 mm.",
+               "A DIN-rail EtherCAT block with in and out ports, for machines already on an EtherCAT master.",
+               ["16 digital points at 24 VDC, each individually configurable as input or NPN output at 200 mA",
+                "8 linear analog inputs, 12 bit, -10 to +10 VDC; 4 analog outputs", "Bicolour LED per digital point: green for input, red for output",
+                "Isolated 24 VDC supply; 50 pin D-sub for I/O and power; 50 x 100 x 70 mm"],
+               "", "Ask for the current listing."),
+        family("Gateways and converters", "Getting data off the machine, and old devices onto new networks.",
+               "An LTE gateway that collects Modbus RTU data and sends it to a server, programmable protocol converters, and a serial signal converter.",
+               ["LTE gateway: Modbus RTU in, TCP/IP, HTTP or MQTT out; offline data storage; configurable slave addresses and send interval",
+                "Protocol converters: serial devices onto CANopen, Profibus, LonWorks, Modbus TCP or GSM networks, with free programming software",
+                "Signal converter: RS232 or CMOS to RS422/RS485, isolated, automatic baud rate and direction control, no software"],
+               spec_table("Gateway and converter part numbers", ["Part number", "Function"], [
+                   ["GWY920-LTE-S2", "LTE gateway, Modbus RTU to TCP/IP, HTTP or MQTT"],
+                   ["GWY-00-B / GWY-300", "Programmable protocol converters"],
+                   ["CNV-02-B", "RS232/CMOS to RS422/RS485 signal converter, DIN rail or panel mount"]]),
+               "Protocol converters and the signal converter: CE and UL. LTE gateway: ask for the current listing."),
+    ])
+
+PAGES["products/cross-reference/index.html"] = dict(
+    nav="Cross-Reference", title="Cross-reference | %s" % SITE,
+    desc="What a Phoenix HMI talks to, and how to match a Phoenix part to the one in your panel now.",
+    eyebrow="Products", h1="The Phoenix part that matches what is in your panel now.",
+    standfirst="Match by cutout, by I/O count and by protocol. Send Russ the part number you have and he will do it for you.",
+    actions=[("Talk to Russ", "/talk-to-russ/"), ("HMIs", "/products/hmis/")],
+    body=note("The driver list is from the manufacturer's current rugged-HMI datasheet. A model-by-model replacement "
+              "table needs Russell's list of the brands and models he replaces most; none is invented here.") + """
 <section class="band">
-  <div class="inner narrow" data-reveal>
-    <div class="eyebrow">What this page will list</div>
-    <ul class="ticks" data-reveal="stagger">%(will)s</ul>
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">Drivers on the panel</div>
+      <h2>What a Phoenix HMI already talks to.</h2>
+      <p class="family-intro">The controller stays where it is. The HMI speaks its protocol, so the swap is a screen and a program, not a panel redesign.</p>
+    </div>
+    %(drivers)s
   </div>
 </section>
 <section class="band band-tint">
   <div class="inner narrow" data-reveal>
-    <div class="eyebrow">Until the catalog is up</div>
-    <p>%(now)s</p>
-    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+    <div class="eyebrow">How to cross-reference</div>
+    <ul class="ticks" data-reveal="stagger">
+      <li><b>By cutout.</b> 4.3, 7, 10.1, 12.1 and 15 inch. Give Russ the panel cutout you have and he will tell you which bezel drops in, or have one made that does.</li>
+      <li><b>By I/O count.</b> Fixed and expandable PLCs to 16 modules; HMI/PLC units with the I/O on the back.</li>
+      <li><b>By protocol.</b> Serial, Ethernet, Modbus RTU and TCP, MQTT where the data has to leave the machine.</li>
+      <li><b>By what changes in the program.</b> Russ will say, before you order, what has to be rewritten and what does not.</li>
+    </ul>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Send Russ the part number</a></p>
   </div>
 </section>
-""" % dict(will="".join("<li>%s</li>" % w for w in will_list), now=how_now))
+""" % dict(drivers=spec_table("Communication drivers", ["Make or protocol", "Driver"], [
+        ["Allen-Bradley", "DF1 serial; EtherNet/IP (PCCC); Logix 5000 series"],
+        ["Siemens", "Profinet PLCs"],
+        ["Modbus", "RTU master and slave; ASCII master; TCP master (client)"],
+        ["Delta", "PLCs"],
+        ["Panasonic", "FP series PLCs"],
+        ["Toshiba", "Inverters; Link-port series PLCs"],
+        ["Anything with a serial port", "Universal serial driver (ASCII)"],
+        ["IIoT", "MQTT publish and subscribe, with three quality-of-service levels"]])),
+)
 
-
-CATALOG_NOTE = ("Product pages are scaffolding: the structure is set, the parts are not listed. Populating "
-                "them needs the product line, specs, dimension drawings and stock counts from Russell, and the "
-                "decision on which brands are named. No part numbers are invented here.")
-product_page("products/hmis/index.html", "HMIs", "HMIs", "Touchscreens, listed by screen size.",
-             "Panel-mount HMIs from small text displays to full-glass fronts, with the specs, cutout dimensions and stock status for each.",
-             ["Every screen size Phoenix stocks, smallest to largest", "Resolution, brightness, touch type and rated environment", "Panel cutout and mounting pattern", "Communication ports: Ethernet, serial, Modbus", "In stock in Mokena, or the lead time if not"],
-             "Tell Russ the screen size, the machine and the protocol you need to talk to, and he will send the spec sheet and the stock position the same day.",
-             CATALOG_NOTE)
-product_page("products/plcs/index.html", "PLCs and HMI/PLC Combos", "PLCs and HMI/PLC combos", "Controllers, and all-in-one units.",
-             "Compact PLCs sized to the machine, and combination units that put the controller behind the screen, with specs and stock status.",
-             ["Controllers by I/O count and program memory", "HMI/PLC combination units by screen size", "Scan time, expansion capacity and communication options", "Programming software and firmware for each", "In stock in Mokena, or the lead time if not"],
-             "Tell Russ the I/O count, the machine and whether you want the controller behind the screen, and he will send the spec sheet and the stock position the same day.",
-             CATALOG_NOTE)
-product_page("products/io-and-communication/index.html", "I/O and Communication Modules", "I/O and communication modules", "Add-on inputs and outputs, and the links between them.",
-             "Discrete and analog I/O expansion, remote I/O, and the Ethernet, serial and Modbus modules that tie a panel together.",
-             ["Discrete input and output modules by point count", "Analog modules for temperature, pressure and level", "Remote I/O over the fieldbus the machine already uses", "Ethernet, serial and Modbus communication modules", "In stock in Mokena, or the lead time if not"],
-             "Tell Russ the point count, the signal types and the network on the machine, and he will send the spec sheet and the stock position the same day.",
-             CATALOG_NOTE)
-product_page("products/cross-reference/index.html", "Cross-Reference", "Cross-reference", "The Phoenix part that matches what is in your panel now.",
-             "Replacements matched to the brands already in a customer's panel, by function, form factor and communication, so the swap is a drop-in.",
-             ["Matched by screen size and cutout, or by I/O count and form factor", "Matched by protocol, so the machine keeps talking", "A note on what changes in the program, if anything", "The datasheet for the Phoenix part beside the one you have"],
-             "Send Russ the part number you have today and the machine it sits in. He will come back with the Phoenix equivalent, what changes in the program, and whether it is on the shelf.",
-             CATALOG_NOTE + " The cross-reference table itself needs Russell's list of the brands and models he replaces most.")
-product_page("products/datasheets/index.html", "Datasheets", "Datasheets", "Spec sheets and dimension drawings for every product.",
-             "Downloadable specifications and dimension drawings, one per part, for the engineer who needs the numbers rather than the pitch.",
-             ["One PDF per part: electrical, environmental and mechanical specifications", "Dimension drawings with cutout and mounting pattern", "Communication and pinout details", "Revision and date on every sheet"],
-             "Until the library is online, Russ sends datasheets by email the same day. Tell him the part or the function.",
-             CATALOG_NOTE)
+PAGES["products/datasheets/index.html"] = dict(
+    nav="Datasheets", title="Datasheets | %s" % SITE,
+    desc="Specification sheets and dimension drawings for Phoenix HMIs, PLCs and I/O, sent the same day.",
+    eyebrow="Products", h1="Spec sheets and dimension drawings.",
+    standfirst="One sheet per part: electrical, environmental and mechanical specifications, with the cutout and the mounting pattern.",
+    actions=[("Ask for a datasheet", "/talk-to-russ/")],
+    body=note("Phoenix-format datasheets, generated from the same specification tables as the product pages, are "
+              "planned for after the show. Until then Russell sends the current sheet by email; the manufacturer's "
+              "own PDFs are not published here.") + """
+<section class="band">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">Sheets on hand today</div>
+    <ul class="ticks" data-reveal="stagger">
+      <li><b>Basic HMI</b>, 4.3 and 7 inch, including the 7 inch with pluggable I/O</li>
+      <li><b>Advanced HMI</b>, 4.3 to 15 inch</li>
+      <li><b>Rugged HMI</b>, 7 to 15.1 inch, with the full driver list</li>
+      <li><b>HMI/PLC with built-in I/O</b>, 4.3 inch</li>
+      <li><b>Eco PLC</b> and <b>standard PLC with Ethernet</b></li>
+      <li><b>EtherCAT remote I/O</b> and the <b>load cell expansion module</b></li>
+    </ul>
+    <p>Tell Russ the part number or the function. He sends the sheet, and the dimension drawing if you need the
+    cutout, the same day.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Ask for a datasheet</a></p>
+  </div>
+</section>
+""",
+)
 
 
 # ---- Proof
@@ -1166,24 +1381,42 @@ PAGES["company/supply-chain/index.html"] = dict(
 
 PAGES["company/certifications/index.html"] = dict(
     nav="Certifications", title="Certifications | %s" % SITE,
-    desc="Product certifications and company credentials for Phoenix Automation Solutions.",
-    eyebrow="Company", h1="Certifications and credentials.",
-    standfirst="Product certifications by product family, and the company's credentials, listed as Russ approves the wording.",
+    desc="Product approvals by family for Phoenix HMIs, PLCs and I/O: CE, UL Class I Division 2, IP66, RoHS and REACH.",
+    eyebrow="Company", h1="Approvals, family by family.",
+    standfirst="What each product family carries today. Ask for the UL file number or the declaration of conformity "
+               "for any part and Russ sends it the same day.",
     actions=[("Talk to Russ", "/talk-to-russ/")],
-    body=note("Russell offered the certifications and credentials list on the 28 Aug call (54:14). Nothing "
-              "is listed until he supplies it; a certification claim that is wrong is worse than none.") + """
+    body=note("Every line is from the manufacturer's February 2025 brochure or a current datasheet, and every line "
+              "wants Russell's confirmation, with the UL file numbers, before launch. Company credentials are still "
+              "to come from him (28 Aug call, 54:14). A certification claim that is wrong is worse than none.") + """
 <section class="band">
+  <div class="inner">
+    %(table)s
+    <p class="approvals">IP66 is the rating of the front face when the panel is mounted in a suitable enclosure.
+    UL Class I Division 2 covers use in hazardous locations where ignitable gas is not normally present.</p>
+  </div>
+</section>
+<section class="band band-tint">
   <div class="inner narrow" data-reveal>
-    <div class="eyebrow">Product certifications</div>
-    <p class="muted">Listed by product family as the catalog comes online.</p>
     <div class="eyebrow">Company credentials</div>
-    <p class="muted">Russ's credentials and the company's, in his approved wording.</p>
-    <p>If a certification matters to your application today, ask. Russ will tell you what the part carries
-    and what it does not.</p>
+    <p class="muted">Russ's credentials and the company's, in his approved wording, to follow.</p>
+    <p>If an approval matters to your application today, ask. Russ will tell you what the part carries and what it
+    does not.</p>
     <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
   </div>
 </section>
-""",
+""" % dict(table=spec_table("Approvals by product family", ["Family", "Approvals"], [
+        ["Basic HMI, 4.3 and 7 inch", "CE, UL Listed Class I Division 2, RoHS, IP66 front"],
+        ["Advanced HMI, 4.3 to 15 inch", "CE, UL Listed Class I Division 2, RoHS, IP66 front"],
+        ["Rugged HMI, metal housing (FP7)", "CE, UL Class I Division 2, IP66, RoHS, REACH"],
+        ["Rugged HMI, sunlight readable (FP6)", "IP66 front; other approvals on request"],
+        ["HMI/PLC combination units", "CE, UL Class I Division 2, IP66 front; RoHS on the basic series"],
+        ["Web panels", "Lite: CE, UL Class I Division 2, IP66. Plus: CE, UL, RoHS, IP66"],
+        ["Eco PLC", "CE"],
+        ["Standard PLC with Ethernet", "CE, UL Class I Division 2"],
+        ["Load cell expansion module", "CE, cUL Class I Division 2, RoHS"],
+        ["Field I/O, Modbus RTU", "CE, with UL as an option"],
+        ["Protocol converters and signal converter", "CE and UL"]])),
 )
 
 PAGES["company/contact/index.html"] = dict(

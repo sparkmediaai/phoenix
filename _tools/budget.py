@@ -19,7 +19,7 @@ def pages():
     """Every built page: index.html files anywhere under the root, plus 404.html."""
     out = []
     for dirpath, dirnames, filenames in os.walk(ROOT):
-        dirnames[:] = [d for d in dirnames if not d.startswith((".", "_"))
+        dirnames[:] = [d for d in dirnames if not d.startswith((".", "_", "phoenixsalesinc"))
                        and d not in ("assets", "docs", "tests", "logos", "node_modules")]
         for f in filenames:
             if f == "index.html" or (f == "404.html" and dirpath == ROOT):

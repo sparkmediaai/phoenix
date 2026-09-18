@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PLCs and HMI/PLC combos | Phoenix Automation Solutions</title>
-<meta name="description" content="Compact PLCs sized to the machine, and combination units that put the controller behind the screen, with specs and stock status.">
+<meta name="description" content="DIN-rail PLCs with a 32-bit processor and high-speed I/O, expansion to 16 modules, and HMI/PLC combination units with pluggable or built-in I/O. All programmed in IEC 61131-3 with free software.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Phoenix Automation Solutions">
 <meta property="og:title" content="PLCs and HMI/PLC combos | Phoenix Automation Solutions">
-<meta property="og:description" content="Compact PLCs sized to the machine, and combination units that put the controller behind the screen, with specs and stock status.">
+<meta property="og:description" content="DIN-rail PLCs with a 32-bit processor and high-speed I/O, expansion to 16 modules, and HMI/PLC combination units with pluggable or built-in I/O. All programmed in IEC 61131-3 with free software.">
 <link rel="canonical" href="https://phoenix.sparkmedia.ai/products/plcs/">
 <meta property="og:url" content="https://phoenix.sparkmedia.ai/products/plcs/">
 <meta property="og:image" content="https://phoenix.sparkmedia.ai/assets/og.jpg">
@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=626a7848">
+<link rel="stylesheet" href="/assets/site.css?v=eb7bf31c">
 <link rel="stylesheet" href="/assets/forms.css?v=ae802e4a">
 <link rel="stylesheet" href="/assets/motion.css?v=de9c970a">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
@@ -34,7 +34,7 @@
 
 <header class="site-head">
   <div class="inner">
-    <a class="wordmark" href="/"><img class="logo" src="/assets/logo-header.webp" width="450" height="133" alt="" decoding="async"><span class="vh">Phoenix Automation Solutions</span></a>
+    <a class="wordmark" href="/"><img class="logo" src="/assets/logo-header.webp" width="450" height="111" alt="" decoding="async"><span class="vh">Phoenix Automation Solutions</span></a>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span class="nav-bars" aria-hidden="true"><i></i><i></i></span><span class="nav-word">Menu</span></button>
     <nav class="site-nav" id="site-nav" aria-label="Primary">
       <ul class="menu">
@@ -88,8 +88,8 @@
 <header class="hero hero-plain">
   <div class="hero-body">
     <div class="eyebrow">Products</div>
-    <h1>Controllers, and all-in-one units.</h1>
-    <p>Compact PLCs sized to the machine, and combination units that put the controller behind the screen, with specs and stock status.</p>
+    <h1>Controllers, and the units that put one behind the screen.</h1>
+    <p>DIN-rail PLCs with a 32-bit processor and high-speed I/O, expansion to 16 modules, and HMI/PLC combination units with pluggable or built-in I/O. All programmed in IEC 61131-3 with free software.</p>
     <div class="hero-actions">
       <a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a>
       <a class="btn" href="/products/cross-reference/">Cross-reference a part</a></div>
@@ -98,19 +98,67 @@
 </header>
 
 <main id="main">
-<aside class="note"><b>Working note</b> Product pages are scaffolding: the structure is set, the parts are not listed. Populating them needs the product line, specs, dimension drawings and stock counts from Russell, and the decision on which brands are named. No part numbers are invented here.</aside>
+<aside class="note"><b>Working note</b> Specifications are taken from the manufacturer's February 2025 brochure and current datasheets. Russell to confirm which part numbers he stocks in Mokena, and every approvals line, before launch. The manufacturer and its product-family trademarks are deliberately not named; part numbers are.</aside>
 
 <section class="band">
-  <div class="inner narrow" data-reveal>
-    <div class="eyebrow">What this page will list</div>
-    <ul class="ticks" data-reveal="stagger"><li>Controllers by I/O count and program memory</li><li>HMI/PLC combination units by screen size</li><li>Scan time, expansion capacity and communication options</li><li>Programming software and firmware for each</li><li>In stock in Mokena, or the lead time if not</li></ul>
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">Eco PLC</div>
+      <h2>The small controller, for the machine with a fixed job.</h2>
+      <p class="family-intro">DIN-rail mounted, 32-bit RISC processor, relay or transistor outputs, expandable to 8 modules.</p>
+      <ul class="ticks"><li>8 bi-directional digital inputs: 2 single-phase high-speed counters to 25 kHz, or 8 to 10 kHz, or quadrature to 10 kHz</li><li>6 outputs, relay or NPN transistor; 3 high-speed outputs to 10 kHz on the transistor model</li><li>2 serial ports (RS232 and RS485) and USB Type-C</li><li>IEC 61131-3 programming environment</li></ul>
+    </div>
+    <div class="spec-wrap" data-reveal><table class="spec"><caption>Eco PLC part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Inputs</th><th scope="col">Outputs</th><th scope="col">Ports</th><th scope="col">Expansion</th></tr></thead><tbody><tr><th scope="row">FL004-0806N-V2</th><td>8 DI, high-speed capable</td><td>6 NPN transistor</td><td>2 serial, USB Type-C</td><td>Up to 8 modules</td></tr><tr><th scope="row">FL004-0806R-V2</th><td>8 DI, high-speed capable</td><td>6 relay</td><td>2 serial, USB Type-C</td><td>Up to 8 modules</td></tr></tbody></table></div>
+    <p class="approvals"><b>Approvals:</b> CE. Ask for the current UL listing.</p>
   </div>
 </section>
+
+<section class="band">
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">Standard PLC</div>
+      <h2>200 kHz counting, Ethernet when you need it, 16 expansion modules.</h2>
+      <p class="family-intro">The same DIN-rail form with faster I/O: four single-phase counters or quadrature to 200 kHz, and four high-speed outputs to 200 kHz.</p>
+      <ul class="ticks"><li>8 bi-directional digital inputs; 8 NPN or 6 relay outputs</li><li>2 serial ports (RS232 and RS485) and USB Type-C; Ethernet on the FL055</li><li>Expandable to 16 modules</li><li>IEC 61131-3: ladder, function block, structured text, SFC, instruction list</li></ul>
+    </div>
+    <div class="spec-wrap" data-reveal><table class="spec"><caption>Standard PLC part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Inputs</th><th scope="col">Outputs</th><th scope="col">Ethernet</th><th scope="col">Expansion</th></tr></thead><tbody><tr><th scope="row">FL005-0808N-V2</th><td>8 DI, 200 kHz capable</td><td>8 NPN (4 to 200 kHz)</td><td>No</td><td>Up to 16 modules</td></tr><tr><th scope="row">FL005-0806R-V2</th><td>8 DI, 200 kHz capable</td><td>6 relay</td><td>No</td><td>Up to 16 modules</td></tr><tr><th scope="row">FL055-0808N-V2</th><td>8 DI, 200 kHz capable</td><td>8 NPN (4 to 200 kHz)</td><td>Yes</td><td>Up to 16 modules</td></tr><tr><th scope="row">FL055-0806R-V2</th><td>8 DI, 200 kHz capable</td><td>6 relay</td><td>Yes</td><td>Up to 16 modules</td></tr></tbody></table></div>
+    <p class="approvals"><b>Approvals:</b> FL055: CE, UL Class I Division 2. FL005: ask for the current listing.</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">Expansion modules</div>
+      <h2>Digital, analog and load cell, on the PLC's own bus.</h2>
+      <p class="family-intro">Snap-on modules for the eco and standard PLCs.</p>
+      <ul class="ticks"><li>Digital: 8 in, 8 out (NPN or relay), or 8 in and 8 out</li><li>Analog: 4 inputs at 16 bit (0 to 10 V, 4 to 20 mA, 0 to 20 mA) and 2 outputs at 12 bit</li><li>Load cell: 2 channels, 24-bit, up to 500 conversions a second, 4- or 6-wire strain gauge, one digital output per channel outside the scan</li></ul>
+    </div>
+    <div class="spec-wrap" data-reveal><table class="spec"><caption>Expansion module part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Inputs</th><th scope="col">Outputs</th></tr></thead><tbody><tr><th scope="row">FLD0800-V2</th><td>8 digital</td><td>None</td></tr><tr><th scope="row">FLD0008N-V2</th><td>None</td><td>8 NPN</td></tr><tr><th scope="row">FLD0008R-V2</th><td>None</td><td>8 relay</td></tr><tr><th scope="row">FLD0808N-V2</th><td>8 digital</td><td>8 NPN</td></tr><tr><th scope="row">FLD0808R-V2</th><td>8 digital</td><td>8 relay</td></tr><tr><th scope="row">FLA0402L-V2</th><td>4 analog, 16 bit</td><td>2 analog, 12 bit</td></tr><tr><th scope="row">FLAD0202P-SO</th><td>2 load cell channels, 24 bit</td><td>2 digital</td></tr></tbody></table></div>
+    <p class="approvals"><b>Approvals:</b> Load cell module: CE, cUL Class I Division 2, RoHS. Others: ask for the current listing.</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="inner">
+    <div class="family" data-reveal>
+      <div class="eyebrow">HMI/PLC combination units</div>
+      <h2>One part number for the screen, the controller and the I/O.</h2>
+      <p class="family-intro">A basic or advanced HMI with the PLC function inside and the I/O plugged into the back, or built in. No separate controller, one program, one cutout.</p>
+      <ul class="ticks"><li>Pluggable I/O modules: 1 on the 4.3 inch, 3 on the 7 inch, 5 on the 10.1 inch</li><li>Built-in I/O models add 4 high-speed inputs to 200 kHz, RTD and thermocouple inputs, and analog outputs</li><li>Available with built-in LTE</li><li>IP66 front; IEC 61131-3 programming environment</li></ul>
+    </div>
+    <div class="spec-wrap" data-reveal><table class="spec"><caption>HMI/PLC combination part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Screen</th><th scope="col">I/O</th><th scope="col">Ethernet</th></tr></thead><tbody><tr><th scope="row">FP2043T-E / FP2043TN-E</th><td>4.3 in</td><td>1 pluggable module</td><td>TN model</td></tr><tr><th scope="row">FP2070T-E / FP2070TN-E</th><td>7 in</td><td>3 pluggable modules</td><td>TN model</td></tr><tr><th scope="row">FP4043TN-E</th><td>4.3 in</td><td>1 pluggable module</td><td>Yes</td></tr><tr><th scope="row">FP4070TN-E</th><td>7 in</td><td>3 pluggable modules</td><td>Yes</td></tr><tr><th scope="row">FP4101TN-E</th><td>10.1 in</td><td>5 pluggable modules</td><td>Yes</td></tr><tr><th scope="row">FP2043TN-LE1208N-A0402U</th><td>4.3 in</td><td>12 DI, 8 NPN out, 4 AI (2 V/I, 2 RTD/TC), 2 AO, + 1 module</td><td>Yes</td></tr><tr><th scope="row">FP2043TN-LE1208P-A0402U</th><td>4.3 in</td><td>12 DI, 8 PNP out, 4 AI (2 V/I, 2 RTD/TC), 2 AO, + 1 module</td><td>Yes</td></tr><tr><th scope="row">FP2070TN-LE2016RP-A0402U</th><td>7 in</td><td>20 DI, 16 out (12 relay, 4 PNP), 4 AI, 2 AO, + 3 modules</td><td>Yes</td></tr></tbody></table></div>
+    <p class="approvals"><b>Approvals:</b> CE, UL Class I Division 2, IP66 front; RoHS on the basic series.</p>
+  </div>
+</section>
+
 <section class="band band-tint">
-  <div class="inner narrow" data-reveal>
-    <div class="eyebrow">Until the catalog is up</div>
-    <p>Tell Russ the I/O count, the machine and whether you want the controller behind the screen, and he will send the spec sheet and the stock position the same day.</p>
-    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+  <div class="inner narrow center" data-reveal>
+    <div class="eyebrow">Stock and lead time</div>
+    <h2>Ask for the position on any part number.</h2>
+    <p>Stock is held in Mokena, Illinois. Send Russ the part number and the quantity and he will tell you
+    what is on the shelf and the lead time on the rest, the same day.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a> &nbsp; <a class="btn" href="/products/datasheets/">Datasheets</a></p>
   </div>
 </section>
 

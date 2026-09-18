@@ -1,18 +1,13 @@
-"""The header logo from Dave's high-resolution rendering.
+"""The header logo, from the company's own artwork.
 
     python _tools/logo_raster.py
 
-Reads _tools/brand/phoenix-logo.png (transparent, grey PHOENIX, orange
-SOLUTIONS), trims the transparent margins, and writes one 450px-wide WebP:
-assets/logo-header.webp, with the grey wordmark recoloured to the header's
-pale text (#E6DDD1) so it reads on the ink header. The flame and the orange
-word are untouched.
-
-The header draws the mark 44px tall, about 149px wide, so 450px covers a 3x
-display and the old 900px covered a 6x one that does not exist. Nothing on
-the site asks for the logo on a light background, so the as-supplied
-rendering is not written at all: an unreferenced file in a public repo is a
-file somebody later assumes is used.
+Reads _tools/brand/phoenix-logo.png: the "Phoenix Automation Solutions, Inc."
+lockup, rendered at high resolution from the vector artwork on the company's
+December 2024 product mailer and lifted off its white box onto transparency.
+Trims the transparent margins and writes assets/logo-header.webp, 450px
+wide, with the grey wordmark recoloured to the header's pale text (#E6DDD1)
+so it reads on the ink header. The flame and the orange line are untouched.
 """
 import os
 from PIL import Image

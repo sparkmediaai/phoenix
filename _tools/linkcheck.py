@@ -28,7 +28,10 @@ STALE = ("/phoenix/",)
 
 pages = []
 for dirpath, dirnames, filenames in os.walk(ROOT):
-    dirnames[:] = [d for d in dirnames if d not in (".git", "_build", "_tools", ".claude")]
+    # Skip tooling, git-ignored research material (the client originals and the
+    # Wayback archive of the old site) and anything hidden: none of it is the site.
+    dirnames[:] = [d for d in dirnames if d not in (".git", "_build", "_tools", ".claude", "_originals", "docs", "tests", "logos")
+                   and not d.startswith((".", "phoenixsalesinc"))]
     for f in filenames:
         if f.endswith((".html", ".css")):
             pages.append(os.path.join(dirpath, f))
