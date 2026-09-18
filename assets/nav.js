@@ -33,3 +33,32 @@
     if (!nav.contains(e.target) && !btn.contains(e.target)) closeAll();
   });
 })();
+
+// The family pills on catalog pages. Once the picture tiles have scrolled
+// away, a slim bar of the same links slides out from under the header, and the
+// family on screen is marked current. No script, no bar: the tiles still work.
+(function () {
+  var pills = document.querySelector(".family-pills");
+  var tiles = document.querySelector(".family-index");
+  var head = document.querySelector(".site-head");
+  if (!pills || !tiles || !head || !("IntersectionObserver" in window)) return;
+  function place() { pills.style.top = head.offsetHeight + "px"; }
+  place();
+  window.addEventListener("resize", place);
+  new IntersectionObserver(function (entries) {
+    var e = entries[0];
+    pills.classList.toggle("show", !e.isIntersecting && e.boundingClientRect.top < 0);
+  }).observe(tiles);
+  var links = {};
+  Array.prototype.forEach.call(pills.querySelectorAll("a"), function (a) { links[a.getAttribute("href").slice(1)] = a; });
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting || !links[e.target.id]) return;
+      Object.keys(links).forEach(function (k) { links[k].removeAttribute("aria-current"); });
+      var a = links[e.target.id];
+      a.setAttribute("aria-current", "true");
+      pills.scrollTo({ left: a.offsetLeft - (pills.clientWidth - a.offsetWidth) / 2, behavior: "smooth" });
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  Array.prototype.forEach.call(document.querySelectorAll(".family-band"), function (s) { spy.observe(s); });
+})();

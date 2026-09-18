@@ -6,6 +6,8 @@
 //
 //   data-reveal            fade and rise into place once, on entering the viewport
 //   data-reveal="stagger"  the same, for the element's children, 120ms apart
+//   data-reveal="left|right|tiles|rows"  directional, popping and row-by-row variants
+//   .scroll-progress       a bar that fills with the page's scroll position
 //   data-parallax="0.2"    background layer drifts at that fraction of scroll speed
 //   data-pin               section pins for data-pin-length viewport heights (default 2)
 //                          while its [data-step] children play in turn; [data-hold]
@@ -27,14 +29,30 @@
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
   // ---- reveal
+  //
+  // The kind decides what moves and how; where it starts from is motion.css's
+  // business (GSAP reads the starting transform off the element), so every
+  // kind simply animates home: opacity 1, no offset, full size.
+  //   (none)   the element rises into place
+  //   left     the element slides in from the left        right   from the right, growing slightly
+  //   stagger  the element's children rise in turn        tiles   children pop in turn, with a little overshoot
+  //   rows     a table's body rows arrive one after another
   $$("[data-reveal]").forEach(function (el) {
-    var stagger = el.getAttribute("data-reveal") === "stagger";
-    var targets = stagger ? Array.prototype.slice.call(el.children) : [el];
+    var kind = el.getAttribute("data-reveal");
+    var kids = Array.prototype.slice.call(el.children);
+    var targets = [el], vars = { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.9, ease: "power3.out" };
+    if (kind === "stagger") { targets = kids; vars.stagger = 0.12; }
+    else if (kind === "tiles") { targets = kids; vars.stagger = 0.09; vars.duration = 0.7; vars.ease = "back.out(1.5)"; }
+    else if (kind === "rows") { targets = $$("tbody tr", el); vars.stagger = 0.06; vars.duration = 0.5; vars.ease = "power2.out"; }
+    else if (kind === "left" || kind === "right") { vars.duration = 1.1; vars.ease = "power4.out"; }
     if (!targets.length) return;
-    gsap.to(targets, {
-      opacity: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: stagger ? 0.12 : 0,
-      scrollTrigger: { trigger: el, start: "top 88%", once: true }
-    });
+    vars.scrollTrigger = { trigger: el, start: "top 86%", once: true };
+    gsap.to(targets, vars);
+  });
+
+  // ---- scroll progress: the thin ember line under the header
+  $$(".scroll-progress").forEach(function (bar) {
+    gsap.to(bar, { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
   });
 
   // ---- parallax
@@ -105,9 +123,15 @@
         onReverseComplete: function () { hold.forEach(function (el) { el.removeAttribute("inert"); }); }
       }, 0);
       if (dim.length) tl.to(dim, { opacity: 0.85, duration: 1 }, 0);
+      // With a headline to clear first (the hero), the first step waits for it.
+      // Without one (the OEM path) there is nothing to wait for, and waiting
+      // meant the section pinned on an empty screen: the first step and its
+      // drawing are there from the moment the section arrives.
+      var waits = hold.length > 0;
+      if (!waits) gsap.set(steps[0], { opacity: 1, y: 0 });
       steps.forEach(function (step, i) {
-        var at = i === 0 ? 0.6 : ">";
-        tl.to(step, { opacity: 1, y: 0, duration: 1 }, at);
+        if (i > 0 || waits) tl.to(step, { opacity: 1, y: 0, duration: 1 }, i === 0 ? 0.6 : ">");
+        else tl.to({}, { duration: 0.01 }, 0);               // an anchor for this step's drawing
         var sel = step.getAttribute("data-step-draw");
         if (sel) {
           var target = section.querySelector(sel) || document.querySelector(sel);

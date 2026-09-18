@@ -217,7 +217,7 @@ a.card h3 { color: var(--ink); }
 .approvals { font-size: .92rem; color: var(--ink-soft); margin: 0; }
 
 /* Catalog: a family's text beside its photograph, and the jump tiles */
-.family-band { scroll-margin-top: calc(var(--head-h) + 12px); }
+.family-band { scroll-margin-top: calc(var(--head-h) + 64px); }
 .family-band:nth-of-type(even) { background: var(--sand); }
 .family-grid { display: grid; gap: clamp(24px, 4vw, 56px); grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr); align-items: center; margin-bottom: 26px; }
 .family-grid.no-shot { grid-template-columns: minmax(0, 1fr); }
@@ -238,9 +238,23 @@ a.card h3 { color: var(--ink); }
 .hero-catalog::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 46% 70% at 78% 58%, rgba(196,84,44,.30), transparent 70%); }
 .hero-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(200,155,74,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(200,155,74,.10) 1px, transparent 1px); background-size: 44px 44px; -webkit-mask-image: radial-gradient(ellipse 60% 90% at 76% 50%, #000 0%, transparent 72%); mask-image: radial-gradient(ellipse 60% 90% at 76% 50%, #000 0%, transparent 72%); }
 .hero-catalog .hero-body { padding: clamp(44px, 6vw, 84px) 0 clamp(40px, 5.5vw, 76px); }
-.hero-art { position: absolute; z-index: 1; right: max(var(--gutter), calc((100% - 1160px) / 2)); top: 50%; transform: translateY(-50%); height: 82%; width: auto; max-width: 38%; object-fit: contain; filter: drop-shadow(0 28px 38px rgba(0,0,0,.6)); }
+.hero-art { position: absolute; z-index: 1; right: max(var(--gutter), calc((100% - 1160px) / 2)); top: 50%; translate: 0 -50%; height: 82%; width: auto; max-width: 38%; object-fit: contain; filter: drop-shadow(0 28px 38px rgba(0,0,0,.6)); }
 @media (max-width: 900px) { .hero-art { opacity: .22; max-width: 60%; right: -6%; } }
 
 /* Industries: the text-only cards get their own compact grid, and link cards with a product render contain it */
 .more-eyebrow { margin-top: 34px; }
 a.card .card-img[src*="/product-"] { object-fit: contain; background: #fff; padding: 14px; }
+
+/* Catalog polish: hover states, and the pill bar that takes over from the tiles */
+.family-shot { overflow: hidden; }
+.family-img { transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.family-shot:hover .family-img { transform: scale(1.05); }
+.spec tbody tr { transition: background .15s; }
+.spec tbody tr:hover { background: #FBF5EC; }
+.family-pills { position: fixed; left: 0; right: 0; top: 76px; z-index: 45; display: flex; gap: 8px; justify-content: center; padding: 9px var(--gutter); background: rgba(251, 248, 243, .93); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; transform: translateY(-110%); opacity: 0; visibility: hidden; transition: transform .35s cubic-bezier(.2, .7, .2, 1), opacity .25s, visibility 0s .35s; }
+.family-pills::-webkit-scrollbar { display: none; }
+.family-pills.show { transform: none; opacity: 1; visibility: visible; transition-delay: 0s; }
+.family-pills a { flex: none; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: 600 .82rem/1 var(--sans); text-decoration: none; white-space: nowrap; transition: background .2s, color .2s, border-color .2s; }
+.family-pills a:hover { border-color: var(--ember); }
+.family-pills a[aria-current="true"] { background: var(--ember); border-color: var(--ember); color: #fff; }
+@media (max-width: 700px) { .family-pills { justify-content: flex-start; } }

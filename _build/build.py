@@ -215,7 +215,7 @@ def spec_table(caption, headers, rows):
     body = "".join(
         "<tr>%s</tr>" % "".join(('<th scope="row">%s</th>' if i == 0 else "<td>%s</td>") % c
                                 for i, c in enumerate(r)) for r in rows)
-    return ('<div class="spec-wrap" data-reveal><table class="spec"><caption>%s</caption>'
+    return ('<div class="spec-wrap" data-reveal="rows"><table class="spec"><caption>%s</caption>'
             '<thead><tr>%s</tr></thead><tbody>%s</tbody></table></div>' % (caption, head, body))
 
 
@@ -406,7 +406,7 @@ def shell(page, path="index.html"):
       </ul>
     </nav>
     <a class="btn btn-solid" href="%(cta_href)s">%(cta_text)s</a>
-  </div>
+  </div>%(progress)s
 </header>
 
 <header class="hero %(hero_class)s">
@@ -458,6 +458,7 @@ def shell(page, path="index.html"):
                 'if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")',
         "loader": "" if page.get("motion") is False else motion_loader(root),
         "motion_css_v": digest("/assets/motion.css"),
+        "progress": "" if page.get("motion") is False else '\n  <div class="scroll-progress" aria-hidden="true"></div>',
     })
 
 
@@ -931,7 +932,17 @@ PAGES["talk-to-russ/index.html"] = dict(
     </form>
   </div>
 </section>
-""" % dict(volumes="".join("<option>%s</option>" % v for v in VOLUMES),
+<section class="band band-tint">
+  <div class="inner narrow">
+    <div class="eyebrow">What happens next</div>
+    %(next)s
+  </div>
+</section>
+""" % dict(next=steps([
+        ("Russ reads it himself", "Every submission goes to the engineer who would do the work, not to a sales desk."),
+        ("A straight answer within two business days", "If the machine fits, you get a time to talk. If it does not, he says so and points you somewhere useful."),
+        ("A call about the machine", "The machine, the volume, the controls on it now and the cost target. You leave the call knowing whether Phoenix can engineer to it."),
+    ]), volumes="".join("<option>%s</option>" % v for v in VOLUMES),
            controls="".join("<option>%s</option>" % c for c in CONTROLS)),
 )
 
@@ -1039,13 +1050,13 @@ def family(eyebrow, heading, intro, features, table, approvals):
     anchor, image, alt = FAMILY_ART[eyebrow]
     shot = ""
     if image:
-        shot = ('\n      <figure class="family-shot" data-reveal>{{img:%s|%s|class="family-img"}}</figure>'
+        shot = ('\n      <figure class="family-shot" data-reveal="right">{{img:%s|%s|class="family-img"}}</figure>'
                 % (image, html_attr(alt)))
     return """
 <section class="band family-band" id="%s" data-family="%s">
   <div class="inner">
     <div class="family-grid%s">
-      <div class="family" data-reveal>
+      <div class="family" data-reveal="left">
         <div class="eyebrow">%s</div>
         <h2>%s</h2>
         <p class="family-intro">%s</p>
@@ -1062,14 +1073,15 @@ def family(eyebrow, heading, intro, features, table, approvals):
 
 def family_index(families):
     """The jump strip at the top of a catalog page: one tile per family, with its photograph."""
-    tiles = []
+    tiles, pills = [], []
     for html in families:
         name = re.search(r'data-family="([^"]+)"', html).group(1)
         anchor, image, alt = FAMILY_ART[name]
         pic = ('<span class="tile-pic">{{img:%s|%s|class="tile-img"}}</span>' % (image, "")) if image else \
               '<span class="tile-pic tile-blank" aria-hidden="true"></span>'
         tiles.append('      <a class="tile" href="#%s">%s<span class="tile-name">%s</span></a>' % (anchor, pic, name))
-    return ('<section class="band family-index">\n  <div class="inner">\n    <nav class="tiles" aria-label="Product families" data-reveal="stagger">\n%s\n    </nav>\n  </div>\n</section>\n'
+        pills.append('<a href="#%s">%s</a>' % (anchor, name))
+    return ('<nav class="family-pills" aria-label="Jump to a product family">%s</nav>\n' % "".join(pills) + '<section class="band family-index">\n  <div class="inner">\n    <nav class="tiles" aria-label="Product families" data-reveal="tiles">\n%s\n    </nav>\n  </div>\n</section>\n'
             % "\n".join(tiles))
 
 

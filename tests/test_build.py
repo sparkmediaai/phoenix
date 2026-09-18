@@ -244,3 +244,25 @@ def test_product_families_have_photographs_and_a_jump_index():
     plcs = b.shell(b.PAGES["products/plcs/index.html"], "products/plcs/index.html")
     assert "/assets/img/product-plc-lineup-" in plcs and plcs.count('class="tile"') == 4
     assert 'class="hero hero-plain hero-catalog"' in plcs and 'class="hero-art" src="/assets/img/hero-plc.webp"' in plcs
+
+
+def test_catalog_pages_use_the_richer_reveals_and_the_pill_bar():
+    b = load_build()
+    html = b.shell(b.PAGES["products/hmis/index.html"], "products/hmis/index.html")
+    for kind in ("left", "right", "rows", "tiles"):
+        assert 'data-reveal="%s"' % kind in html, kind
+    assert html.count('<nav class="family-pills"') == 1 and html.count('class="tile"') == 4
+    assert '<a href="#rugged-hmi">Rugged HMI</a>' in html
+
+
+def test_progress_line_only_where_motion_loads():
+    b = load_build()
+    assert 'class="scroll-progress"' in b.shell(b.PAGES["index.html"], "index.html")
+    still = next(k for k, v in b.PAGES.items() if v.get("motion") is False)
+    assert 'class="scroll-progress"' not in b.shell(b.PAGES[still], still)
+
+
+def test_talk_to_russ_says_what_happens_next():
+    b = load_build()
+    html = b.shell(b.PAGES["talk-to-russ/index.html"], "talk-to-russ/index.html")
+    assert "What happens next" in html and "A call about the machine" in html
