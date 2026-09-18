@@ -332,7 +332,10 @@ def shell(page, path="index.html"):
         v = page["hero_video"]
         poster = "%sassets/video/%s-poster.webp" % (root, v["name"])
         w, h = webp_size(os.path.join(ROOT, "assets", "video", "%s-poster.webp" % v["name"]))
-        hero_class = "hero-cinema\" data-pin data-pin-length=\"2"
+        # The hero pins, and its headline gives way to the steps, only when a page
+        # supplies hero_steps. The homepage no longer does: three screens of scroll
+        # before the page began was too much, and the body makes the same points.
+        hero_class = "hero-cinema\" data-pin data-pin-length=\"2" if page.get("hero_steps") else "hero-cinema"
         preload = '<link rel="preload" as="image" href="%s">\n' % poster
         # MP4 first: the browser takes the first source it can play, and the
         # H.264 cut is 1704 KB against the VP9 cut's 2422 KB. Everything that
@@ -361,7 +364,7 @@ def shell(page, path="index.html"):
         contact += '<br><a href="tel:%s">%s</a>' % (re.sub(r"[^\d+]", "", PHONE), PHONE)
     contact += '<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL)
 
-    hold_attr = " data-hold" if page.get("hero_video") else ""
+    hold_attr = " data-hold" if page.get("hero_video") and page.get("hero_steps") else ""
 
     return version_assets("""<!doctype html>
 <html lang="en">
@@ -502,11 +505,6 @@ PAGES["index.html"] = dict(
                "not pulled from a catalog and shipped with a wish.",
     actions=[("Talk to Russ", "/talk-to-russ/"), ("Meet us at PACK EXPO", "/pack-expo/")],
     hero_video=dict(name="hero", alt="A multi-station automation machine on the shop floor, pneumatic slides and valve manifolds on a blue frame"),
-    hero_steps=[
-        ("Proof one", "Engineered to the target.", "A $1,000 operator panel taken back to the factory and re-engineered to $350 at 2,500 units. Not discounted. Redesigned."),
-        ("Proof two", "A panel with your name on it.", "Your logo on the bezel, your mounting, your price at your quantity. The big brands will not discuss it below a seven-figure order."),
-        ("Proof three", "An engineer on your first application.", "Russell Homans, three to eight hours a week, until the first unit is running on your floor."),
-    ],
     body=note("Positioning per the 8 Sep session and the SOW: Phoenix is the solution, Russell is the "
               "value, the supplier stays in the background. Every claim here is drawn from the two "
               "transcripts; Russell signs off technical claims before launch.") + """

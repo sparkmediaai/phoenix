@@ -107,12 +107,21 @@ def test_expand_img_emits_srcset(tmp_path, monkeypatch):
 def test_cinematic_hero_markup():
     b = load_build()
     html = b.shell(b.PAGES["index.html"], "index.html")
-    assert 'class="hero hero-cinema" data-pin data-pin-length="2"' in html
+    assert 'class="hero hero-cinema">' in html
     assert '<video class="hero-video" muted loop playsinline preload="none"' in html
     assert 'type="video/webm"' in html and 'type="video/mp4"' in html
     assert 'rel="preload" as="image" href="/assets/video/hero-poster.webp"' in html
-    assert html.count('data-step') == 3
-    assert 'data-hold' in html and 'data-dim' in html
+    # the hero plays in place: no pin, no steps to scroll through, nothing to hold
+    assert 'data-pin' not in html.split("</header>")[1].split("</header>")[0] and 'data-hold' not in html
+    assert 'hero-step' not in html and 'data-dim' in html
+
+
+def test_a_hero_pins_only_when_it_has_steps():
+    b = load_build()
+    page = dict(b.PAGES["index.html"], hero_steps=[("One", "A step", "Its text.")])
+    html = b.shell(page, "index.html")
+    assert 'class="hero hero-cinema" data-pin data-pin-length="2"' in html
+    assert html.count('data-step') == 1 and 'data-hold' in html
 
 
 def test_homepage_has_cost_figure_and_counts():
