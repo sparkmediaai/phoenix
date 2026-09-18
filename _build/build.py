@@ -319,6 +319,14 @@ def shell(page, path="index.html"):
                 % dict(r=root, big=big, small=small, sw=sw, w=w, h=h,
                        alt=html_attr(page["hero_alt"])))
 
+    if page.get("hero_art"):
+        # Catalog pages: a product cut out onto transparency, over a faint engineering grid.
+        aw, ah = webp_size(os.path.join(IMG, page["hero_art"]))
+        hero_class = "hero-plain hero-catalog"
+        hero = ('  <div class="hero-lines" aria-hidden="true"></div>\n'
+                '  <img class="hero-art" src="%sassets/img/%s" alt="" width="%d" height="%d" decoding="async">\n'
+                % (root, page["hero_art"], aw, ah))
+
     preload = ""
     if page.get("hero_video"):
         v = page["hero_video"]
@@ -1008,29 +1016,67 @@ CATALOG_NOTE = ("Specifications are taken from the manufacturer's February 2025 
                 "The manufacturer and its product-family trademarks are deliberately not named; part numbers are.")
 
 
+# Each family's anchor, photograph and alt text, keyed by its eyebrow. The
+# photographs are cut and retouched by _tools/product_images.py.
+FAMILY_ART = {
+    "Basic HMI": ("basic-hmi", "product-basic-hmi", "A 7 inch basic HMI, panel-mount, showing a gauge and a trend"),
+    "Advanced HMI": ("advanced-hmi", "product-advanced-hmi", "Three advanced HMIs in 4.3, 7 and 10.1 inch sizes showing process screens"),
+    "Rugged HMI": ("rugged-hmi", "product-rugged-hmi", "A rugged HMI with a metal housing and bonded glass, showing a production dashboard"),
+    "Web panels": ("web-panels", "product-web-panel", "An HTML5 web panel in an industrial bezel"),
+    "Eco PLC": ("eco-plc", "product-eco-plc", "A slim DIN-rail eco PLC with pluggable terminal blocks"),
+    "Standard PLC": ("standard-plc", "product-standard-plc", "A DIN-rail standard PLC with an Ethernet port and pluggable terminal blocks"),
+    "Expansion modules": ("expansion-modules", "product-plc-lineup", "Eco and standard PLCs side by side; the expansion modules snap onto the same rail beside them"),
+    "HMI/PLC combination units": ("hmi-plc", "product-hmi-plc", "A 7 inch HMI/PLC combination unit with I/O modules plugged into the back"),
+    "Field I/O, Modbus RTU": ("field-io", "product-field-io", "Two DIN-rail Modbus field I/O modules with an LED for every point"),
+    "EtherCAT remote I/O": ("ethercat-io", "product-ethercat-io", "An EtherCAT remote I/O block with in and out ports and a 50 pin connector"),
+    "Gateways and converters": ("gateways", "product-gateway", "An LTE gateway with its antenna beside a DIN-rail signal converter"),
+}
+
+
 def family(eyebrow, heading, intro, features, table, approvals):
+    anchor, image, alt = FAMILY_ART[eyebrow]
+    shot = ""
+    if image:
+        shot = ('\n      <figure class="family-shot" data-reveal>{{img:%s|%s|class="family-img"}}</figure>'
+                % (image, html_attr(alt)))
     return """
-<section class="band">
+<section class="band family-band" id="%s" data-family="%s">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">%s</div>
-      <h2>%s</h2>
-      <p class="family-intro">%s</p>
-      <ul class="ticks">%s</ul>
+    <div class="family-grid%s">
+      <div class="family" data-reveal>
+        <div class="eyebrow">%s</div>
+        <h2>%s</h2>
+        <p class="family-intro">%s</p>
+        <ul class="ticks">%s</ul>
+      </div>%s
     </div>
     %s
     <p class="approvals"><b>Approvals:</b> %s</p>
   </div>
 </section>
-""" % (eyebrow, heading, intro, "".join("<li>%s</li>" % f for f in features), table, approvals)
+""" % (anchor, eyebrow, "" if image else " no-shot", eyebrow, heading, intro,
+       "".join("<li>%s</li>" % f for f in features), shot, table, approvals)
 
 
-def catalog_page(path, nav_label, title, h1, standfirst, families):
+def family_index(families):
+    """The jump strip at the top of a catalog page: one tile per family, with its photograph."""
+    tiles = []
+    for html in families:
+        name = re.search(r'data-family="([^"]+)"', html).group(1)
+        anchor, image, alt = FAMILY_ART[name]
+        pic = ('<span class="tile-pic">{{img:%s|%s|class="tile-img"}}</span>' % (image, "")) if image else \
+              '<span class="tile-pic tile-blank" aria-hidden="true"></span>'
+        tiles.append('      <a class="tile" href="#%s">%s<span class="tile-name">%s</span></a>' % (anchor, pic, name))
+    return ('<section class="band family-index">\n  <div class="inner">\n    <nav class="tiles" aria-label="Product families" data-reveal="stagger">\n%s\n    </nav>\n  </div>\n</section>\n'
+            % "\n".join(tiles))
+
+
+def catalog_page(path, nav_label, title, h1, standfirst, families, art=None):
     PAGES[path] = dict(
         nav=nav_label, title="%s | %s" % (title, SITE), desc=standfirst, eyebrow="Products", h1=h1,
-        standfirst=standfirst,
+        standfirst=standfirst, hero_art=art,
         actions=[("Talk to Russ", "/talk-to-russ/"), ("Cross-reference a part", "/products/cross-reference/")],
-        body=note(CATALOG_NOTE) + "".join(families) + STOCK_BAND)
+        body=note(CATALOG_NOTE) + family_index(families) + "".join(families) + STOCK_BAND)
 
 
 catalog_page(
@@ -1082,7 +1128,7 @@ catalog_page(
                    ["WP7043CN / WP7070CN / WP7101CN", "4.3 / 7 / 10.1 in capacitive", "Chromium, HTML5", "Plastic"],
                    ["WP7070CN-M / WP7101CN-M", "7 / 10.1 in PCAP", "Chromium, HTML5", "Metal"]]),
                "Lite: CE, UL Class I Division 2, IP66. Plus: CE, UL, RoHS, IP66. Capacitive models: IP66 front; ask for the current listing."),
-    ])
+    ], art="hero-hmi.webp")
 
 catalog_page(
     "products/plcs/index.html", "PLCs and HMI/PLC Combos", "PLCs and HMI/PLC combos",
@@ -1135,7 +1181,7 @@ catalog_page(
                    ["FP2043TN-LE1208P-A0402U", "4.3 in", "12 DI, 8 PNP out, 4 AI (2 V/I, 2 RTD/TC), 2 AO, + 1 module", "Yes"],
                    ["FP2070TN-LE2016RP-A0402U", "7 in", "20 DI, 16 out (12 relay, 4 PNP), 4 AI, 2 AO, + 3 modules", "Yes"]]),
                "CE, UL Class I Division 2, IP66 front; RoHS on the basic series."),
-    ])
+    ], art="hero-plc.webp")
 
 catalog_page(
     "products/io-and-communication/index.html", "I/O and Communication Modules", "I/O and communication modules",
@@ -1173,12 +1219,12 @@ catalog_page(
                    ["GWY-00-B / GWY-300", "Programmable protocol converters"],
                    ["CNV-02-B", "RS232/CMOS to RS422/RS485 signal converter, DIN rail or panel mount"]]),
                "Protocol converters and the signal converter: CE and UL. LTE gateway: ask for the current listing."),
-    ])
+    ], art="hero-io.webp")
 
 PAGES["products/cross-reference/index.html"] = dict(
     nav="Cross-Reference", title="Cross-reference | %s" % SITE,
     desc="What a Phoenix HMI talks to, and how to match a Phoenix part to the one in your panel now.",
-    eyebrow="Products", h1="The Phoenix part that matches what is in your panel now.",
+    eyebrow="Products", h1="The Phoenix part that matches what is in your panel now.", hero_art="hero-hmi.webp",
     standfirst="Match by cutout, by I/O count and by protocol. Send Russ the part number you have and he will do it for you.",
     actions=[("Talk to Russ", "/talk-to-russ/"), ("HMIs", "/products/hmis/")],
     body=note("The driver list is from the manufacturer's current rugged-HMI datasheet. A model-by-model replacement "
@@ -1219,7 +1265,7 @@ PAGES["products/cross-reference/index.html"] = dict(
 PAGES["products/datasheets/index.html"] = dict(
     nav="Datasheets", title="Datasheets | %s" % SITE,
     desc="Specification sheets and dimension drawings for Phoenix HMIs, PLCs and I/O, sent the same day.",
-    eyebrow="Products", h1="Spec sheets and dimension drawings.",
+    eyebrow="Products", h1="Spec sheets and dimension drawings.", hero_art="hero-plc.webp",
     standfirst="One sheet per part: electrical, environmental and mechanical specifications, with the cutout and the mounting pattern.",
     actions=[("Ask for a datasheet", "/talk-to-russ/")],
     body=note("Phoenix-format datasheets, generated from the same specification tables as the product pages, are "

@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=eb7bf31c">
+<link rel="stylesheet" href="/assets/site.css?v=4f5c4d33">
 <link rel="stylesheet" href="/assets/forms.css?v=ae802e4a">
 <link rel="stylesheet" href="/assets/motion.css?v=de9c970a">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
@@ -85,7 +85,9 @@
   </div>
 </header>
 
-<header class="hero hero-plain">
+<header class="hero hero-plain hero-catalog">
+  <div class="hero-lines" aria-hidden="true"></div>
+  <img class="hero-art" src="/assets/img/hero-hmi.webp" alt="" width="638" height="559" decoding="async">
   <div class="hero-body">
     <div class="eyebrow">Products</div>
     <h1>Touchscreens from 4.3 to 15 inch.</h1>
@@ -99,53 +101,75 @@
 
 <main id="main">
 <aside class="note"><b>Working note</b> Specifications are taken from the manufacturer's February 2025 brochure and current datasheets. Russell to confirm which part numbers he stocks in Mokena, and every approvals line, before launch. The manufacturer and its product-family trademarks are deliberately not named; part numbers are.</aside>
-
-<section class="band">
+<section class="band family-index">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">Basic HMI</div>
-      <h2>4.3 and 7 inch, for the machine that needs a screen and not a computer.</h2>
-      <p class="family-intro">Colour TFT with resistive touch. Trends, alarms, data logging, recipes and a built-in web server.</p>
-      <ul class="ticks"><li>RS232 and RS485 serial; Ethernet on the TN models</li><li>USB Type-C for programming, upload and download; one USB host</li><li>IEC 61131-3 programming environment</li><li>IP66 protection for front-panel mounting</li></ul>
+    <nav class="tiles" aria-label="Product families" data-reveal="stagger">
+      <a class="tile" href="#basic-hmi"><span class="tile-pic"><img src="/assets/img/product-basic-hmi-1600.webp" srcset="/assets/img/product-basic-hmi-800.webp 800w, /assets/img/product-basic-hmi-1600.webp 911w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="911" height="840" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">Basic HMI</span></a>
+      <a class="tile" href="#advanced-hmi"><span class="tile-pic"><img src="/assets/img/product-advanced-hmi-1600.webp" srcset="/assets/img/product-advanced-hmi-800.webp 800w, /assets/img/product-advanced-hmi-1600.webp 1062w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="1062" height="924" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">Advanced HMI</span></a>
+      <a class="tile" href="#rugged-hmi"><span class="tile-pic"><img src="/assets/img/product-rugged-hmi-1600.webp" srcset="/assets/img/product-rugged-hmi-800.webp 684w, /assets/img/product-rugged-hmi-1600.webp 684w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="684" height="574" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">Rugged HMI</span></a>
+      <a class="tile" href="#web-panels"><span class="tile-pic"><img src="/assets/img/product-web-panel-1600.webp" srcset="/assets/img/product-web-panel-800.webp 614w, /assets/img/product-web-panel-1600.webp 614w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="614" height="612" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">Web panels</span></a>
+    </nav>
+  </div>
+</section>
+
+<section class="band family-band" id="basic-hmi" data-family="Basic HMI">
+  <div class="inner">
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">Basic HMI</div>
+        <h2>4.3 and 7 inch, for the machine that needs a screen and not a computer.</h2>
+        <p class="family-intro">Colour TFT with resistive touch. Trends, alarms, data logging, recipes and a built-in web server.</p>
+        <ul class="ticks"><li>RS232 and RS485 serial; Ethernet on the TN models</li><li>USB Type-C for programming, upload and download; one USB host</li><li>IEC 61131-3 programming environment</li><li>IP66 protection for front-panel mounting</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-basic-hmi-1600.webp" srcset="/assets/img/product-basic-hmi-800.webp 800w, /assets/img/product-basic-hmi-1600.webp 911w" sizes="(max-width: 800px) 100vw, 800px" alt="A 7 inch basic HMI, panel-mount, showing a gauge and a trend" width="911" height="840" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     <div class="spec-wrap" data-reveal><table class="spec"><caption>Basic HMI part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Screen</th><th scope="col">Serial</th><th scope="col">Ethernet</th><th scope="col">USB</th></tr></thead><tbody><tr><th scope="row">FP2043T-V2</th><td>4.3 in TFT</td><td>1 port (RS232 and RS485)</td><td>No</td><td>Type-C + host</td></tr><tr><th scope="row">FP2043TN-V2</th><td>4.3 in TFT</td><td>1 port (RS232 and RS485)</td><td>Yes</td><td>Type-C + host</td></tr><tr><th scope="row">FP2070T-V2</th><td>7 in TFT</td><td>2 ports (RS232/RS485)</td><td>No</td><td>Type-C + host</td></tr><tr><th scope="row">FP2070TN-V2</th><td>7 in TFT</td><td>2 ports (RS232/RS485)</td><td>Yes</td><td>Type-C + host</td></tr></tbody></table></div>
     <p class="approvals"><b>Approvals:</b> CE, UL Listed Class I Division 2, RoHS, IP66 front.</p>
   </div>
 </section>
 
-<section class="band">
+<section class="band family-band" id="advanced-hmi" data-family="Advanced HMI">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">Advanced HMI</div>
-      <h2>4.3 to 15 inch, with the connectivity built in.</h2>
-      <p class="family-intro">For complex applications: VNC server, email, FTP host and client, MQTT and web server on the panel itself.</p>
-      <ul class="ticks"><li>4 GB eMMC and 512 MB RAM; real-time clock; microSDHC slot</li><li>10/100 Ethernet, RS232/RS485 serial, USB Type-C and USB host</li><li>Trends, alarms, data logging and recipe management</li><li>IEC 61131-3 programming environment; IP66 front</li></ul>
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">Advanced HMI</div>
+        <h2>4.3 to 15 inch, with the connectivity built in.</h2>
+        <p class="family-intro">For complex applications: VNC server, email, FTP host and client, MQTT and web server on the panel itself.</p>
+        <ul class="ticks"><li>4 GB eMMC and 512 MB RAM; real-time clock; microSDHC slot</li><li>10/100 Ethernet, RS232/RS485 serial, USB Type-C and USB host</li><li>Trends, alarms, data logging and recipe management</li><li>IEC 61131-3 programming environment; IP66 front</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-advanced-hmi-1600.webp" srcset="/assets/img/product-advanced-hmi-800.webp 800w, /assets/img/product-advanced-hmi-1600.webp 1062w" sizes="(max-width: 800px) 100vw, 800px" alt="Three advanced HMIs in 4.3, 7 and 10.1 inch sizes showing process screens" width="1062" height="924" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     <div class="spec-wrap" data-reveal><table class="spec"><caption>Advanced HMI part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Screen</th><th scope="col">Serial</th><th scope="col">Ethernet</th><th scope="col">Storage</th></tr></thead><tbody><tr><th scope="row">FP4043TN</th><td>4.3 in resistive</td><td>1 x RS232/RS485</td><td>1 x 10/100</td><td>4 GB + microSDHC</td></tr><tr><th scope="row">FP4070TN</th><td>7 in resistive</td><td>2 x RS232/RS485</td><td>1 x 10/100</td><td>4 GB + microSDHC</td></tr><tr><th scope="row">FP4101TN</th><td>10.1 in resistive</td><td>2 x RS232/RS485</td><td>1 x 10/100</td><td>4 GB + microSDHC</td></tr><tr><th scope="row">FP4121TN</th><td>12.1 in resistive</td><td>2 x RS232/RS485</td><td>1 x 10/100</td><td>4 GB + microSDHC</td></tr><tr><th scope="row">FP4151TN-V2</th><td>15 in resistive</td><td>2 x RS232/RS485</td><td>1 x 10/100</td><td>4 GB + microSDHC</td></tr></tbody></table></div>
     <p class="approvals"><b>Approvals:</b> CE, UL Listed Class I Division 2, RoHS, IP66 front.</p>
   </div>
 </section>
 
-<section class="band">
+<section class="band family-band" id="rugged-hmi" data-family="Rugged HMI">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">Rugged HMI</div>
-      <h2>Metal housing, bonded glass, readable in direct sun.</h2>
-      <p class="family-intro">Capacitive touch behind optically bonded glass at 1,000 nits, a quad-core Cortex-A53 at 1.4 GHz, and a PLC function built in. Made for outdoor and washdown-adjacent machines.</p>
-      <ul class="ticks"><li>Operating temperature -20 to 70 &deg;C; IP66 front</li><li>Two Ethernet ports, one of them gigabit; two RS232/RS485 serial ports</li><li>FTP, HTTPS, MQTT and email; data logging to microSDHC</li><li>Ladder, instruction list, structured text, SFC and function block diagram</li></ul>
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">Rugged HMI</div>
+        <h2>Metal housing, bonded glass, readable in direct sun.</h2>
+        <p class="family-intro">Capacitive touch behind optically bonded glass at 1,000 nits, a quad-core Cortex-A53 at 1.4 GHz, and a PLC function built in. Made for outdoor and washdown-adjacent machines.</p>
+        <ul class="ticks"><li>Operating temperature -20 to 70 &deg;C; IP66 front</li><li>Two Ethernet ports, one of them gigabit; two RS232/RS485 serial ports</li><li>FTP, HTTPS, MQTT and email; data logging to microSDHC</li><li>Ladder, instruction list, structured text, SFC and function block diagram</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-rugged-hmi-1600.webp" srcset="/assets/img/product-rugged-hmi-800.webp 684w, /assets/img/product-rugged-hmi-1600.webp 684w" sizes="(max-width: 800px) 100vw, 800px" alt="A rugged HMI with a metal housing and bonded glass, showing a production dashboard" width="684" height="574" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     <div class="spec-wrap" data-reveal><table class="spec"><caption>Rugged HMI part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Screen</th><th scope="col">Memory</th><th scope="col">Ethernet</th><th scope="col">USB</th></tr></thead><tbody><tr><th scope="row">FP6070CN-M</th><td>7 in, 1024 x 600, PCAP</td><td>8 GB eMMC, 1 GB RAM</td><td>10/100 + 10/100/1000</td><td>Type-C + 2 host</td></tr><tr><th scope="row">FP6101CN-M</th><td>10.1 in, 1024 x 600, PCAP</td><td>8 GB eMMC, 1 GB RAM</td><td>10/100 + 10/100/1000</td><td>Type-C + 2 host</td></tr><tr><th scope="row">FP6121CN-M</th><td>12.1 in XGA, PCAP</td><td>8 GB eMMC, 1 GB RAM</td><td>10/100 + 10/100/1000</td><td>Type-C + 2 host</td></tr><tr><th scope="row">FP6151CN-M</th><td>15.1 in XGA, PCAP</td><td>8 GB eMMC, 1 GB RAM</td><td>10/100 + 10/100/1000</td><td>Type-C + 2 host</td></tr><tr><th scope="row">FP7070CN-M</th><td>7 in, 1024 x 600, capacitive</td><td>4 GB flash, 1 GB RAM</td><td>10/100 + 10/100/1000</td><td>Type-C + 2 host</td></tr><tr><th scope="row">FP7101CN-M</th><td>10.1 in, 1280 x 800, capacitive</td><td>4 GB flash, 1 GB RAM</td><td>10/100 + 10/100/1000</td><td>Type-C + 2 host</td></tr></tbody></table></div>
     <p class="approvals"><b>Approvals:</b> FP7 metal-housing models: CE, UL Class I Division 2, IP66, RoHS, REACH. FP6 models: IP66 front; ask for the current listing.</p>
   </div>
 </section>
 
-<section class="band">
+<section class="band family-band" id="web-panels" data-family="Web panels">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">Web panels</div>
-      <h2>An HTML5 browser in an industrial bezel.</h2>
-      <p class="family-intro">Thin clients for machines whose interface is already a web application. Point the panel at any web server and it runs.</p>
-      <ul class="ticks"><li>4.3, 7 and 10.1 inch</li><li>Chromium-based HTML5 browser on the Plus and capacitive models; a microbrowser on the Lite</li><li>Capacitive, high-brightness and metal-housing options</li><li>IP66 protection for front-panel mounting</li></ul>
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">Web panels</div>
+        <h2>An HTML5 browser in an industrial bezel.</h2>
+        <p class="family-intro">Thin clients for machines whose interface is already a web application. Point the panel at any web server and it runs.</p>
+        <ul class="ticks"><li>4.3, 7 and 10.1 inch</li><li>Chromium-based HTML5 browser on the Plus and capacitive models; a microbrowser on the Lite</li><li>Capacitive, high-brightness and metal-housing options</li><li>IP66 protection for front-panel mounting</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-web-panel-1600.webp" srcset="/assets/img/product-web-panel-800.webp 614w, /assets/img/product-web-panel-1600.webp 614w" sizes="(max-width: 800px) 100vw, 800px" alt="An HTML5 web panel in an industrial bezel" width="614" height="612" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     <div class="spec-wrap" data-reveal><table class="spec"><caption>Web panel part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Screen</th><th scope="col">Browser</th><th scope="col">Housing</th></tr></thead><tbody><tr><th scope="row">WP2043TN Lite / WP2070TN Lite / WP2101TN Lite</th><td>4.3 / 7 / 10.1 in</td><td>Microbrowser thin client</td><td>Plastic</td></tr><tr><th scope="row">WP6043TN Plus / WP6070TN Plus / WP6101TN Plus</th><td>4.3 / 7 / 10.1 in</td><td>Chromium, HTML5</td><td>Plastic</td></tr><tr><th scope="row">WP7043CN / WP7070CN / WP7101CN</th><td>4.3 / 7 / 10.1 in capacitive</td><td>Chromium, HTML5</td><td>Plastic</td></tr><tr><th scope="row">WP7070CN-M / WP7101CN-M</th><td>7 / 10.1 in PCAP</td><td>Chromium, HTML5</td><td>Metal</td></tr></tbody></table></div>
     <p class="approvals"><b>Approvals:</b> Lite: CE, UL Class I Division 2, IP66. Plus: CE, UL, RoHS, IP66. Capacitive models: IP66 front; ask for the current listing.</p>

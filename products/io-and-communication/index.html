@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=eb7bf31c">
+<link rel="stylesheet" href="/assets/site.css?v=4f5c4d33">
 <link rel="stylesheet" href="/assets/forms.css?v=ae802e4a">
 <link rel="stylesheet" href="/assets/motion.css?v=de9c970a">
 <script>document.documentElement.classList.add("js");window.FORM_ENDPOINT="";window.CONTACT_EMAIL="russell@phoenixautomationsolutions.example";if(/[?&]notes\b/.test(location.search))document.documentElement.classList.add("notes");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("motion")</script>
@@ -85,7 +85,9 @@
   </div>
 </header>
 
-<header class="hero hero-plain">
+<header class="hero hero-plain hero-catalog">
+  <div class="hero-lines" aria-hidden="true"></div>
+  <img class="hero-art" src="/assets/img/hero-io.webp" alt="" width="493" height="900" decoding="async">
   <div class="hero-body">
     <div class="eyebrow">Products</div>
     <h1>Remote I/O, and the links between machines.</h1>
@@ -99,40 +101,58 @@
 
 <main id="main">
 <aside class="note"><b>Working note</b> Specifications are taken from the manufacturer's February 2025 brochure and current datasheets. Russell to confirm which part numbers he stocks in Mokena, and every approvals line, before launch. The manufacturer and its product-family trademarks are deliberately not named; part numbers are.</aside>
-
-<section class="band">
+<section class="band family-index">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">Field I/O, Modbus RTU</div>
-      <h2>Remote points on two wires, configured with switches.</h2>
-      <p class="family-intro">Compact DIN-rail modules that expand any Modbus master. Address, baud rate and parity are set on DIP switches; the digital modules need no configuration software at all.</p>
-      <ul class="ticks"><li>2-wire RS485 on a pluggable terminal block</li><li>An LED for every input and output, plus power and communication</li><li>Relay, NPN and PNP output versions</li><li>A 3-phase energy module measures voltage, current, frequency and power, with 4 DI and 4 DO</li></ul>
+    <nav class="tiles" aria-label="Product families" data-reveal="stagger">
+      <a class="tile" href="#field-io"><span class="tile-pic"><img src="/assets/img/product-field-io-1600.webp" srcset="/assets/img/product-field-io-800.webp 564w, /assets/img/product-field-io-1600.webp 564w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="564" height="1010" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">Field I/O, Modbus RTU</span></a>
+      <a class="tile" href="#ethercat-io"><span class="tile-pic"><img src="/assets/img/product-ethercat-io-1600.webp" srcset="/assets/img/product-ethercat-io-800.webp 787w, /assets/img/product-ethercat-io-1600.webp 787w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="787" height="1145" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">EtherCAT remote I/O</span></a>
+      <a class="tile" href="#gateways"><span class="tile-pic"><img src="/assets/img/product-gateway-1600.webp" srcset="/assets/img/product-gateway-800.webp 800w, /assets/img/product-gateway-1600.webp 854w" sizes="(max-width: 800px) 100vw, 800px" alt="" width="854" height="694" loading="lazy" decoding="async" class="tile-img"></span><span class="tile-name">Gateways and converters</span></a>
+    </nav>
+  </div>
+</section>
+
+<section class="band family-band" id="field-io" data-family="Field I/O, Modbus RTU">
+  <div class="inner">
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">Field I/O, Modbus RTU</div>
+        <h2>Remote points on two wires, configured with switches.</h2>
+        <p class="family-intro">Compact DIN-rail modules that expand any Modbus master. Address, baud rate and parity are set on DIP switches; the digital modules need no configuration software at all.</p>
+        <ul class="ticks"><li>2-wire RS485 on a pluggable terminal block</li><li>An LED for every input and output, plus power and communication</li><li>Relay, NPN and PNP output versions</li><li>A 3-phase energy module measures voltage, current, frequency and power, with 4 DI and 4 DO</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-field-io-1600.webp" srcset="/assets/img/product-field-io-800.webp 564w, /assets/img/product-field-io-1600.webp 564w" sizes="(max-width: 800px) 100vw, 800px" alt="Two DIN-rail Modbus field I/O modules with an LED for every point" width="564" height="1010" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     <div class="spec-wrap" data-reveal><table class="spec"><caption>Field I/O part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Points</th></tr></thead><tbody><tr><th scope="row">FIOA-0800-L-B</th><td>8 analog inputs, 0 to 10 V or 4 to 20 mA, 12 bit</td></tr><tr><th scope="row">FIOA-0402-U-B / FIOA-0402-U-16-B</th><td>4 universal analog inputs (V, mA, RTD, thermocouple), 2 analog outputs; 12 or 16 bit</td></tr><tr><th scope="row">FL001D-1600-V3</th><td>16 digital inputs</td></tr><tr><th scope="row">FL001D-0008R-V3</th><td>8 relay outputs</td></tr><tr><th scope="row">FL001D-0016N-V3 / -0016P-V3 / -0016R-V3</th><td>16 outputs: NPN, PNP or relay</td></tr><tr><th scope="row">FL001D-0404N-V3 / -0404P-V3 / -0404R-V3</th><td>4 inputs, 4 outputs: NPN, PNP or relay</td></tr><tr><th scope="row">FL001D-0808N-V3 / -0808P-V3 / -0808R-V3</th><td>8 inputs, 8 outputs: NPN, PNP or relay</td></tr></tbody></table></div>
     <p class="approvals"><b>Approvals:</b> CE, with UL as an option. Say so when you order.</p>
   </div>
 </section>
 
-<section class="band">
+<section class="band family-band" id="ethercat-io" data-family="EtherCAT remote I/O">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">EtherCAT remote I/O</div>
-      <h2>Sixteen configurable digital points and twelve analog, in 50 mm.</h2>
-      <p class="family-intro">A DIN-rail EtherCAT block with in and out ports, for machines already on an EtherCAT master.</p>
-      <ul class="ticks"><li>16 digital points at 24 VDC, each individually configurable as input or NPN output at 200 mA</li><li>8 linear analog inputs, 12 bit, -10 to +10 VDC; 4 analog outputs</li><li>Bicolour LED per digital point: green for input, red for output</li><li>Isolated 24 VDC supply; 50 pin D-sub for I/O and power; 50 x 100 x 70 mm</li></ul>
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">EtherCAT remote I/O</div>
+        <h2>Sixteen configurable digital points and twelve analog, in 50 mm.</h2>
+        <p class="family-intro">A DIN-rail EtherCAT block with in and out ports, for machines already on an EtherCAT master.</p>
+        <ul class="ticks"><li>16 digital points at 24 VDC, each individually configurable as input or NPN output at 200 mA</li><li>8 linear analog inputs, 12 bit, -10 to +10 VDC; 4 analog outputs</li><li>Bicolour LED per digital point: green for input, red for output</li><li>Isolated 24 VDC supply; 50 pin D-sub for I/O and power; 50 x 100 x 70 mm</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-ethercat-io-1600.webp" srcset="/assets/img/product-ethercat-io-800.webp 787w, /assets/img/product-ethercat-io-1600.webp 787w" sizes="(max-width: 800px) 100vw, 800px" alt="An EtherCAT remote I/O block with in and out ports and a 50 pin connector" width="787" height="1145" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     
     <p class="approvals"><b>Approvals:</b> Ask for the current listing.</p>
   </div>
 </section>
 
-<section class="band">
+<section class="band family-band" id="gateways" data-family="Gateways and converters">
   <div class="inner">
-    <div class="family" data-reveal>
-      <div class="eyebrow">Gateways and converters</div>
-      <h2>Getting data off the machine, and old devices onto new networks.</h2>
-      <p class="family-intro">An LTE gateway that collects Modbus RTU data and sends it to a server, programmable protocol converters, and a serial signal converter.</p>
-      <ul class="ticks"><li>LTE gateway: Modbus RTU in, TCP/IP, HTTP or MQTT out; offline data storage; configurable slave addresses and send interval</li><li>Protocol converters: serial devices onto CANopen, Profibus, LonWorks, Modbus TCP or GSM networks, with free programming software</li><li>Signal converter: RS232 or CMOS to RS422/RS485, isolated, automatic baud rate and direction control, no software</li></ul>
+    <div class="family-grid">
+      <div class="family" data-reveal>
+        <div class="eyebrow">Gateways and converters</div>
+        <h2>Getting data off the machine, and old devices onto new networks.</h2>
+        <p class="family-intro">An LTE gateway that collects Modbus RTU data and sends it to a server, programmable protocol converters, and a serial signal converter.</p>
+        <ul class="ticks"><li>LTE gateway: Modbus RTU in, TCP/IP, HTTP or MQTT out; offline data storage; configurable slave addresses and send interval</li><li>Protocol converters: serial devices onto CANopen, Profibus, LonWorks, Modbus TCP or GSM networks, with free programming software</li><li>Signal converter: RS232 or CMOS to RS422/RS485, isolated, automatic baud rate and direction control, no software</li></ul>
+      </div>
+      <figure class="family-shot" data-reveal><img src="/assets/img/product-gateway-1600.webp" srcset="/assets/img/product-gateway-800.webp 800w, /assets/img/product-gateway-1600.webp 854w" sizes="(max-width: 800px) 100vw, 800px" alt="An LTE gateway with its antenna beside a DIN-rail signal converter" width="854" height="694" loading="lazy" decoding="async" class="family-img"></figure>
     </div>
     <div class="spec-wrap" data-reveal><table class="spec"><caption>Gateway and converter part numbers</caption><thead><tr><th scope="col">Part number</th><th scope="col">Function</th></tr></thead><tbody><tr><th scope="row">GWY920-LTE-S2</th><td>LTE gateway, Modbus RTU to TCP/IP, HTTP or MQTT</td></tr><tr><th scope="row">GWY-00-B / GWY-300</th><td>Programmable protocol converters</td></tr><tr><th scope="row">CNV-02-B</th><td>RS232/CMOS to RS422/RS485 signal converter, DIN rail or panel mount</td></tr></tbody></table></div>
     <p class="approvals"><b>Approvals:</b> Protocol converters and the signal converter: CE and UL. LTE gateway: ask for the current listing.</p>

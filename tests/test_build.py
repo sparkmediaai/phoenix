@@ -233,3 +233,13 @@ def test_spec_table_marks_row_headers():
     b = load_build()
     out = b.spec_table("Cap", ["A", "B"], [["P-1", "x"]])
     assert '<caption>Cap</caption>' in out and '<th scope="row">P-1</th><td>x</td>' in out
+
+
+def test_product_families_have_photographs_and_a_jump_index():
+    b = load_build()
+    html = b.shell(b.PAGES["products/hmis/index.html"], "products/hmis/index.html")
+    assert html.count('class="tile"') == 4 and 'href="#rugged-hmi"' in html and 'id="rugged-hmi"' in html
+    assert "/assets/img/product-rugged-hmi-" in html and 'class="family-img"' in html
+    plcs = b.shell(b.PAGES["products/plcs/index.html"], "products/plcs/index.html")
+    assert "/assets/img/product-plc-lineup-" in plcs and plcs.count('class="tile"') == 4
+    assert 'class="hero hero-plain hero-catalog"' in plcs and 'class="hero-art" src="/assets/img/hero-plc.webp"' in plcs
