@@ -187,8 +187,8 @@ html.notes .notes-off { display: inline; }
 
 /* Portrait placeholder and the timeline */
 .portrait { margin: 0; }
-.portrait-frame { aspect-ratio: 4 / 5; background: var(--ink); border-radius: 4px; display: grid; place-items: center; }
-.portrait-frame svg { width: 45%; height: auto; }
+.portrait-frame { aspect-ratio: 4 / 5; background: var(--sand); border: 1px solid var(--line); border-radius: 4px; display: grid; place-items: center; }
+.portrait-frame svg, .portrait-frame img { width: 38%; height: auto; }
 .portrait figcaption { font: 500 .85rem/1.5 var(--sans); color: var(--ink-soft); margin-top: 10px; }
 .timeline { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--ember); }
 .timeline li { padding: 0 0 18px 24px; position: relative; }
@@ -240,3 +240,7 @@ a.card h3 { color: var(--ink); }
 .hero-catalog .hero-body { padding: clamp(44px, 6vw, 84px) 0 clamp(40px, 5.5vw, 76px); }
 .hero-art { position: absolute; z-index: 1; right: max(var(--gutter), calc((100% - 1160px) / 2)); top: 50%; transform: translateY(-50%); height: 82%; width: auto; max-width: 38%; object-fit: contain; filter: drop-shadow(0 28px 38px rgba(0,0,0,.6)); }
 @media (max-width: 900px) { .hero-art { opacity: .22; max-width: 60%; right: -6%; } }
+
+/* Industries: the text-only cards get their own compact grid, and link cards with a product render contain it */
+.more-eyebrow { margin-top: 34px; }
+a.card .card-img[src*="/product-"] { object-fit: contain; background: #fff; padding: 14px; }

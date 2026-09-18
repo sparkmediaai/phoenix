@@ -370,7 +370,7 @@ def shell(page, path="index.html"):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%(title)s</title>
 <meta name="description" content="%(desc)s">
-%(robots)s<link rel="icon" href="%(root)sassets/favicon.svg" type="image/svg+xml">
+%(robots)s<link rel="icon" href="%(root)sassets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="%(root)sassets/icon-180.png">
 <meta name="theme-color" content="#1F1A17">
 %(preload)s<meta property="og:type" content="website">
@@ -748,6 +748,8 @@ PAGES["machine-builders/industries/index.html"] = dict(
   <div class="inner">
     <div class="eyebrow">Every industry Phoenix controls run in today</div>
     %(cards)s
+    <div class="eyebrow more-eyebrow">And on these machines too</div>
+    %(more)s
   </div>
 </section>
 <section class="band">
@@ -760,18 +762,19 @@ PAGES["machine-builders/industries/index.html"] = dict(
 """ % dict(lead=linked_cards([
         ("Packaging", "/machine-builders/industries/packaging/", "Die cutters, labellers, case erectors and fillers, with the operator interface and verification built in.", "barcode-verification", "Barcode verification station on a packaging line"),
         ("Residential elevators", "/machine-builders/industries/residential-elevators/", "Twenty years on one account: cab operating panels, hall stations, and the cost engineering behind revision two.", "elevator-hall-station", "Elevator hall station with call display"),
-        ("Food equipment", "/machine-builders/industries/food-equipment/", "Ovens, mixers and slicers, with the temperature and recipe interfaces that set them.", None, None),
+        ("Food equipment", "/machine-builders/industries/food-equipment/", "Ovens, mixers and slicers, with the temperature and recipe interfaces that set them.", "product-hmi-plc", "An HMI/PLC unit running a clean-in-place screen for a food process"),
     ]), cards=cards([
         ("Packaging machinery", "Die cutters with barcode verification, labellers, case erectors, fillers. The $10,000 to $100,000 machines still built in the States.", "barcode-verification", "Barcode verification station on a packaging line"),
         ("Residential elevators", "Twenty years on the same account. Glass cab operating panels, hall stations, and the cost engineering that made revision two possible.", "elevator-hall-station", "Elevator hall station with call display"),
-        ("Commercial kitchen equipment", "Ovens and mixers, and the temperature and recipe interfaces that set them."),
         ("Printing and finishing", "Screen-printing presses, pad printers and print-curing lines with operator control at the press.", "pad-printing-machine", "Pad printing machine with touchscreen operator control"),
-        ("Food processing", "Industrial slicers and portioning equipment with washdown-rated interfaces."),
         ("Water and wastewater", "Municipal treatment plants: load balancing, remote I/O and operator screens that run for decades.", "waste-water-plant", "Exterior of a municipal waste water treatment plant, with aeration basins and the operations building"),
-        ("Building products machinery", "Seamless gutter machines and roll-forming lines that run from a truck."),
         ("Agriculture and field equipment", "Hydraulic soil-sampling rigs with carousel control and logging.", "soil-sampling-rig", "Hydraulic soil-sampling rig with carousel control"),
+    ], "mosaic"), more=cards([
+        ("Commercial kitchen equipment", "Ovens and mixers, and the temperature and recipe interfaces that set them."),
+        ("Food processing", "Industrial slicers and portioning equipment with washdown-rated interfaces."),
+        ("Building products machinery", "Seamless gutter machines and roll-forming lines that run from a truck."),
         ("Medical and rehabilitation equipment", "Controls and operator interfaces for therapy and rehabilitation machines."),
-    ], "mosaic")),
+    ], "two")),
 )
 
 PAGES["company/about-russ/index.html"] = dict(
@@ -798,7 +801,7 @@ PAGES["company/about-russ/index.html"] = dict(
         who have worked with Russell for years. Too much work is not a problem Phoenix turns away.</p>
       </div>
       <figure class="portrait" data-reveal>
-        <div class="portrait-frame" aria-hidden="true">{{inline:mark.svg}}</div>
+        <div class="portrait-frame" aria-hidden="true"><img src="/assets/mark.webp" alt="" width="220" height="330" loading="lazy" decoding="async"></div>
         <figcaption>Photograph to come.</figcaption>
       </figure>
     </div>
