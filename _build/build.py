@@ -1032,7 +1032,6 @@ FAMILY_ART = {
     "HMI/PLC combination units": ("hmi-plc", "product-hmi-plc", "A 7 inch HMI/PLC combination unit with I/O modules plugged into the back"),
     "Field I/O, Modbus RTU": ("field-io", "product-field-io", "Two DIN-rail Modbus field I/O modules with an LED for every point"),
     "EtherCAT remote I/O": ("ethercat-io", "product-ethercat-io", "An EtherCAT remote I/O block with in and out ports and a 50 pin connector"),
-    "Gateways and converters": ("gateways", "product-gateway", "An LTE gateway with its antenna beside a DIN-rail signal converter"),
 }
 
 
@@ -1188,9 +1187,8 @@ catalog_page(
 
 catalog_page(
     "products/io-and-communication/index.html", "I/O and Communication Modules", "I/O and communication modules",
-    "Remote I/O, and the links between machines.",
-    "Modbus RTU field I/O that sets up with DIP switches, an EtherCAT remote I/O block, an LTE gateway, "
-    "protocol converters and a serial signal converter.",
+    "Remote I/O, on the network the machine already runs.",
+    "Modbus RTU field I/O that sets up with DIP switches, and an EtherCAT remote I/O block for machines on an EtherCAT master.",
     [
         family("Field I/O, Modbus RTU", "Remote points on two wires, configured with switches.",
                "Compact DIN-rail modules that expand any Modbus master. Address, baud rate and parity are set on DIP switches; "
@@ -1212,16 +1210,6 @@ catalog_page(
                 "8 linear analog inputs, 12 bit, -10 to +10 VDC; 4 analog outputs", "Bicolour LED per digital point: green for input, red for output",
                 "Isolated 24 VDC supply; 50 pin D-sub for I/O and power; 50 x 100 x 70 mm"],
                "", "Ask for the current listing."),
-        family("Gateways and converters", "Getting data off the machine, and old devices onto new networks.",
-               "An LTE gateway that collects Modbus RTU data and sends it to a server, programmable protocol converters, and a serial signal converter.",
-               ["LTE gateway: Modbus RTU in, TCP/IP, HTTP or MQTT out; offline data storage; configurable slave addresses and send interval",
-                "Protocol converters: serial devices onto CANopen, Profibus, LonWorks, Modbus TCP or GSM networks, with free programming software",
-                "Signal converter: RS232 or CMOS to RS422/RS485, isolated, automatic baud rate and direction control, no software"],
-               spec_table("Gateway and converter part numbers", ["Part number", "Function"], [
-                   ["GWY920-LTE-S2", "LTE gateway, Modbus RTU to TCP/IP, HTTP or MQTT"],
-                   ["GWY-00-B / GWY-300", "Programmable protocol converters"],
-                   ["CNV-02-B", "RS232/CMOS to RS422/RS485 signal converter, DIN rail or panel mount"]]),
-               "Protocol converters and the signal converter: CE and UL. LTE gateway: ask for the current listing."),
     ], art="hero-io.webp")
 
 PAGES["products/cross-reference/index.html"] = dict(
@@ -1464,8 +1452,7 @@ PAGES["company/certifications/index.html"] = dict(
         ["Eco PLC", "CE"],
         ["Standard PLC with Ethernet", "CE, UL Class I Division 2"],
         ["Load cell expansion module", "CE, cUL Class I Division 2, RoHS"],
-        ["Field I/O, Modbus RTU", "CE, with UL as an option"],
-        ["Protocol converters and signal converter", "CE and UL"]])),
+        ["Field I/O, Modbus RTU", "CE, with UL as an option"]])),
 )
 
 PAGES["company/contact/index.html"] = dict(

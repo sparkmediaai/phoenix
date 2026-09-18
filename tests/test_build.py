@@ -205,7 +205,8 @@ def test_product_pages_carry_real_part_numbers():
     io_ = b.shell(b.PAGES["products/io-and-communication/index.html"], "products/io-and-communication/index.html")
     assert "FP4070TN" in hmis and "FP6151CN-M" in hmis and '<table class="spec">' in hmis
     assert "FL055-0808N-V2" in plcs and "FLAD0202P-SO" in plcs
-    assert "FL001D-1600-V3" in io_ and "GWY920-LTE-S2" in io_
+    assert "FL001D-1600-V3" in io_ and "EtherCAT" in io_
+    assert "GWY" not in io_ and "gateway" not in io_.lower()      # Russ no longer carries gateways or converters
 
 
 def test_no_page_names_the_manufacturer_or_its_trademarks():
@@ -226,7 +227,7 @@ def test_certifications_lists_approvals_by_family():
     b = load_build()
     html = b.shell(b.PAGES["company/certifications/index.html"], "company/certifications/index.html")
     assert "Approvals by product family" in html and "UL Listed Class I Division 2" in html
-    assert html.count("<tr>") >= 12
+    assert html.count("<tr>") >= 11 and "converter" not in html.lower()
 
 
 def test_spec_table_marks_row_headers():

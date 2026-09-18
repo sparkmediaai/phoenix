@@ -51,8 +51,6 @@ PICKS = [
          fixes=[("bezel", (318, 648, 412, 698))]),
     dict(name="product-field-io", pdf=BROCHURE, page=35, k=0, crop=(40, 570, 610, 1580), fixes=[]),
     dict(name="product-ethercat-io", pdf="Ethercat IO Module.pdf", page=1, k=0, crop=(0, 10, 787, 1155), fixes=[]),
-    dict(name="product-gateway", pdf=BROCHURE, page=37, k=0, crop=None,
-         fixes=[("fill", (128, 292, 270, 324))]),
 ]
 
 
