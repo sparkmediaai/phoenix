@@ -340,7 +340,9 @@ def shell(page, path="index.html"):
         # MP4 first: the browser takes the first source it can play, and the
         # H.264 cut is 1704 KB against the VP9 cut's 2422 KB. Everything that
         # plays the WebM plays the MP4 too.
-        hero = ('  <div class="hero-media" data-parallax="0.15">\n'
+        # No parallax on this layer: a playing video is the most expensive thing
+        # on the site to move, so it scrolls with the page and no more.
+        hero = ('  <div class="hero-media">\n'
                 '    <img class="hero-bg" src="%(p)s" alt="%(alt)s" width="%(w)d" height="%(h)d" fetchpriority="high" decoding="async">\n'
                 '    <video class="hero-video" muted loop playsinline preload="none" poster="%(p)s" aria-hidden="true" tabindex="-1">\n'
                 '      <source src="%(r)sassets/video/%(n)s.mp4" type="video/mp4">\n'

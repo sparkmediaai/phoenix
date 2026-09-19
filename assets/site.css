@@ -18,8 +18,9 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* No scroll-behavior: smooth. It fights ScrollTrigger, and a long animated jump
+   through lazy images and reveals stutters more than it charms. */
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--paper); color: var(--ink);
   font: 400 17px/1.6 var(--sans);
@@ -251,7 +252,7 @@ a.card .card-img[src*="/product-"] { object-fit: contain; background: #fff; padd
 .family-shot:hover .family-img { transform: scale(1.05); }
 .spec tbody tr { transition: background .15s; }
 .spec tbody tr:hover { background: #FBF5EC; }
-.family-pills { position: fixed; left: 0; right: 0; top: 76px; z-index: 45; display: flex; gap: 8px; justify-content: center; padding: 9px var(--gutter); background: rgba(251, 248, 243, .93); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; transform: translateY(-110%); opacity: 0; visibility: hidden; transition: transform .35s cubic-bezier(.2, .7, .2, 1), opacity .25s, visibility 0s .35s; }
+.family-pills { position: fixed; left: 0; right: 0; top: 76px; z-index: 45; display: flex; gap: 8px; justify-content: center; padding: 9px var(--gutter); background: rgba(251, 248, 243, .97); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; transform: translateY(-110%); opacity: 0; visibility: hidden; transition: transform .35s cubic-bezier(.2, .7, .2, 1), opacity .25s, visibility 0s .35s; }
 .family-pills::-webkit-scrollbar { display: none; }
 .family-pills.show { transform: none; opacity: 1; visibility: visible; transition-delay: 0s; }
 .family-pills a { flex: none; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: 600 .82rem/1 var(--sans); text-decoration: none; white-space: nowrap; transition: background .2s, color .2s, border-color .2s; }
