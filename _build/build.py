@@ -40,15 +40,15 @@ BASE = "https://www.phoenixautomationsolutions.com/"
 PRODUCTION = "https://www.phoenixautomationsolutions.com/"
 
 # Where the intake form posts: a GoHighLevel inbound webhook, straight from
-# the browser, exactly as The Valley does it. Empty until Phoenix's GHL
-# sub-account exists. While it is empty the form does not submit; it shows the
+# the browser, exactly as The Valley does it. Phoenix's sub-account webhook
+# went in on 22 Sep 2026. Empty it and the form stops submitting and shows the
 # visitor the phone number instead, so nothing anybody types is lost.
 #
 # When it is set, remember what that means: the URL is the endpoint's only
 # authentication, GHL bills Inbound Webhook per execution, and this repo is
 # public. The honeypot in assets/forms.js is the only thing between a scraper
 # and the invoice. Do not remove it.
-FORM_ENDPOINT = ""
+FORM_ENDPOINT = "https://services.leadconnectorhq.com/hooks/zucknYCejflE2btNjI8n/webhook-trigger/b982b217-7c52-4bc3-9f51-e5a93e324b8e"
 # No email on the site: Russ would rather every enquiry come through the form
 # (22 Sep). Set this and the mailto links come back, on the contact page,
 # in the footer and as the form's fallback.
