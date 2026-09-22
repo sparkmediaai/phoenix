@@ -42,14 +42,17 @@ PRODUCTION = "https://phoenixautomationsolutions.com/"
 # Where the intake form posts: a GoHighLevel inbound webhook, straight from
 # the browser, exactly as The Valley does it. Empty until Phoenix's GHL
 # sub-account exists. While it is empty the form does not submit; it shows the
-# visitor the contact email instead, so nothing anybody types is lost.
+# visitor the phone number instead, so nothing anybody types is lost.
 #
 # When it is set, remember what that means: the URL is the endpoint's only
 # authentication, GHL bills Inbound Webhook per execution, and this repo is
 # public. The honeypot in assets/forms.js is the only thing between a scraper
 # and the invoice. Do not remove it.
 FORM_ENDPOINT = ""
-CONTACT_EMAIL = "russh@phoenixautomationsolutions.com"
+# No email on the site: Russ would rather every enquiry come through the form
+# (22 Sep). Set this and the mailto links come back, on the contact page,
+# in the footer and as the form's fallback.
+CONTACT_EMAIL = ""
 PHONE = "630 879 8412"
 
 # Primary navigation: five headers, each a menu of pages, plus the one button.
@@ -89,7 +92,7 @@ NAV = [
         ("About Russ", "/company/about-russ/", "Russ's background, his introduction and how he works with customers."),
         ("Supply Chain", "/company/supply-chain/", "The factory relationship and the stock held in Mokena."),
         ("Certifications", "/company/certifications/", "Product certifications and company credentials."),
-        ("Contact", "/company/contact/", "One phone number, one email, the Mokena address."),
+        ("Contact", "/company/contact/", "One phone number, one form, the Mokena address."),
     ]),
 ]
 CTA = ("Talk to Russ", "/talk-to-russ/")
@@ -391,7 +394,9 @@ def shell(page, path="index.html"):
     contact = ""
     if PHONE:
         contact += '<br><a href="tel:%s">%s</a>' % (re.sub(r"[^\d+]", "", PHONE), PHONE)
-    contact += '<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL)
+    if CONTACT_EMAIL:
+        contact += '<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL)
+    contact += '<br><a href="%s">Send Russ a message</a>' % CTA[1]
 
     hold_attr = " data-hold" if page.get("hero_video") and page.get("hero_steps") else ""
 
@@ -422,7 +427,7 @@ def shell(page, path="index.html"):
 <link rel="stylesheet" href="%(root)sassets/site.css">
 <link rel="stylesheet" href="%(root)sassets/forms.css">
 <link rel="stylesheet" href="%(root)sassets/motion.css?v=%(motion_css_v)s">
-%(head)s<script>document.documentElement.classList.add("js");window.FORM_ENDPOINT=%(endpoint)s;window.CONTACT_EMAIL=%(email)s;if(/[?&]notes\\b/.test(location.search))document.documentElement.classList.add("notes");%(gate)s</script>
+%(head)s<script>document.documentElement.classList.add("js");window.FORM_ENDPOINT=%(endpoint)s;window.CONTACT_EMAIL=%(email)s;window.CONTACT_PHONE=%(phone)s;if(/[?&]notes\\b/.test(location.search))document.documentElement.classList.add("notes");%(gate)s</script>
 </head>
 <body>
 
@@ -471,7 +476,7 @@ def shell(page, path="index.html"):
 """ % {
         "title": page["title"], "desc": html_attr(page["desc"]), "root": root,
         "url": url, "base": BASE, "og_alt": html_attr(OG_ALT),
-        "endpoint": json_str(FORM_ENDPOINT), "email": json_str(CONTACT_EMAIL),
+        "endpoint": json_str(FORM_ENDPOINT), "email": json_str(CONTACT_EMAIL), "phone": json_str(PHONE),
         "robots": "" if BASE == PRODUCTION else
                   '<meta name="robots" content="noindex,nofollow">' + chr(10),
         "site": SITE, "logo": LOGO, "nav": nav,
@@ -1448,7 +1453,7 @@ support_page("support/warranty-and-rma/index.html", "Warranty and RMA", "Warrant
              "Warranty terms, and how to return a part.",
              "The warranty on Phoenix-supplied hardware, what it covers, and the return process when a part needs to come back.",
              ["Warranty term and what it covers, by product family", "How to request a return authorisation", "Where to ship, and what to include", "Turnaround on repair or replacement"],
-             "Until the terms are posted, email Russ with the part, the serial number and what happened. He answers within two business days.",
+             "Until the terms are posted, send Russ the part, the serial number and what happened through the <a href=\"/talk-to-russ/\">form</a>, or call. He answers within two business days.",
              "Scaffolding. Warranty terms and the RMA process need Russell's wording; nothing is stated here until he supplies it.")
 
 
@@ -1523,8 +1528,8 @@ PAGES["company/certifications/index.html"] = dict(
 
 PAGES["company/contact/index.html"] = dict(
     nav="Contact", title="Contact | %s" % SITE,
-    desc="One phone number, one email address and the Mokena, Illinois address for Phoenix Automation Solutions.",
-    eyebrow="Company", h1="One number, one inbox, one address.",
+    desc="One phone number, one form and the Mokena, Illinois address for Phoenix Automation Solutions.",
+    eyebrow="Company", h1="One number, one form, one address.",
     standfirst="Phoenix Automation Solutions, Inc., Mokena, Illinois, southwest of Chicago.",
     actions=[("Talk to Russ", "/talk-to-russ/")],
     body=note("PHONE, CONTACT_EMAIL and the street address are placeholders in _build/build.py until Russell "
@@ -1549,7 +1554,8 @@ PAGES["company/contact/index.html"] = dict(
 """ % dict(address=ADDRESS,
            contact=('<br><a href="tel:%s">%s</a>' % (re.sub(r"[^\d+]", "", PHONE), PHONE) if PHONE else
                     '<br><span class="muted">Phone number to be confirmed.</span>')
-                   + '<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL)),
+                   + ('<br><a href="mailto:%s">%s</a>' % (CONTACT_EMAIL, CONTACT_EMAIL) if CONTACT_EMAIL else "")
+                   + '<br><a href="/talk-to-russ/">Send Russ a message</a>'),
 )
 
 

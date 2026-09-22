@@ -17,6 +17,9 @@
   var status = form.querySelector(".form-status");
   var endpoint = window.FORM_ENDPOINT || "";
   var email = window.CONTACT_EMAIL || "";
+  var phone = window.CONTACT_PHONE || "";
+  // Where to send people if the form cannot: the inbox if one is published, else the phone.
+  var instead = email ? "email " + email : phone ? "call " + phone : "call Phoenix";
 
   var CONTROLS = ["Allen-Bradley / Rockwell", "Siemens", "Omron", "Automation Direct", "Maple Systems",
                   "Relay logic / no PLC", "Other", "Not sure"];
@@ -66,7 +69,9 @@
 
   function validate(d) {
     var ok = true;
-    ["machine_type", "annual_volume", "current_controls", "application",
+    // The same fields the markup marks required. "What you need" is the
+    // optional step, so application is not among them.
+    ["machine_type", "annual_volume", "current_controls",
      "company", "first_name", "last_name", "email"].forEach(function (k) {
       var bad = !d[k];
       invalid(k, bad); if (bad) ok = false;
@@ -86,7 +91,7 @@
     if (!validate(data)) { say("Please check the highlighted fields.", "err"); return; }
 
     if (!endpoint) {
-      say("Online submissions are not open yet. Please email the same details to " + email + " and Russell will reply within two business days.", "err");
+      say("Online submissions are not open yet. Please " + instead + " with the same details and Russell will reply within two business days.", "err");
       return;
     }
 
@@ -101,7 +106,7 @@
       say("Thank you. Russell reads every submission and will reply within two business days.", "ok");
       form.reset();
     }).catch(function () {
-      say("That did not go through. Please email " + email + " instead; nothing you typed has been lost.", "err");
+      say("That did not go through. Please " + instead + " instead; nothing you typed has been lost.", "err");
     }).finally(function () { btn.disabled = false; });
   });
 })();

@@ -288,3 +288,12 @@ def test_videos_page_and_the_posters_that_link_to_youtube():
     assert 'data-yt="uxfkgtCQcvI"' in plcs and "built-in LTE" not in plcs
     sw = b.shell(b.PAGES["support/software/index.html"], "support/software/index.html")
     assert 'data-yt="pe0WDcuWw18"' in sw
+
+
+def test_no_email_address_on_the_site_and_the_form_falls_back_to_the_phone():
+    b = load_build()
+    for path in ("index.html", "company/contact/index.html", "support/warranty-and-rma/index.html", "talk-to-russ/index.html"):
+        html = b.shell(b.PAGES[path], path)
+        assert "mailto:" not in html and "@" not in html.split("<body")[1].split("<script")[0], path
+        assert 'href="/talk-to-russ/"' in html
+    assert 'window.CONTACT_PHONE="630 879 8412"' in b.shell(b.PAGES["index.html"], "index.html")
