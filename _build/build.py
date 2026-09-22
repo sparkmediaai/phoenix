@@ -30,14 +30,14 @@ TAGLINE = "Engineered to the target. Not quoted from the shelf."
 #
 # Change BASE with _build/set_domain.py, not by hand -- it keeps CNAME in step.
 URL_ROOT = "/"
-BASE = "https://phoenix.sparkmedia.ai/"
+BASE = "https://phoenixautomationsolutions.com/"
 
 # The address the site is actually for. While BASE is anything else this is a
 # staging copy of a real business's website on a public host, and it asks
 # search engines to stay away. Point BASE at the line below (with
 # set_domain.py) and the noindex disappears on its own, which is the point:
 # "remember to take the noindex off" is a thing somebody forgets on launch day.
-PRODUCTION = "https://phoenixautomationsolutions.example/"   # TODO: Russell's domain
+PRODUCTION = "https://phoenixautomationsolutions.com/"
 
 # Where the intake form posts: a GoHighLevel inbound webhook, straight from
 # the browser, exactly as The Valley does it. Empty until Phoenix's GHL
@@ -49,8 +49,8 @@ PRODUCTION = "https://phoenixautomationsolutions.example/"   # TODO: Russell's d
 # public. The honeypot in assets/forms.js is the only thing between a scraper
 # and the invoice. Do not remove it.
 FORM_ENDPOINT = ""
-CONTACT_EMAIL = "russell@phoenixautomationsolutions.example"   # TODO: the one inbox
-PHONE = ""                                                     # TODO: the one number
+CONTACT_EMAIL = "russh@phoenixautomationsolutions.com"
+PHONE = "630 879 8412"
 
 # Primary navigation: five headers, each a menu of pages, plus the one button.
 # A header is a grouping, not a page; its intro line sits at the top of the
