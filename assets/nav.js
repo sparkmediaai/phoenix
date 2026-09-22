@@ -62,3 +62,21 @@
   }, { rootMargin: "-40% 0px -55% 0px" });
   Array.prototype.forEach.call(document.querySelectorAll(".family-band"), function (s) { spy.observe(s); });
 })();
+
+// Video posters. A click swaps the poster for YouTube's player, on the
+// no-cookie domain and set to play at once. Without this the poster is a
+// plain link to the video on YouTube.
+document.addEventListener("click", function (e) {
+  var a = e.target.closest && e.target.closest("a.yt[data-yt]");
+  if (!a) return;
+  e.preventDefault();
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + a.getAttribute("data-yt") + "?autoplay=1&rel=0";
+  f.title = a.getAttribute("data-title") || "Video";
+  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  f.setAttribute("allowfullscreen", "");
+  var box = document.createElement("div");
+  box.className = "yt";
+  box.appendChild(f);
+  a.parentNode.replaceChild(box, a);
+});

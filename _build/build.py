@@ -83,6 +83,7 @@ NAV = [
         ("Software, Manuals and Firmware", "/support/software/",
          "Programming software, user manuals and firmware updates."),
         ("Warranty and RMA", "/support/warranty-and-rma/", "Warranty terms and how to return a part."),
+        ("Videos", "/support/videos/", "Product walkthroughs and software tutorials from the factory."),
     ]),
     ("Company", "Who Phoenix is.", [
         ("About Russ", "/company/about-russ/", "Russ's background, his introduction and how he works with customers."),
@@ -222,6 +223,32 @@ def spec_table(caption, headers, rows):
 def steps(items):
     return '<ol class="steps" data-reveal="stagger">\n%s\n    </ol>' % "\n".join(
         '      <li><h3>%s</h3><p>%s</p></li>' % (t, p) for t, p in items)
+
+
+# The factory's videos, by YouTube id. Our own title and description go on
+# the page; the player shows the channel's once it is playing.
+VIDEOS = {
+    "eco-plc": ("uxfkgtCQcvI", "The eco PLC, up close",
+                "A walkthrough of the FL004: the controller itself, its I/O and ports, and the machines it is sized for."),
+    "software": ("pe0WDcuWw18", "The programming software, start to finish",
+                 "A complete tour of the programming environment, from installation to a first project set up and running."),
+}
+
+
+def video(key, eyebrow="Watch"):
+    """A YouTube video as a poster with a play button. The player only loads on
+    a click (nav.js swaps it in), so the page stays light and YouTube sets no
+    cookies until someone chooses to watch. Without script the poster is a
+    link to the video on YouTube."""
+    vid, title, text = VIDEOS[key]
+    return """<figure class="video" data-reveal>
+      <a class="yt" href="https://www.youtube.com/watch?v=%(id)s" data-yt="%(id)s" data-title="%(t)s">
+        <img src="https://i.ytimg.com/vi/%(id)s/hqdefault.jpg" alt="" width="480" height="360" loading="lazy" decoding="async">
+        <span class="yt-play" aria-hidden="true"></span>
+        <span class="vh">Play: %(title)s</span>
+      </a>
+      <figcaption><div class="eyebrow">%(eyebrow)s</div><h3>%(title)s</h3><p>%(text)s</p></figcaption>
+    </figure>""" % dict(id=vid, t=html_attr(title), title=title, text=text, eyebrow=eyebrow)
 
 
 def figure(svg_name, caption, cls=""):
@@ -1046,7 +1073,7 @@ FAMILY_ART = {
 }
 
 
-def family(eyebrow, heading, intro, features, table, approvals):
+def family(eyebrow, heading, intro, features, table, approvals, watch=None):
     anchor, image, alt = FAMILY_ART[eyebrow]
     shot = ""
     if image:
@@ -1064,11 +1091,12 @@ def family(eyebrow, heading, intro, features, table, approvals):
       </div>%s
     </div>
     %s
-    <p class="approvals"><b>Approvals:</b> %s</p>
+    <p class="approvals"><b>Approvals:</b> %s</p>%s
   </div>
 </section>
 """ % (anchor, eyebrow, "" if image else " no-shot", eyebrow, heading, intro,
-       "".join("<li>%s</li>" % f for f in features), shot, table, approvals)
+       "".join("<li>%s</li>" % f for f in features), shot, table, approvals,
+       ('\n    <div class="family-watch">%s</div>' % video(watch)) if watch else "")
 
 
 def family_index(families):
@@ -1158,7 +1186,7 @@ catalog_page(
                spec_table("Eco PLC part numbers", ["Part number", "Inputs", "Outputs", "Ports", "Expansion"], [
                    ["FL004-0806N-V2", "8 DI, high-speed capable", "6 NPN transistor", "2 serial, USB Type-C", "Up to 8 modules"],
                    ["FL004-0806R-V2", "8 DI, high-speed capable", "6 relay", "2 serial, USB Type-C", "Up to 8 modules"]]),
-               "CE. Ask for the current UL listing."),
+               "CE. Ask for the current UL listing.", watch="eco-plc"),
         family("Standard PLC", "200 kHz counting, Ethernet when you need it, 16 expansion modules.",
                "The same DIN-rail form with faster I/O: four single-phase counters or quadrature to 200 kHz, and four high-speed outputs to 200 kHz.",
                ["8 bi-directional digital inputs; 8 NPN or 6 relay outputs", "2 serial ports (RS232 and RS485) and USB Type-C; Ethernet on the FL055",
@@ -1184,7 +1212,7 @@ catalog_page(
                "No separate controller, one program, one cutout.",
                ["Pluggable I/O modules: 1 on the 4.3 inch, 3 on the 7 inch, 5 on the 10.1 inch",
                 "Built-in I/O models add 4 high-speed inputs to 200 kHz, RTD and thermocouple inputs, and analog outputs",
-                "Available with built-in LTE", "IP66 front; IEC 61131-3 programming environment"],
+                "IP66 front; IEC 61131-3 programming environment"],
                spec_table("HMI/PLC combination part numbers", ["Part number", "Screen", "I/O", "Ethernet"], [
                    ["FP2043T-E / FP2043TN-E", "4.3 in", "1 pluggable module", "TN model"],
                    ["FP2070T-E / FP2070TN-E", "7 in", "3 pluggable modules", "TN model"],
@@ -1363,7 +1391,7 @@ PAGES["proof/custom-builds/index.html"] = dict(
 
 
 # ---- Support
-def support_page(path, nav_label, title, h1, standfirst, items, now, note_text):
+def support_page(path, nav_label, title, h1, standfirst, items, now, note_text, extra=""):
     PAGES[path] = dict(
         nav=nav_label, title="%s | %s" % (title, SITE), desc=standfirst, eyebrow="Support", h1=h1,
         standfirst=standfirst, actions=[("Contact Phoenix", "/company/contact/")],
@@ -1374,14 +1402,14 @@ def support_page(path, nav_label, title, h1, standfirst, items, now, note_text):
     <ul class="ticks" data-reveal="stagger">%(items)s</ul>
   </div>
 </section>
-<section class="band band-tint">
+%(extra)s<section class="band band-tint">
   <div class="inner narrow" data-reveal>
     <div class="eyebrow">For now</div>
     <p>%(now)s</p>
     <p><a class="btn btn-solid" href="/company/contact/">Contact Phoenix</a></p>
   </div>
 </section>
-""" % dict(items="".join("<li>%s</li>" % i for i in items), now=now))
+""" % dict(items="".join("<li>%s</li>" % i for i in items), now=now, extra=extra))
 
 
 support_page("support/software/index.html", "Software, Manuals and Firmware", "Software, manuals and firmware",
@@ -1389,7 +1417,33 @@ support_page("support/software/index.html", "Software, Manuals and Firmware", "S
              "Downloads for current customers: the programming software for each controller and HMI, the user manuals, and firmware updates with their release notes.",
              ["Programming software by product family, with the version and the date", "User manuals as PDF", "Firmware updates with release notes and the products they apply to", "Sample code from application support, where Russ has written it for you"],
              "Current customers get software, manuals and firmware from Russ directly, the same day. Say which product and which version you are on.",
-             "Scaffolding. The download library depends on what the product line's software and manuals are and on how they may be distributed; Russell decides.")
+             "Scaffolding. The download library depends on what the product line's software and manuals are and on how they may be distributed; Russell decides.",
+             extra='<section class="band">\n  <div class="inner narrow">\n    %s\n  </div>\n</section>\n' % video("software", "Before you install"))
+
+PAGES["support/videos/index.html"] = dict(
+    nav="Videos", title="Videos | %s" % SITE, eyebrow="Support", h1="Watch the products and the software.",
+    desc="Product walkthroughs and software tutorials from the factory: the eco PLC up close, and the programming software from installation to a first project.",
+    standfirst="Walkthroughs and tutorials from the factory. More are added as Russ picks them; "
+               "if there is a product you want to see running before you buy it, ask.",
+    actions=[("Talk to Russ", "/talk-to-russ/"), ("Software and manuals", "/support/software/")],
+    body=note("Russ asked for the factory's videos on the site. The page copy is Phoenix's; the player carries the channel's branding once it plays.") + """
+<section class="band">
+  <div class="inner">
+    <div class="videos">
+      %(eco)s
+      %(sw)s
+    </div>
+  </div>
+</section>
+<section class="band band-tint">
+  <div class="inner narrow" data-reveal>
+    <div class="eyebrow">Something not covered?</div>
+    <h2>Ask for a demonstration.</h2>
+    <p>Russ keeps the products on the bench in Mokena. If a video does not answer the question, he can put the part in front of a camera, or in front of you.</p>
+    <p><a class="btn btn-solid" href="/talk-to-russ/">Talk to Russ</a></p>
+  </div>
+</section>
+""" % dict(eco=video("eco-plc", "Product"), sw=video("software", "Software")))
 support_page("support/warranty-and-rma/index.html", "Warranty and RMA", "Warranty and RMA",
              "Warranty terms, and how to return a part.",
              "The warranty on Phoenix-supplied hardware, what it covers, and the return process when a part needs to come back.",

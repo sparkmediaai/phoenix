@@ -259,3 +259,19 @@ a.card .card-img[src*="/product-"] { object-fit: contain; background: #fff; padd
 .family-pills a:hover { border-color: var(--ember); }
 .family-pills a[aria-current="true"] { background: var(--ember); border-color: var(--ember); color: #fff; }
 @media (max-width: 700px) { .family-pills { justify-content: flex-start; } }
+
+/* Videos: a poster with a play button until it is clicked, then the player */
+.videos { display: grid; gap: clamp(24px, 4vw, 48px); grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.video { margin: 0; }
+.yt { position: relative; display: block; aspect-ratio: 16 / 9; width: 100%; border-radius: 6px; overflow: hidden; background: #000; box-shadow: 0 14px 40px rgba(31,26,23,.14); }
+.yt img { width: 100%; height: 100%; object-fit: cover; opacity: .82; transition: opacity .3s, transform .6s cubic-bezier(.2, .7, .2, 1); }
+.yt:hover img { opacity: 1; transform: scale(1.03); }
+.yt-play { position: absolute; left: 50%; top: 50%; width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%; background: var(--ember); box-shadow: 0 8px 24px rgba(0,0,0,.4); transition: transform .2s; }
+.yt-play::after { content: ""; position: absolute; left: 29px; top: 22px; border-style: solid; border-width: 14px 0 14px 22px; border-color: transparent transparent transparent #fff; }
+.yt:hover .yt-play { transform: scale(1.08); }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video figcaption { padding-top: 16px; }
+.video h3 { margin: 4px 0 6px; }
+.video p { margin: 0; color: var(--muted, #5d554f); }
+.family-watch { max-width: 640px; margin-top: 28px; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

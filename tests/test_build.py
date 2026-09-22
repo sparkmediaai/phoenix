@@ -275,3 +275,16 @@ def test_talk_to_russ_says_what_happens_next():
     b = load_build()
     html = b.shell(b.PAGES["talk-to-russ/index.html"], "talk-to-russ/index.html")
     assert "What happens next" in html and "A call about the machine" in html
+
+
+def test_videos_page_and_the_posters_that_link_to_youtube():
+    b = load_build()
+    html = b.shell(b.PAGES["support/videos/index.html"], "support/videos/index.html")
+    assert html.count('class="yt"') == 2 and 'data-yt="uxfkgtCQcvI"' in html and 'data-yt="pe0WDcuWw18"' in html
+    assert 'href="https://www.youtube.com/watch?v=uxfkgtCQcvI"' in html       # works without script
+    assert "<iframe" not in html                                               # the player loads only on a click
+    assert 'href="/support/videos/"' in html                                   # in the Support menu
+    plcs = b.shell(b.PAGES["products/plcs/index.html"], "products/plcs/index.html")
+    assert 'data-yt="uxfkgtCQcvI"' in plcs and "built-in LTE" not in plcs
+    sw = b.shell(b.PAGES["support/software/index.html"], "support/software/index.html")
+    assert 'data-yt="pe0WDcuWw18"' in sw
