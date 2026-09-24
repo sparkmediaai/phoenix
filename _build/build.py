@@ -30,7 +30,7 @@ TAGLINE = "Engineered to the target. Not quoted from the shelf."
 #
 # Change BASE with _build/set_domain.py, not by hand -- it keeps CNAME in step.
 URL_ROOT = "/"
-BASE = "https://phoenix.sparkmedia.ai/"
+BASE = "https://phoenixautomationsolutions.com/"
 
 # The address the site is actually for. While BASE is anything else this is a
 # staging copy of a real business's website on a public host, and it asks
