@@ -30,14 +30,14 @@ TAGLINE = "Engineered to the target. Not quoted from the shelf."
 #
 # Change BASE with _build/set_domain.py, not by hand -- it keeps CNAME in step.
 URL_ROOT = "/"
-BASE = "https://www.phoenixautomationsolutions.com/"
+BASE = "https://phoenixautomationsolutions.com/"
 
 # The address the site is actually for. While BASE is anything else this is a
 # staging copy of a real business's website on a public host, and it asks
 # search engines to stay away. Point BASE at the line below (with
 # set_domain.py) and the noindex disappears on its own, which is the point:
 # "remember to take the noindex off" is a thing somebody forgets on launch day.
-PRODUCTION = "https://www.phoenixautomationsolutions.com/"
+PRODUCTION = "https://phoenixautomationsolutions.com/"
 
 # Where the intake form posts: a GoHighLevel inbound webhook, straight from
 # the browser, exactly as The Valley does it. Phoenix's sub-account webhook
