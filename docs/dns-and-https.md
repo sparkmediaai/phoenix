@@ -33,7 +33,10 @@ read `new` since 22 September, with the custom domain set to the bare
 domain and to www alike. Removing and re-adding the domain, and deleting and
 re-creating the Pages site, changed nothing. A second site on the account,
 sparkmediaai/thevalleyvenues, is stuck in `bad_authz` with clean DNS.
-This is GitHub's to fix; a support request has been drafted.
+Resolved on 24 September at 10:56: GitHub issued the certificate on its own,
+about a day and a half after the request was queued, with no change on our
+side. HTTPS enforcement went on at 11:28. If it ever happens again: check the
+health API, then wait; the remove/re-add cycles did nothing.
 
 ## Plan B: Cloudflare in front
 
