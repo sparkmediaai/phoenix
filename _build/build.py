@@ -537,7 +537,7 @@ PAGES["index.html"] = dict(
     standfirst="HMIs, PLCs, I/O and custom operator panels for machines built in the United States. "
                "Specified, cost-engineered and supported by an engineer who has done it for twenty years, "
                "not pulled from a catalog and shipped with a wish.",
-    actions=[("Talk to Russ", "/talk-to-russ/"), ("Meet us at PACK EXPO", "/pack-expo/")],
+    actions=[("Talk to Russ", "/talk-to-russ/")],
     hero_video=dict(name="hero", alt="A multi-station automation machine on the shop floor, pneumatic slides and valve manifolds on a blue frame"),
     body=note("Positioning per the 8 Sep session and the SOW: Phoenix is the solution, Russell is the "
               "value, the supplier stays in the background. Every claim here is drawn from the two "
@@ -866,12 +866,12 @@ PAGES["company/about-russ/index.html"] = dict(
 )
 
 PAGES["pack-expo/index.html"] = dict(
-    nav=None, motion=False, title="Meet Phoenix at PACK EXPO 2026 | %s" % SITE,
-    desc="Phoenix Automation Solutions at PACK EXPO International, McCormick Place, September 28 to October 1, 2026.",
+    nav=None, motion=False, title="Phoenix at PACK EXPO 2026 | %s" % SITE,
+    desc="Phoenix Automation Solutions exhibited at PACK EXPO International, McCormick Place, September 28 to October 1, 2026.",
     hero_img="barcode-verification-1600.webp", hero_alt="Barcode verification station on a packaging line",
     eyebrow="%(name)s &middot; %(place)s" % SHOW,
     h1="Bring us the machine you wish cost less to control.",
-    standfirst="%(dates)s. Russell Homans is on the floor all four days." % SHOW,
+    standfirst="%(dates)s. Thanks to everyone who stopped by. Russell still wants to hear about your machine." % SHOW,
     actions=[("Talk to Russ", "/talk-to-russ/"), ("What Phoenix does", "/machine-builders/design-win/")],
     body=note("This is the QR-code landing. Keep it to one screen of reading. The show is research "
               "for Phoenix as much as sales: the intake form is the instrument.") + """
